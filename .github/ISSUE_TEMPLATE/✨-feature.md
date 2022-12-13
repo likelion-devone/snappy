@@ -1,7 +1,7 @@
 ---
-name: "✨ Feature"
+name: "✨ feat"
 about: 기능구현 관련 이슈 템플릿입니다.
-title: "✨ Feat: "
+title: "✨ feat: "
 labels: ":sparkles: 기능 추가"
 assignees: ''
 
