@@ -3,18 +3,9 @@ name: "✨ Feature"
 about: 기능구현 관련 이슈 템플릿입니다.
 title: "✨ Feature: "
 labels: ":sparkles: 기능 추가"
-assignees: custardcream98
-
----
-
----
-name: "✅ Feature"
-about: 기능구현 시 사용하시면 됩니다.
-title: ''
-labels: 기능개발
 assignees: ''
----
 
+---
 
 ## Description
 
