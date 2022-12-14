@@ -1,23 +1,20 @@
+import { forwardRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
 /**
  * 로그인, 이메일로 회원가입, 프로필 설정
  */
-export default function AuthInput({
-  type = "text",
-  id,
-  labelText,
-  useRef,
-  ...props
-}) {
+const AuthInput = forwardRef(function AuthInputForwarded(props, ref) {
+  const { type = "text", id, labelText, ...restProps } = props;
+
   return (
     <InputContainer>
       <Label htmlFor={id}>{labelText}</Label>
-      <Input type={type} ref={useRef} {...props} />
+      <Input type={type} ref={ref} {...restProps} />
     </InputContainer>
   );
-}
+});
 
 AuthInput.propTypes = {
   type: PropTypes.string.isRequired,
@@ -58,3 +55,5 @@ const Input = styled.input`
     border-bottom: 1px solid #33afd8;
   }
 `;
+
+export default AuthInput;
