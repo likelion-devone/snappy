@@ -1,22 +1,22 @@
 const commonTheme = {
-    snBlue: "#33AFD8",
-    snYellow: "#F7CE15", 
-    snDisabled: "#85CFE8",
-    snGrey: "#85CFE8",
-    snBlack: "#000000",
-    snRed:"#EB5757",
-    snWhite:"#FFFFFF",
-
-  };
+  snBlue: "#33AFD8",
+  snYellow: "#F7CE15",
+  snDisabled: "#85CFE8",
+  snGreyMain: "#85CFE8",
+  snGreyIcon: "767676",
+  snGreyOff: "DBDBDB",
+  snBlack: "#000000",
+  snRed: "#EB5757",
+  snWhite: "#FFFFFF",
+};
 
 //   what is this? mode?
-  const light = {
-    ...commonTheme,
-  };
-  //   what is this? mode?
-  const dark = {
-    ...commonTheme,
-  };
-  
-  export { light, dark };
-  
+const light = {
+  ...commonTheme,
+};
+//   what is this? mode?
+const dark = {
+  ...commonTheme,
+};
+
+export { light, dark };
