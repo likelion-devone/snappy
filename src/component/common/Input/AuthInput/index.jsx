@@ -18,10 +18,6 @@ const AuthInput = forwardRef(function AuthInputForwarded(props, ref) {
 
 AuthInput.propTypes = {
   type: PropTypes.string.isRequired,
-  useRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
   id: PropTypes.string.isRequired,
   labelText: PropTypes.string.isRequired,
 };
@@ -42,17 +38,23 @@ const Label = styled.label`
   left: 0;
   font-weight: 500;
   font-size: 12px;
-  line-height: 15px; // 15.02px
-  color: black;
+  line-height: 15px;
+  color: #767676;
 `;
 
 const Input = styled.input`
+  box-sizing: border-box; // TODO: 추후 GlobalStyle 수정시 삭제
   padding-top: 25px;
   margin-bottom: 16px;
   height: 48px;
+  color: #000000;
   border-bottom: 1px solid #dbdbdb;
   :focus {
     border-bottom: 1px solid #33afd8;
+    outline: none;
+  }
+  ::placeholder {
+    color: #dbdbdb;
   }
 `;
 
