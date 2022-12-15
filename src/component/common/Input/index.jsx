@@ -1,3 +1,4 @@
-import AuthInput from "./AuthInput/AuthInput";
+import AuthInput from "./AuthInput/index";
+import ValidationInputWrapper from "./ValidationInput/index";
 
-export { AuthInput };
+export { AuthInput, ValidationInputWrapper };
