@@ -3,11 +3,6 @@ import reset from "styled-reset";
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
-    
-    * {
-    box-sizing: border-box
-    }
-
     a {
         text-decoration: none;
         color: inherit;
@@ -25,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
     }
     button:disabled {
         cursor: initial;
-    }
+}
     li {
         list-style: none;
     }
@@ -40,8 +35,6 @@ const GlobalStyle = createGlobalStyle`
         border: 0;
         clip: rect(0,0,0,0);
   }
-
-  
 `;
 
 export default GlobalStyle;

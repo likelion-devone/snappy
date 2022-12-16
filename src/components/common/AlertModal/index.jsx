@@ -1,6 +1,7 @@
-import PropTypes from "prop-types";
-import Button from "./Button/index";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+
+import Button from "./Button/index";
 
 const Wrapper = styled.div`
   width: 252px;
@@ -14,7 +15,7 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-const AlertTitle = styled.p`
+const Content = styled.p`
   grid-column: 1 / 3;
   display: flex;
   justify-content: center;
@@ -25,18 +26,18 @@ const AlertTitle = styled.p`
   background-color: #ffffff;
 `;
 
-export default function AlertModal({ text, children }) {
-  return (
+export default function AlertModal({ isModalOpened, children }) {
+  return (isModalOpened &&
     <Wrapper>
-      <AlertTitle>{text}</AlertTitle>
       {children}
     </Wrapper>
   );
 }
 
+AlertModal.Content = Content;
 AlertModal.Button = Button;
 
 AlertModal.propTypes = {
-  text: PropTypes.string.isRequired,
+  isModalOpened: PropTypes.bool,
   children: PropTypes.node.isRequired,
 };
