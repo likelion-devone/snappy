@@ -3,9 +3,11 @@ import reset from "styled-reset";
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
-    * {
-        box-sizing: border-box;
+    body {
         font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+        * {
+        box-sizing: border-box;
+        }
     }
     a {
         text-decoration: none;
