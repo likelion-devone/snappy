@@ -4,7 +4,8 @@ import reset from "styled-reset";
 const GlobalStyle = createGlobalStyle`
     ${reset}
     * {
-    box-sizing: border-box;
+        box-sizing: border-box;
+        font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     }
     a {
         text-decoration: none;
@@ -37,6 +38,7 @@ const GlobalStyle = createGlobalStyle`
         border: 0;
         clip: rect(0,0,0,0);
     }
+    
 `;
 
 export default GlobalStyle;
