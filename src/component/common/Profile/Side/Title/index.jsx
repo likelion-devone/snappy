@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -26,6 +25,7 @@ const StyledTitle = styled.strong`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   .title-wrapper {
     display: flex;
@@ -33,11 +33,18 @@ const Wrapper = styled.div`
   }
 
   .subtitle {
+    margin-top: 2px;
+    width: 100%;
+
     font-weight: 400;
     font-size: 12px;
     line-height: 14px;
 
     color: #767676;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
