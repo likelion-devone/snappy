@@ -1,42 +1,24 @@
-import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
-
-export default function Button({ children, size, state, callbacks }) {
-  return (
-    <StyledButton size={size} state={state} onClick={callbacks[state]}>
-      {children}
-    </StyledButton>
-  );
-}
-
-Button.propTypes = {
-  size: PropTypes.oneOf(["xs", "sm", "md", "lg34", "lg44", "xl"]).isRequired,
-  state: PropTypes.oneOf(["disabled", "abled", "activated"]).isRequired,
-};
 
 const StyledButton = styled.button`
   display: inline-block;
   color: #fff;
   font-size: 14px;
-  background-color: #f26e22;
+  background-color: #33afd8;
 
-  /* 앞에 상태값이 null이면 ?? b */
-  ${
-    ({ state }) => stateStyleMap[state] ?? ""
-    // state in stateStyleMap ? stateStyleMap[state] : ""
-  }
+  ${({ state }) => stateStyleMap[state] ?? ""}
 
   ${({ size }) => sizeStyleMap[size] ?? ""}
 `;
 
 const stateStyleMap = {
   disabled: css`
-    background-color: #ffc7a7;
+    background-color: #85cfe8;
     pointer-events: none;
   `,
   activated: css`
-    background-color: skyblue;
+    background-color: #ffffff;
     color: #767676;
   `,
 };
@@ -73,3 +55,20 @@ const sizeStyleMap = {
     border-radius: 44px;
   `,
 };
+
+Button.propTypes = {
+  size: PropTypes.oneOf(["xs", "sm", "md", "lg34", "lg44", "xl"]).isRequired,
+  state: PropTypes.oneOf(["disabled", "abled", "activated"]).isRequired,
+  children: PropTypes.string.isRequired,
+  callbacks: PropTypes.object.isRequired,
+};
+
+export default function Button({ ...props }) {
+  const { size, state, children, callbacks } = props;
+
+  return (
+    <StyledButton size={size} state={state} onClick={callbacks[state]}>
+      {children}
+    </StyledButton>
+  );
+}
