@@ -1,8 +1,6 @@
-import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
-// import DefaultProfile from "assets/images/default_profile.png";
 import Side from "./Side";
 
 import { PROFILE_SIZE } from "constant/sizes";
@@ -17,19 +15,46 @@ const Wrapper = styled.div`
 const Img = styled.img`
   overflow: hidden;
   border-radius: 50%;
+  ${({ size }) => sizeStyleMap[size] ?? ""}
 `;
 
-export default function Profile({ size, left, right, topLeft, bottomRight }) {
-  // if (process.env.NODE_ENV === "development") {
-  // }
+const sizeStyleMap = {
+  xs: css`
+    width: 36px;
+    height: 36px;
+  `,
+  sm: css`
+    width: 42px;
+    height: 42px;
+  `,
+  md: css`
+    width: 50px;
+    height: 50px;
+  `,
+  lg: css`
+    width: 110px;
+    height: 110px;
+  `,
+};
 
-  return (
-    <Wrapper>
-      {!!left && left}
-      <Img src={"https://fakeimg.pl/42x42/"} alt="" />
-      {!!right && right}
-    </Wrapper>
-  );
+export default function Profile({ size, left, right, topLeft, bottomRight }) {
+  if (process.env.NODE_ENV === "development") {
+    return (
+      <Wrapper>
+        {!!left && left}
+        <Img src={"https://fakeimg.pl/110x110/"} alt="" size={size} />
+        {!!right && right}
+      </Wrapper>
+    );
+  } else {
+    return (
+      <Wrapper>
+        {!!left && left}
+        <Img src="" alt="" size={size} />
+        {!!right && right}
+      </Wrapper>
+    );
+  }
 }
 
 Profile.propTypes = {
@@ -39,10 +64,5 @@ Profile.propTypes = {
   topLeft: PropTypes.element,
   bottomRight: PropTypes.element,
 };
-
-// https://fakeimg.pl/110x110/
-// https://fakeimg.pl/50x50/
-// https://fakeimg.pl/42x42/
-// https://fakeimg.pl/36x36/
 
 Profile.Side = Side;
