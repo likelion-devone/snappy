@@ -10,13 +10,4 @@ const commonTheme = {
   snWhite: "#FFFFFF",
 };
 
-//   what is this? mode?
-const light = {
-  ...commonTheme,
-};
-//   what is this? mode?
-const dark = {
-  ...commonTheme,
-};
-
-export { light, dark };
+export default commonTheme;
