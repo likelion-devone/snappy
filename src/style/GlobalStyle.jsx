@@ -3,6 +3,9 @@ import reset from "styled-reset";
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
+    * {
+    box-sizing: border-box;
+    }
     a {
         text-decoration: none;
         color: inherit;
@@ -20,11 +23,10 @@ const GlobalStyle = createGlobalStyle`
     }
     button:disabled {
         cursor: initial;
-}
+    }
     li {
         list-style: none;
     }
-
     .sr-only {
         position: absolute;
         overflow: hidden;
@@ -34,7 +36,7 @@ const GlobalStyle = createGlobalStyle`
         margin: -1px;
         border: 0;
         clip: rect(0,0,0,0);
-  }
+    }
 `;
 
 export default GlobalStyle;
