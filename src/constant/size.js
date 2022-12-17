@@ -1,5 +1,4 @@
 const SIZE = {
-  LARGE: "lg",
   MEDIUM: "md",
   SMALL: "sm",
   X_SMALL: "xs",

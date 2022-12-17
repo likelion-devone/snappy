@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -10,15 +9,15 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
 
   padding: 0 12px;
 `;
 
-export default function Side({ left, center, right }) {
+export default function Side({ left, right }) {
   return (
     <Wrapper>
       {!!left && left}
-      {!!center && center}
       {!!right && right}
     </Wrapper>
   );
@@ -28,6 +27,5 @@ Side.Title = Title;
 
 Side.propTypes = {
   left: PropTypes.element,
-  center: PropTypes.element,
   right: PropTypes.element,
 };
