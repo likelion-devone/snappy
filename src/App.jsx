@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 import AppRouter from "page/Router";
 import GlobalStyle from "style/GlobalStyle";
@@ -6,6 +6,7 @@ import GlobalStyle from "style/GlobalStyle";
 import { MAX_WIDTH } from "constant/style";
 
 import "style/font.css";
+import theme from "style/theme";
 
 const Wrapper = styled.div`
   width: min(${MAX_WIDTH}, calc(100% - 30px));
@@ -18,7 +19,9 @@ const Wrapper = styled.div`
 function App() {
   return <Wrapper>
     <GlobalStyle />
-    <AppRouter />
+    <ThemeProvider theme={theme}>
+      <AppRouter />
+    </ThemeProvider>
   </Wrapper>;
 }
 
