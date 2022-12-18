@@ -11,7 +11,7 @@ const LabeledInput = forwardRef(function LabeledInputForwarded(props, ref) {
   return (
     <InputContainer>
       <Label htmlFor={id}>{labelText}</Label>
-      <Input type={type} ref={ref} {...restProps} />
+      <Input id={id} type={type} ref={ref} {...restProps} />
     </InputContainer>
   );
 });
@@ -39,21 +39,21 @@ const Label = styled.label`
   font-weight: 500;
   font-size: 12px;
   line-height: 15px;
-  color: #767676;
+  color: ${({ theme }) => theme.snGrayIcon};
 `;
 
 const Input = styled.input`
   padding-top: 25px;
   margin-bottom: 16px;
   height: 48px;
-  color: #000000;
-  border-bottom: 1px solid #dbdbdb;
+  color: ${({ theme }) => theme.snBlack};
+  border-bottom: 1px solid ${({ theme }) => theme.snGreyOff};
   :focus {
-    border-bottom: 1px solid #33afd8;
+    border-bottom: 1px solid ${({ theme }) => theme.snBlue};
     outline: none;
   }
   ::placeholder {
-    color: #dbdbdb;
+    color: ${({ theme }) => theme.snGreyOff};
   }
 `;
 
