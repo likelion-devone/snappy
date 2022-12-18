@@ -69,7 +69,7 @@ export default function SmallProfile({ size, isNotifying, children }) {
   } else {
     return (
       <Wrapper isNotifying={isNotifying}>
-        <Img src="" alt="" size={size} />
+        <Img src="" alt="프로필 이미지입니다" size={size} />
         {children}
       </Wrapper>
     );

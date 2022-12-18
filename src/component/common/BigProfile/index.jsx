@@ -47,7 +47,7 @@ export default function BigProfile({ bottomRight, left, right }) {
       <Wrapper bottomRight={bottomRight}>
         {left}
         <div className="image-wrapper">
-          <Img src={"https://fakeimg.pl/110x110/"} alt="" />
+          <Img src={"https://fakeimg.pl/110x110/"} alt="프로필 이미지입니다" />
           <div className="bottom-right-wrapper">{bottomRight}</div>
         </div>
         {right}
@@ -56,8 +56,13 @@ export default function BigProfile({ bottomRight, left, right }) {
   }
 
   return (
-    <Wrapper>
-      <Img src={"https://fakeimg.pl/110x110/"} alt="" />
+    <Wrapper bottomRight={bottomRight}>
+      {left}
+      <div className="image-wrapper">
+        <Img src={""} alt="프로필 이미지입니다" />
+        <div className="bottom-right-wrapper">{bottomRight}</div>
+      </div>
+      {right}
     </Wrapper>
   );
 }
