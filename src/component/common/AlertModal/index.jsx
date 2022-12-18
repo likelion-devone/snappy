@@ -5,7 +5,7 @@ import Button from "./Button/index";
 
 const Wrapper = styled.div`
   width: 252px;
-  background: #dbdbdb;
+  background: ${({ theme }) => theme.snGreyOff};
   border-radius: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -23,7 +23,7 @@ const Content = styled.p`
   padding: 20px;
   font-weight: 500;
   font-size: 16px;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.snWhite};
 `;
 
 export default function AlertModal({ isModalOpened, children }) {

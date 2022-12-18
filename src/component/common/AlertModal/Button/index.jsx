@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const StyleButton = styled.button`
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.snWhite};
 `;
 
 function Button({ children, handleModalButton }) {
