@@ -43,7 +43,6 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  box-sizing: border-box; // TODO: 추후 GlobalStyle 수정시 삭제
   padding-top: 25px;
   margin-bottom: 16px;
   height: 48px;

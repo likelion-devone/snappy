@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 
   ${({ isNotifying }) =>
     isNotifying
-      ? css`
+    && css`
           &::before {
             content: "";
             display: block;
@@ -27,8 +27,7 @@ const Wrapper = styled.div`
             left: 0;
             z-index: 10;
           }
-        `
-      : ""}
+        `}
 `;
 
 const Img = styled.img`
@@ -54,8 +53,11 @@ const sizeStyleMap = {
   `,
 };
 
+/**
+ * `isNotifying` : 채팅 페이지에서 사용시 노티 표시 여부
+ */
 export default function SmallProfile({ size, isNotifying, children }) {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "development") { // TODO: 개발 모드 추후 삭제 필요
     return (
       <Wrapper isNotifying={isNotifying}>
         <Img
@@ -66,14 +68,14 @@ export default function SmallProfile({ size, isNotifying, children }) {
         {children}
       </Wrapper>
     );
-  } else {
-    return (
-      <Wrapper isNotifying={isNotifying}>
-        <Img src="" alt="프로필 이미지입니다" size={size} />
-        {children}
-      </Wrapper>
-    );
   }
+
+  return (
+    <Wrapper isNotifying={isNotifying}>
+      <Img src="" alt="프로필 이미지입니다" size={size} />
+      {children}
+    </Wrapper>
+  );
 }
 
 SmallProfile.propTypes = {
