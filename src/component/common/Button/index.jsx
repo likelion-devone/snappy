@@ -6,9 +6,9 @@ import { BUTTON_STATE } from "constant/button_state";
 
 const StyledButton = styled.button`
   display: inline-block;
-  color: #fff;
+  color: ${({ theme }) => theme.snWhite};
   font-size: 14px;
-  background-color: #33afd8;
+  background-color: ${({ theme }) => theme.snBlue};
 
   ${({ state }) => stateStyleMap[state] ?? ""}
 
@@ -17,12 +17,12 @@ const StyledButton = styled.button`
 
 const stateStyleMap = {
   disabled: css`
-    background-color: #85cfe8;
+    background-color: ${({ theme }) => theme.snDisabled};
     pointer-events: none;
   `,
   activated: css`
-    background-color: #ffffff;
-    color: #767676;
+    background-color: ${({ theme }) => theme.snWhite};
+    color: ${({ theme }) => theme.snGrayIcon};
   `,
 };
 

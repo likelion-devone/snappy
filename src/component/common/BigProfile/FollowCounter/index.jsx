@@ -18,7 +18,7 @@ const StyledP = styled.p`
   font-weight: 400;
   font-size: 10px;
   line-height: 12px;
-  color: #767676;
+  color: ${({ theme }) => theme.snGreyIcon};
 `;
 
 export default function FollowCounter() {

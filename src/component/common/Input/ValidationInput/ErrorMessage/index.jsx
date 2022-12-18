@@ -8,7 +8,7 @@ const StyledErrorMessage = styled.div`
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
-  color: #eb5757;
+  color: ${({ theme }) => theme.snRed};
   display: flex;
   align-items: flex-end;
   margin: -10px 0 16px; // 기존 margin-bottom 16px, 에러메시지 있으면 6px로 변경됨

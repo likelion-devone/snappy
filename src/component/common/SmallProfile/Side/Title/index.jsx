@@ -19,7 +19,7 @@ const Wrapper = styled.div`
     font-size: 12px;
     line-height: 14px;
 
-    color: #767676;
+    color: ${({ theme }) => theme.snGrayIcon};
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -39,7 +39,7 @@ const StyledTitle = styled.strong`
     font-size: 10px;
     line-height: 13px;
 
-    color: #767676;
+    color: ${({ theme }) => theme.snGrayIcon};
 
     ::before {
       content: "\\00B7";

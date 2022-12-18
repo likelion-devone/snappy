@@ -21,7 +21,7 @@ const Wrapper = styled.div`
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background-color: #33afd8;
+            background-color: ${({ theme }) => theme.snBlue};
             position: absolute;
             top: 0;
             left: 0;
