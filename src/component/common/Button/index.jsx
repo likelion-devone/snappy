@@ -1,6 +1,9 @@
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
+import { BUTTON_SIZE } from "constant/size";
+import { BUTTON_STATE } from "constant/button_state";
+
 const StyledButton = styled.button`
   display: inline-block;
   color: #fff;
@@ -57,8 +60,8 @@ const sizeStyleMap = {
 };
 
 Button.propTypes = {
-  size: PropTypes.oneOf(["xs", "sm", "md", "lg34", "lg44", "xl"]).isRequired,
-  state: PropTypes.oneOf(["disabled", "abled", "activated"]).isRequired,
+  size: PropTypes.oneOf(Object.values(BUTTON_SIZE)).isRequired,
+  state: PropTypes.oneOf(Object.values(BUTTON_STATE)).isRequired,
   children: PropTypes.string.isRequired,
   callbacks: PropTypes.object.isRequired,
 };
