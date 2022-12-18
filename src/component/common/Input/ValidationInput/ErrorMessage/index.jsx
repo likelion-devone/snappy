@@ -11,7 +11,7 @@ const StyledErrorMessage = styled.div`
   color: ${({ theme }) => theme.snRed};
   display: flex;
   align-items: flex-end;
-  margin: -10px 0 16px; // 기존 margin-bottom 16px, 에러메시지 있으면 6px로 변경됨
+  margin: -10px 0 16px; // 기존 margin-bottom 16px, 에러메시지 있으면 6px로 변경됩니다.
 `;
 
 export default function ErrorMessage() {

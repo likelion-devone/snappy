@@ -5,18 +5,18 @@ import PropTypes from "prop-types";
 /**
  * 로그인, 이메일로 회원가입, 프로필 설정
  */
-const AuthInput = forwardRef(function AuthInputForwarded(props, ref) {
+const LabeledInput = forwardRef(function LabeledInputForwarded(props, ref) {
   const { type = "text", id, labelText, ...restProps } = props;
 
   return (
     <InputContainer>
       <Label htmlFor={id}>{labelText}</Label>
-      <Input type={type} ref={ref} {...restProps} />
+      <Input id={id} type={type} ref={ref} {...restProps} />
     </InputContainer>
   );
 });
 
-AuthInput.propTypes = {
+LabeledInput.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   labelText: PropTypes.string.isRequired,
@@ -57,4 +57,4 @@ const Input = styled.input`
   }
 `;
 
-export default AuthInput;
+export default LabeledInput;
