@@ -17,7 +17,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "icons": "node scripts/createIconMap.js && npx prettier --write src/asset/icon/icons.js"
   },
   "eslintConfig": {
     "extends": [
