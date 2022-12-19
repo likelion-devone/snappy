@@ -9,25 +9,26 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  gap: 12px;
 
   width: 100%;
 
   ${({ isNotifying }) =>
-    isNotifying
-    && css`
-          &::before {
-            content: "";
-            display: block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: ${({ theme }) => theme.snBlue};
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 10;
-          }
-        `}
+    isNotifying &&
+    css`
+      &::before {
+        content: "";
+        display: block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: ${({ theme }) => theme.snBlue};
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
+    `}
 `;
 
 const Img = styled.img`
@@ -36,6 +37,13 @@ const Img = styled.img`
   position: relative;
 
   ${({ size }) => sizeStyleMap[size] ?? ""}
+
+  ${({ isPhotographer }) =>
+    isPhotographer &&
+    css`
+      outline: ${({ theme }) => theme.snBlue} solid 2px;
+      outline-offset: -2px;
+    `}
 `;
 
 const sizeStyleMap = {
@@ -56,23 +64,46 @@ const sizeStyleMap = {
 /**
  * `isNotifying` : 채팅 페이지에서 사용시 노티 표시 여부
  */
-export default function SmallProfile({ size, isNotifying, children }) {
-  if (process.env.NODE_ENV === "development") { // TODO: 개발 모드 추후 삭제 필요
-    return (
+export default function SmallProfile({ size, children, ...props }) {
+  const { isPhotographer, isNotifying } = props;
+
+  if (process.env.NODE_ENV === "development") {
+    // TODO: 개발 모드 추후 삭제 필요
+    return !children ? (
+      <Img
+        src={"https://fakeimg.pl/110x110/"}
+        alt="프로필 이미지입니다"
+        size={size}
+        isPhotographer={isPhotographer}
+      />
+    ) : (
       <Wrapper isNotifying={isNotifying}>
         <Img
           src={"https://fakeimg.pl/110x110/"}
           alt="프로필 이미지입니다"
           size={size}
+          isPhotographer={isPhotographer}
         />
         {children}
       </Wrapper>
     );
   }
 
-  return (
+  return !children ? (
+    <Img
+      src={"https://fakeimg.pl/110x110/"}
+      alt="프로필 이미지입니다"
+      size={size}
+      isPhotographer={isPhotographer}
+    />
+  ) : (
     <Wrapper isNotifying={isNotifying}>
-      <Img src="" alt="프로필 이미지입니다" size={size} />
+      <Img
+        src={"https://fakeimg.pl/110x110/"}
+        alt="프로필 이미지입니다"
+        size={size}
+        isPhotographer={isPhotographer}
+      />
       {children}
     </Wrapper>
   );
@@ -82,6 +113,7 @@ SmallProfile.propTypes = {
   size: PropTypes.oneOf(Object.values(PROFILE_SIZE)).isRequired,
   isNotifying: PropTypes.bool,
   children: PropTypes.node,
+  isPhotographer: PropTypes.bool,
 };
 
 SmallProfile.Side = Side;

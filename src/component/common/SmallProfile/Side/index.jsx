@@ -9,9 +9,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
-
-  padding: 0 12px;
+  gap: 12px;
 `;
 
 export default function Side({ left, right }) {
