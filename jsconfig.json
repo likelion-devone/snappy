@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "target": "ES6",
+    "module": "Node16"
   },
   "include": ["src"],
   "exclude": ["node_modules", "build"]
