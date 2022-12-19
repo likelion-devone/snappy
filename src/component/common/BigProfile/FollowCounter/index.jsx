@@ -22,7 +22,7 @@ const StyledP = styled.p`
   color: ${({ theme }) => theme.snGreyIcon};
 `;
 
-export default function FollowCounter() {
+function FollowerCounter() {
   return (
     <Wrapper>
       <Count>295</Count>
@@ -30,3 +30,14 @@ export default function FollowCounter() {
     </Wrapper>
   );
 }
+
+function FollowingCounter() {
+  return (
+    <Wrapper>
+      <Count>300</Count>
+      <StyledP>followings</StyledP>
+    </Wrapper>
+  );
+}
+
+export { FollowerCounter, FollowingCounter };

@@ -27,6 +27,7 @@ const Wrapper = styled.div`
         top: 0;
         left: 0;
         z-index: 10;
+        outline: ${({ theme }) => theme.snWhite} 1px solid;
       }
     `}
 `;
@@ -41,8 +42,8 @@ const Img = styled.img`
   ${({ isPhotographer }) =>
     isPhotographer &&
     css`
-      outline: ${({ theme }) => theme.snBlue} solid 2px;
-      outline-offset: -2px;
+      outline: ${({ theme }) => theme.snBlue} solid 3px;
+      outline-offset: -3px;
     `}
 `;
 

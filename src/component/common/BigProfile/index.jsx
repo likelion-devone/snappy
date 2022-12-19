@@ -43,9 +43,11 @@ const Img = styled.img`
   ${({ isPhotographer }) =>
     isPhotographer &&
     css`
-      outline: ${({ theme }) => theme.snBlue} solid 4px;
-      outline-offset: -4px;
+      outline: ${({ theme }) => theme.snBlue} solid 6px;
+      outline-offset: -6px;
     `}
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 export default function BigProfile({ bottomRight, left, right, ...props }) {
