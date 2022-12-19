@@ -2,6 +2,8 @@ import { forwardRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
+import { FONT_SIZE } from "constant/style";
+
 /**
  * 로그인, 이메일로 회원가입, 프로필 설정
  */
@@ -37,7 +39,7 @@ const Label = styled.label`
   top: 0;
   left: 0;
   font-weight: 500;
-  font-size: 12px;
+  font-size: ${FONT_SIZE.MEDIUM};
   line-height: 15px;
   color: ${({ theme }) => theme.snGrayIcon};
 `;
