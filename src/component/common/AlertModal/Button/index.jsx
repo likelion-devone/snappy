@@ -5,9 +5,9 @@ const StyleButton = styled.button`
   background-color: ${({ theme }) => theme.snWhite};
 `;
 
-function Button({ children, handleModalButton }) {
+function Button({ children, handleModalButton, ...props }) {
   return (
-    <StyleButton type="button" onClick={handleModalButton}>
+    <StyleButton type="button" onClick={handleModalButton} {...props}>
       {children}
     </StyleButton>
   );

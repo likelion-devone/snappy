@@ -3,10 +3,12 @@ import styled from "styled-components";
 
 import { ValidationInputContext } from "component/common/Input/ValidationInput";
 
+import { FONT_SIZE } from "constant/style";
+
 const StyledErrorMessage = styled.div`
   font-style: normal;
   font-weight: 400;
-  font-size: 12px;
+  font-size: ${FONT_SIZE.MEDIUM};
   line-height: 14px;
   color: ${({ theme }) => theme.snRed};
   display: flex;

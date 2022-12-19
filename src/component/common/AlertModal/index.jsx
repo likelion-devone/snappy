@@ -2,6 +2,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import Button from "./Button/index";
+import { FONT_SIZE } from "constant/style";
 
 const Wrapper = styled.div`
   width: 252px;
@@ -22,7 +23,10 @@ const Content = styled.p`
   align-items: center;
   padding: 20px;
   font-weight: 500;
-  font-size: 16px;
+  font-size: ${FONT_SIZE.LARGE};
+
+  line-height: 1.6;
+
   background-color: ${({ theme }) => theme.snWhite};
 `;
 
@@ -35,7 +39,10 @@ export default function AlertModal({ isModalOpened, children }) {
 }
 
 AlertModal.Content = Content;
-AlertModal.Button = Button;
+AlertModal.CancleButton = Button;
+AlertModal.ConfirmButton = styled(Button)`
+  color: ${({ theme }) => theme.snBlue};
+`
 
 AlertModal.propTypes = {
   isModalOpened: PropTypes.bool,

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { FONT_SIZE } from "constant/style";
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ const Wrapper = styled.div`
     width: 100%;
 
     font-weight: 400;
-    font-size: 12px;
+    font-size: ${FONT_SIZE.MEDIUM};
     line-height: 14px;
 
     color: ${({ theme }) => theme.snGrayIcon};
@@ -29,14 +30,14 @@ const Wrapper = styled.div`
 
 const StyledTitle = styled.strong`
   font-weight: 500;
-  font-size: 14px;
+  font-size: ${FONT_SIZE.BASE};
   line-height: 18px;
 
   & + * {
     align-self: center;
 
     font-weight: 400;
-    font-size: 10px;
+    font-size: ${FONT_SIZE.SMALL};
     line-height: 13px;
 
     color: ${({ theme }) => theme.snGrayIcon};

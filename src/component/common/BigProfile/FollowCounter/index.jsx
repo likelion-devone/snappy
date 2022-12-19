@@ -1,3 +1,4 @@
+import { FONT_SIZE } from "constant/style";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -10,13 +11,13 @@ const Wrapper = styled.div`
 
 const Count = styled.span`
   font-weight: 700;
-  font-size: 18px;
+  font-size: ${FONT_SIZE.X_LARGE};
   line-height: 23px;
 `;
 
 const StyledP = styled.p`
   font-weight: 400;
-  font-size: 10px;
+  font-size: ${FONT_SIZE.SMALL};
   line-height: 12px;
   color: ${({ theme }) => theme.snGreyIcon};
 `;
