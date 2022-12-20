@@ -39,15 +39,30 @@ const Img = styled.img`
   vertical-align: top;
 
   flex-shrink: 0;
+
+  ${({ isPhotographer }) =>
+    isPhotographer &&
+    css`
+      outline: ${({ theme }) => theme.snBlue} solid 6px;
+      outline-offset: -6px;
+    `}
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
-export default function BigProfile({ bottomRight, left, right }) {
+export default function BigProfile({ bottomRight, left, right, ...props }) {
+  const { isPhotographer } = props;
+
   if (process.env.NODE_ENV === "development") {
     return (
       <Wrapper bottomRight={bottomRight}>
         {left}
         <div className="image-wrapper">
-          <Img src={"https://fakeimg.pl/110x110/"} alt="프로필 이미지입니다" />
+          <Img
+            src={"https://fakeimg.pl/110x110/"}
+            alt="프로필 이미지입니다"
+            isPhotographer={isPhotographer}
+          />
           <div className="bottom-right-wrapper">{bottomRight}</div>
         </div>
         {right}
@@ -59,7 +74,11 @@ export default function BigProfile({ bottomRight, left, right }) {
     <Wrapper bottomRight={bottomRight}>
       {left}
       <div className="image-wrapper">
-        <Img src={""} alt="프로필 이미지입니다" />
+        <Img
+          src={"https://fakeimg.pl/110x110/"}
+          alt="프로필 이미지입니다"
+          isPhotographer={isPhotographer}
+        />
         <div className="bottom-right-wrapper">{bottomRight}</div>
       </div>
       {right}
@@ -71,4 +90,5 @@ BigProfile.propTypes = {
   left: PropTypes.node,
   right: PropTypes.node,
   bottomRight: PropTypes.element,
+  isPhotographer: PropTypes.bool,
 };
