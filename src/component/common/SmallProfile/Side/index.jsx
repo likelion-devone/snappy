@@ -10,6 +10,10 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+
+  & * + * {
+    flex-shrink: 0;
+  }
 `;
 
 export default function Side({ left, right }) {
