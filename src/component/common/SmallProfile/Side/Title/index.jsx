@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   }
 
   .subtitle {
-    margin-top: 2px;
+    margin-top: ${({ gap }) => gap + "px"};
     width: 100%;
 
     font-weight: 400;
@@ -49,9 +49,17 @@ const StyledTitle = styled.strong`
   }
 `;
 
-export default function Title({ title, subtitle, attachment }) {
+/**
+ * SmallProfile.Side의 왼쪽 부분을 담당하는 컴포넌트
+ *
+ * @prop {string} title
+ * @prop {string} subtitle
+ * @prop {element} attachment
+ * @prop {number} gap title과 subtitle간의 간격을 의미
+ */
+export default function Title({ title, subtitle, attachment, gap = 2 }) {
   return (
-    <Wrapper>
+    <Wrapper gap={gap}>
       <div className="title-wrapper">
         <StyledTitle>{title}</StyledTitle>
         {!!attachment && attachment}
@@ -65,4 +73,5 @@ Title.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   attachment: PropTypes.element,
+  gap: PropTypes.number,
 };
