@@ -22,12 +22,10 @@ const getToken = async () => {
   if (process.env.NODE_ENV === "development") {
     const {
       user: { token },
-    } = await server.noAuth(
-      req.noAuth.user.login({
-        email: process.env.REACT_APP_DEV_ID,
-        password: process.env.REACT_APP_DEV_PASSWORD,
-      })
-    );
+    } = await server.noAuth(req.noAuth.user.login, {
+      email: process.env.REACT_APP_DEV_ID,
+      password: process.env.REACT_APP_DEV_PASSWORD,
+    });
 
     setTokenOnLocalStorage(token);
     return token;

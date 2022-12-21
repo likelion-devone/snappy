@@ -30,10 +30,6 @@ import ROUTE from "constant/route";
  * @typedef {() => void} LogoutHandler
  * @description 로그아웃시 사용하는 함수
  */
-/**
- * @typedef {Object.} LogoutHandler
- * @description 로그아웃시 사용하는 함수
- */
 
 /**
  * @type {React.Context<{authInfo: UserInfo | null, handleLogin: LoginHandler, handleLogout: LogoutHandler }>}
@@ -52,12 +48,14 @@ export default function AuthProvider({ children }) {
   const location = useLocation();
 
   const [authInfo, setAuthInfo] = useState(null);
-  const [____, authInfoLoaded, ___, getAuthInfo] = useAPI(
+  const [____, ______, ___, getAuthInfo] = useAPI(
     req.user.authInfo
   );
   const [_____, _, __, login] = useAPI(
     req.noAuth.user.login
   );
+
+  const [haveTriedAutoLogin, setHaveTriedAutoLogin] = useState(false);
 
   const loginWithToken = useCallback(async () => {
     const token = await getValidToken();
@@ -67,20 +65,21 @@ export default function AuthProvider({ children }) {
       return;
     }
 
-    if (!authInfo && !authInfoLoaded) {
-      getAuthInfo().then((result) => {
-        const { user } = result
-        setAuthInfo(user);
-        if ([ROUTE.LOGIN, ROUTE.LANDING].includes(location.pathname)) {
-          navigate(ROUTE.HOME, { relative: false })
-        }
-      })
-    }
-  }, [navigate, getAuthInfo, authInfoLoaded, authInfo, location])
+    getAuthInfo().then((result) => {
+      const { user } = result
+      setAuthInfo(user);
+      if ([ROUTE.LOGIN, ROUTE.LANDING].includes(location.pathname)) {
+        navigate(ROUTE.HOME, { relative: false })
+      }
+      setHaveTriedAutoLogin(true);
+    })
+  }, [navigate, getAuthInfo, location])
 
   useEffect(() => {
-    loginWithToken();
-  }, [loginWithToken])
+    if ((![ROUTE.LOGIN, ROUTE.LANDING].includes(location.pathname) && !authInfo) || !haveTriedAutoLogin) {
+      loginWithToken();
+    }
+  }, [loginWithToken, location, authInfo, haveTriedAutoLogin])
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development" && authInfo) {
