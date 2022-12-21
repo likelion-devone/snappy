@@ -23,7 +23,7 @@ const stateStyleMap = {
   `,
   activated: css`
     background-color: ${({ theme }) => theme.snWhite};
-    color: ${({ theme }) => theme.snGrayIcon};
+    color: ${({ theme }) => theme.snGreyIcon};
   `,
 };
 

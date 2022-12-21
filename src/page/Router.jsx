@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import styled from "styled-components";
 
 import GlobalNav from "component/common/GlobalNav";
 import TopNav from "component/common/TopNav";
-import AuthProvider from "component/common/AuthProvider";
+import AuthProvider from "lib/auth/AuthProvider";
+import Layout from "component/common/Layout";
 
 import LandingPage from "./Landing";
 import LoginPage from "./Login";
@@ -14,15 +14,6 @@ import ChatPage from "./Chat";
 import NotFoundErrorPage from "./404";
 
 import ROUTE from "constant/route";
-import { GLOBAL_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT } from "constant/style";
-
-const Layout = styled.main`
-  margin-top: calc(${TOP_NAVBAR_HEIGHT} + 10px);
-  margin-bottom: calc(${GLOBAL_NAVBAR_HEIGHT} + 10px);
-  flex-grow: 1;
-  max-width: 1024px;
-  min-width: 390px;
-`;
 
 export default function AppRouter() {
   return (
@@ -37,10 +28,7 @@ export default function AppRouter() {
             <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
             <Route path={ROUTE.POST} element={<PostPage />} />
             <Route path={ROUTE.CHAT} element={<ChatPage />} />
-            <Route
-              path="*"
-              element={<NotFoundErrorPage />}
-            />
+            <Route path="*" element={<NotFoundErrorPage />} />
           </Routes>
           <GlobalNav />
         </Layout>
