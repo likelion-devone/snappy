@@ -14,7 +14,7 @@ const Single = styled.div`
 const AlbumGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 144px);
-  grid-template-rows: repeat(8, 144px);
+  grid-template-rows: repeat(10, 144px);
   gap: 8px;
   align-content: stretch;
   justify-content: center;
@@ -41,7 +41,7 @@ function AlbumView({ photodata }) {
       {photodata.map((slide, index) => {
         return (
           <Single key={index}>
-            <SingleImg src={slide.img} alt="" />
+            <SingleImg src={slide.image} alt="" />
           </Single>
         );
       })}
@@ -55,8 +55,8 @@ function ListView({ photodata }) {
       {photodata.map((slide, index) => {
         return (
           <div className="ListSingle" key={index}>
-            <p>{slide.text}</p>
-            <SingleImg src={slide.img} alt="" />
+            <p>{slide.content}</p>
+            <SingleImg src={slide.image} alt="" />
           </div>
         );
       })}
