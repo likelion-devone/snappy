@@ -17,7 +17,6 @@ import { req, server } from "lib/api";
  */
 export default function useAPI(requestConfigResolver) {
   const configResolverRef = useRef(requestConfigResolver);
-  // const noAuthRef = useRef(noAuth);
 
   /**
    * @typedef {ResponseObject} Data

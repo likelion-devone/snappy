@@ -48,10 +48,10 @@ export default function AuthProvider({ children }) {
   const location = useLocation();
 
   const [authInfo, setAuthInfo] = useState(null);
-  const [____, ______, ___, getAuthInfo] = useAPI(
+  const [_isAuthInfoLoading, _loadedAuthInfo, _authInfoLoadingError, getAuthInfo] = useAPI(
     req.user.authInfo
   );
-  const [_____, _, __, login] = useAPI(
+  const [_isLoggingIn, _loginResponse, _loginError, login] = useAPI(
     req.noAuth.user.login
   );
 
@@ -62,17 +62,22 @@ export default function AuthProvider({ children }) {
 
     if (!token) {
       navigate(ROUTE.LOGIN, { relative: false });
+      setHaveTriedAutoLogin(true);
       return;
     }
 
-    getAuthInfo().then((result) => {
-      const { user } = result
+    try {
+      const { user } = await getAuthInfo()
+
       setAuthInfo(user);
       if ([ROUTE.LOGIN, ROUTE.LANDING].includes(location.pathname)) {
         navigate(ROUTE.HOME, { relative: false })
       }
-      setHaveTriedAutoLogin(true);
-    })
+    } catch (error) {
+      console.error(error);
+    }
+
+    setHaveTriedAutoLogin(true);
   }, [navigate, getAuthInfo, location])
 
   useEffect(() => {
@@ -108,7 +113,8 @@ export default function AuthProvider({ children }) {
     <AuthContext.Provider value={{
       authInfo, handleLogin, handleLogout
     }}>
-      {children}
+      {authInfo || haveTriedAutoLogin ? children : <div>사용자 정보 로딩중</div>}
+      {/* TODO: 사용자 정보 로딩중을 랜딩 페이지로 변경 */}
     </AuthContext.Provider>
   );
 }
