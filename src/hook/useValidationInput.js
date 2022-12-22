@@ -1,16 +1,24 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-export default function useValidationInput({ checkValidation }) {
+/**
+ * ValidationInput 사용을 위한 Custom Hook
+ *
+ * @param {(value:string) => string | null} checkValidation
+ * @returns {[inputRef: React.MutableRefObject<HTMLInputElement>, handleValidation: () => void, errorMessage: string, isPassed: boolean]}
+ */
+export default function useValidationInput(checkValidation) {
   const inputRef = useRef(null);
   const errorMessageCache = useRef("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isPassed, setIsPassed] = useState(false);
 
   const handleValidation = useCallback(() => {
     const {
       current: { value },
     } = inputRef;
 
-    const errorMessageCalculated = checkValidation(value);
+    const errorMessageCalculated = checkValidation(value) || "";
+    setIsPassed(!errorMessageCalculated);
 
     setErrorMessage(errorMessageCalculated);
     errorMessageCache.current = errorMessageCalculated;
@@ -40,5 +48,5 @@ export default function useValidationInput({ checkValidation }) {
     }
   }, [addFocusListeners, removeFocusListeners]);
 
-  return { inputRef, handleValidation, errorMessage };
+  return [inputRef, handleValidation, errorMessage, isPassed];
 }
