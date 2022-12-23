@@ -1,9 +1,11 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
 import { FONT_SIZE } from "constant/style";
+
+import { sizeStyleMap, stateStyleMap } from "./style";
 
 const StyledButton = styled.button`
   display: inline-block;
@@ -16,63 +18,22 @@ const StyledButton = styled.button`
   ${({ size }) => sizeStyleMap[size] ?? ""}
 `;
 
-const stateStyleMap = {
-  disabled: css`
-    background-color: ${({ theme }) => theme.snDisabled};
-    pointer-events: none;
-  `,
-  activated: css`
-    background-color: ${({ theme }) => theme.snWhite};
-    color: ${({ theme }) => theme.snGreyIcon};
-  `,
-};
-
-const sizeStyleMap = {
-  xs: css`
-    width: 56px;
-    height: 28px;
-    border-radius: 26px;
-  `,
-  sm: css`
-    width: 90px;
-    height: 32px;
-    border-radius: 26px;
-  `,
-  md: css`
-    width: 100px;
-    height: 34px;
-    border-radius: 32px;
-  `,
-  lg34: css`
-    width: 120px;
-    height: 34px;
-    border-radius: 30px;
-  `,
-  lg44: css`
-    width: 120px;
-    height: 44px;
-    border-radius: 44px;
-  `,
-  xl: css`
-    width: 322px;
-    height: 44px;
-    border-radius: 44px;
-  `,
-};
-
-Button.propTypes = {
-  size: PropTypes.oneOf(Object.values(BUTTON_SIZE)).isRequired,
-  state: PropTypes.oneOf(Object.values(BUTTON_STATE)).isRequired,
-  children: PropTypes.string.isRequired,
-  callbacks: PropTypes.object.isRequired,
-};
-
-export default function Button({ ...props }) {
-  const { size, state, children, callbacks } = props;
-
+/**
+ * 
+ * @param {{ size: BUTTON_SIZE, state: BUTTON_STATE, children: import("react").ReactNode, ...props }} params
+ * 
+ * @returns 
+ */
+export default function Button({ size, state, children, ...props }) {
   return (
-    <StyledButton size={size} state={state} onClick={callbacks[state]}>
+    <StyledButton size={size} state={state} {...props}>
       {children}
     </StyledButton>
   );
 }
+
+Button.propTypes = {
+  size: PropTypes.oneOf(Object.values(BUTTON_SIZE)).isRequired,
+  state: PropTypes.oneOf(Object.values(BUTTON_STATE.LARGE_34)).isRequired,
+  children: PropTypes.string.isRequired,
+};
