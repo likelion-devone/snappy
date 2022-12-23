@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "component/common/Layout";
 
-import LandingPage from "./Landing";
 import LoginPage from "./Login";
 import HomePage from "./Home";
 import ProfilePage from "./Profile";
@@ -16,9 +15,9 @@ export default function AppRouter() {
   return (
     <Router>
       <Routes>
-        <Route path={ROUTE.LOGIN} element={<LoginPage />} />
         <Route element={<Layout />}>
-          <Route path={ROUTE.LANDING} element={<LandingPage />} />
+          <Route path={ROUTE.LANDING} element={<></>} /> {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
+          <Route path={ROUTE.LOGIN} element={<LoginPage />} />
           <Route path={ROUTE.HOME} element={<HomePage />} />
           <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
           <Route path={ROUTE.POST} element={<PostPage />} />

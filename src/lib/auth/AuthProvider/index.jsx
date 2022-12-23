@@ -8,6 +8,7 @@ import { getValidToken } from "lib/auth";
 import { removeTokenOnLocalStorage } from "lib/storage/localStorage";
 
 import ROUTE from "constant/route";
+import LandingPage from "page/Landing/index";
 
 /**
  * @typedef {Object} UserInfo
@@ -113,8 +114,7 @@ export default function AuthProvider({ children }) {
     <AuthContext.Provider value={{
       authInfo, handleLogin, handleLogout
     }}>
-      {authInfo || haveTriedAutoLogin ? children : <div>사용자 정보 로딩중</div>}
-      {/* TODO: 사용자 정보 로딩중을 랜딩 페이지로 변경 */}
+      {authInfo || haveTriedAutoLogin ? children : <LandingPage />}
     </AuthContext.Provider>
   );
 }

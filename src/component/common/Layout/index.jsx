@@ -19,13 +19,13 @@ const LayoutStyle = styled.main`
 function Layout() {
   return (
     <>
-      <TopNav />
-      <LayoutStyle>
-        <AuthProvider>
+      <AuthProvider>
+        <TopNav />
+        <LayoutStyle>
           <Outlet />
-        </AuthProvider>
-        <GlobalNav />
-      </LayoutStyle>
+          <GlobalNav />
+        </LayoutStyle>
+      </AuthProvider>
     </>
   )
 }
