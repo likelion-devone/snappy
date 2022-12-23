@@ -19,5 +19,5 @@ export default function useFetch(requestConfigResolver, ...params) {
     getData(...paramRef.current);
   }, [getData]);
 
-  return [isLoading, data, error];
+  return [isLoading || !data, data, error];
 }
