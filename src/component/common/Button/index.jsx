@@ -7,7 +7,7 @@ import { FONT_SIZE } from "constant/style";
 
 import { sizeStyleMap, stateStyleMap } from "./style";
 
-const StyledButton = styled.button`
+const Button = styled.button`
   display: inline-block;
   color: ${({ theme }) => theme.snWhite};
   font-size: ${FONT_SIZE.BASE};
@@ -18,22 +18,10 @@ const StyledButton = styled.button`
   ${({ size }) => sizeStyleMap[size] ?? ""}
 `;
 
-/**
- * 
- * @param {{ size: BUTTON_SIZE, state: BUTTON_STATE, children: import("react").ReactNode, ...props }} params
- * 
- * @returns 
- */
-export default function Button({ size, state, children, ...props }) {
-  return (
-    <StyledButton size={size} state={state} {...props}>
-      {children}
-    </StyledButton>
-  );
-}
-
 Button.propTypes = {
+  ...Button.propTypes,
   size: PropTypes.oneOf(Object.values(BUTTON_SIZE)).isRequired,
   state: PropTypes.oneOf(Object.values(BUTTON_STATE.LARGE_34)).isRequired,
-  children: PropTypes.string.isRequired,
-};
+}
+
+export default Button;
