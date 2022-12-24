@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 import { AlbumView, ListView } from "component/Profile/AlbumListView";
 import { useState } from "react";
 import data from "./data.json";
+import productdata from "./productlist.json";
 import BigProfile from "component/common/BigProfile/index";
 import {
   FollowerCounter,
@@ -15,7 +16,9 @@ import ProductList from "component/Profile/ProductList/index";
 import { Link } from "react-router-dom";
 import ROUTE from "constant/route";
 import theme from "style/theme";
-import portfolio from "asset/portfolio.png";
+import PortfolioTitleImg from "asset/title-portfolio.png";
+import Modal from "component/Profile/Modal/index";
+import Calendar from "component/Profile/Calendar/index";
 
 const Gobacknav = styled.div`
   height: 48px;
@@ -80,22 +83,25 @@ const Wrapper = styled.div`
   margin-bottom: 26px;
 `;
 
-const Box1 = styled.div`
-  height: 100px;
-  border: 4px solid ${(props) => props.theme.snBlue};
-`;
-const Portfolio = styled.img`
-  display: block;
-  margin: auto;
-  width: 500px;
-`;
-const Box2 = styled.div`
-  height: 450px;
+const CurrentPortfolio = styled.section`
+  display: flex;
+  flex-direction: column;
   background-color: ${(props) => props.theme.snBlue};
+  .title {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: ${(props) => props.theme.snWhite};
+    border: 3px solid ${(props) => props.theme.snBlue};
+    text-align: center;
+  }
 `;
-const Box3 = styled.div`
-  border: 1px solid grey;
+
+const Portfolio = styled.img`
+  width: 300px;
 `;
+
 const IconBox = styled.div`
   display: flex;
   margin-left: auto;
@@ -109,9 +115,9 @@ const IconList = styled(Icons.PostList)`
   margin-right: 22.5px;
   path {
     fill: ${({ $isListActive, theme }) =>
-      $isListActive ? theme.snGreyIcon : theme.snGreyOff};
+      $isListActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isListActive, theme }) =>
-      $isListActive ? theme.snGreyIcon : theme.snGreyOff};
+      $isListActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
@@ -119,15 +125,24 @@ const IconAlbum = styled(Icons.PostAlbum)`
   margin-top: 12.25px;
   path {
     fill: ${({ $isAlbumActive, theme }) =>
-      $isAlbumActive ? theme.snGreyIcon : theme.snGreyOff};
+      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isAlbumActive, theme }) =>
-      $isAlbumActive ? theme.snGreyIcon : theme.snGreyOff};
+      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
   }
+`;
+
+const ReservationButton = styled.button`
+  height: 50px;
+  border: 1px solid ${(props) => props.theme.snWhite};
+  margin: 0 auto;
+  color: ${(props) => props.theme.snWhite};
+  margin-bottom: 50px;
 `;
 
 function ProfilePage() {
   const [ViewOption, setViewOption] = useState(true);
   const [isListActive, setIsListActive] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const ShowListView = () => {
     setViewOption(true);
@@ -171,12 +186,27 @@ function ProfilePage() {
           </ShareLink>
         </Wrapper>
       </StyleBigProfile>
-      <Box1>
-        <Portfolio className="" src={portfolio}></Portfolio>
-      </Box1>
-      <Box2>
-        <ProductList photodata={data}></ProductList>
-      </Box2>
+
+      <CurrentPortfolio>
+        <h2 className="title">
+          <Portfolio src={PortfolioTitleImg}></Portfolio>
+        </h2>
+        <ProductList productdata={productdata}></ProductList>
+        <ReservationButton type="button" onClick={() => setIsOpen(!isOpen)}>
+          Make a Reservation
+        </ReservationButton>
+      </CurrentPortfolio>
+      {/* Test */}
+      {/* Test */}
+      {/* Test */}
+
+      <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+        <Calendar />
+      </Modal>
+
+      {/* Test */}
+      {/* Test */}
+      {/* Test */}
 
       <IconBox>
         <button type="button" onClick={ShowListView}>

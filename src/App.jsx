@@ -6,6 +6,7 @@ import GlobalStyle from "style/GlobalStyle";
 import theme from "style/theme";
 import "style/font.css";
 
+
 function App() {
   return (
     <>
