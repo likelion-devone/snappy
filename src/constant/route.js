@@ -11,4 +11,11 @@ const ROUTE = {
   CHAT: "/chat",
 };
 
+const ROUTE_LOGIN = {
+  JOIN: "join",
+  AUTHORIZE: "authorize",
+};
+
+export { ROUTE_LOGIN };
+
 export default ROUTE;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import { FONT_SIZE } from "constant/style";
-import { NavLinkMap } from "./constant";
+import { NAV_LINK_MAP } from "./constant";
 
 const StyledLink = styled(Link)`
   text-align: center;
@@ -22,7 +22,7 @@ const Title = styled.strong`
 
 function NavLink({ linkKey }) {
   const location = useLocation();
-  const { to, icon: Icon, text } = NavLinkMap[linkKey];
+  const { to, icon: Icon, text } = NAV_LINK_MAP[linkKey];
   const isActive = location.pathname === to;
 
   return (
@@ -34,7 +34,7 @@ function NavLink({ linkKey }) {
 }
 
 NavLink.propTypes = {
-  linkKey: PropTypes.oneOf(Object.keys(NavLinkMap)).isRequired,
+  linkKey: PropTypes.oneOf(Object.keys(NAV_LINK_MAP)).isRequired,
 }
 
 export default NavLink;

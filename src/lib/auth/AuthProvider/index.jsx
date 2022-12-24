@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState, useCallback } from "react";
-import PropTypes from "prop-types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { req } from "lib/api";
 import useAPI from "hook/useAPI";
@@ -44,7 +43,7 @@ export const AuthContext = createContext();
  * 
  * 개발 환경에서는 개발용 계정으로 자동 로그인합니다.
  */
-export default function AuthProvider({ children }) {
+export default function AuthProvider() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -114,11 +113,7 @@ export default function AuthProvider({ children }) {
     <AuthContext.Provider value={{
       authInfo, handleLogin, handleLogout
     }}>
-      {authInfo || haveTriedAutoLogin ? children : <LandingPage />}
+      {authInfo || haveTriedAutoLogin ? <Outlet /> : <LandingPage />}
     </AuthContext.Provider>
   );
-}
-
-AuthProvider.propTypes = {
-  children: PropTypes.node
 }
