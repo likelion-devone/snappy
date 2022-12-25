@@ -1,7 +1,9 @@
 import { FONT_SIZE } from "constant/style";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const Wrapper = styled.div`
+const StyledLink = styled(Link)`
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -15,29 +17,40 @@ const Count = styled.span`
   line-height: 23px;
 `;
 
-const StyledP = styled.p`
+const StyledSpan = styled.span`
   font-weight: 400;
   font-size: ${FONT_SIZE.SMALL};
   line-height: 12px;
   color: ${({ theme }) => theme.snGreyIcon};
 `;
 
-function FollowerCounter() {
+function FollowerCounter({ count }) {
   return (
-    <Wrapper>
-      <Count>295</Count>
-      <StyledP>followers</StyledP>
-    </Wrapper>
+    <StyledLink to="/:accountname/follower">
+      <Count>{count}</Count>
+      <StyledSpan>followers</StyledSpan>
+    </StyledLink>
   );
 }
 
-function FollowingCounter() {
+/**
+ * @prop {string} count
+ */
+function FollowingCounter({ count }) {
   return (
-    <Wrapper>
-      <Count>300</Count>
-      <StyledP>followings</StyledP>
-    </Wrapper>
+    <StyledLink to="/:accountname/following">
+      <Count>{count}</Count>
+      <StyledSpan>followings</StyledSpan>
+    </StyledLink>
   );
 }
 
 export { FollowerCounter, FollowingCounter };
+
+FollowerCounter.propTypes = {
+  count: PropTypes.string.isRequired,
+};
+
+FollowingCounter.propTypes = {
+  count: PropTypes.string.isRequired,
+};

@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
+import ProfileErrorImage from "asset/logo-404-203220.png";
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -34,6 +36,9 @@ const Wrapper = styled.div`
 `;
 
 const Img = styled.img`
+  width: 110px;
+  height: 110px;
+
   overflow: hidden;
   border-radius: 50%;
   vertical-align: top;
@@ -47,37 +52,29 @@ const Img = styled.img`
       outline-offset: -6px;
     `}
 
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 `;
 
-export default function BigProfile({ bottomRight, left, right, ...props }) {
-  const { isPhotographer } = props;
-
-  if (process.env.NODE_ENV === "development") {
-    return (
-      <Wrapper bottomRight={bottomRight}>
-        {left}
-        <div className="image-wrapper">
-          <Img
-            src={"https://fakeimg.pl/110x110/"}
-            alt="프로필 이미지입니다"
-            isPhotographer={isPhotographer}
-          />
-          <div className="bottom-right-wrapper">{bottomRight}</div>
-        </div>
-        {right}
-      </Wrapper>
-    );
-  }
+export default function BigProfile({
+  src,
+  bottomRight,
+  left,
+  right,
+  isPhotographer,
+}) {
+  const handleImgError = (event) => {
+    event.target.src = ProfileErrorImage;
+  };
 
   return (
     <Wrapper bottomRight={bottomRight}>
       {left}
       <div className="image-wrapper">
         <Img
-          src={"https://fakeimg.pl/110x110/"}
+          src={src}
           alt="프로필 이미지입니다"
           isPhotographer={isPhotographer}
+          onError={(e) => handleImgError(e)}
         />
         <div className="bottom-right-wrapper">{bottomRight}</div>
       </div>
@@ -87,6 +84,7 @@ export default function BigProfile({ bottomRight, left, right, ...props }) {
 }
 
 BigProfile.propTypes = {
+  src: PropTypes.string.isRequired,
   left: PropTypes.node,
   right: PropTypes.node,
   bottomRight: PropTypes.element,
