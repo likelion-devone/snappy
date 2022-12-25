@@ -84,7 +84,7 @@ export default function SmallProfile({
   return !children ? (
     !imageTo ? (
       <Img
-        src={src}
+        src={src ?? ProfileErrorImage}
         alt="프로필 이미지입니다"
         size={size}
         isPhotographer={isPhotographer}
@@ -93,7 +93,7 @@ export default function SmallProfile({
     ) : (
       <Link to={imageTo}>
         <Img
-          src={src}
+          src={src ?? ProfileErrorImage}
           alt="프로필 이미지입니다"
           size={size}
           isPhotographer={isPhotographer}
@@ -104,7 +104,7 @@ export default function SmallProfile({
   ) : !imageTo ? (
     <Wrapper isNotifying={isNotifying}>
       <Img
-        src={src}
+        src={src ?? ProfileErrorImage}
         alt="프로필 이미지입니다"
         size={size}
         isPhotographer={isPhotographer}
@@ -116,7 +116,7 @@ export default function SmallProfile({
     <Wrapper isNotifying={isNotifying}>
       <Link to={imageTo}>
         <Img
-          src={src}
+          src={src ?? ProfileErrorImage}
           alt="프로필 이미지입니다"
           size={size}
           isPhotographer={isPhotographer}

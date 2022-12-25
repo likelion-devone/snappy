@@ -71,7 +71,7 @@ export default function BigProfile({
       {left}
       <div className="image-wrapper">
         <Img
-          src={src}
+          src={src ?? ProfileErrorImage}
           alt="프로필 이미지입니다"
           isPhotographer={isPhotographer}
           onError={(e) => handleImgError(e)}
