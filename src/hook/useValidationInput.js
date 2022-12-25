@@ -30,21 +30,27 @@ export default function useValidationInput(checkValidation) {
     []
   );
 
-  const addFocusListeners = useCallback(() => {
-    inputRef.current.addEventListener("focusout", clearErrorMessage);
-    inputRef.current.addEventListener("focusin", loadErrorMessage);
-  }, [clearErrorMessage, loadErrorMessage]);
+  const addFocusListeners = useCallback(
+    (element) => {
+      element.addEventListener("focusout", clearErrorMessage);
+      element.addEventListener("focusin", loadErrorMessage);
+    },
+    [clearErrorMessage, loadErrorMessage]
+  );
 
-  const removeFocusListeners = useCallback(() => {
-    inputRef.current.removeEventListener("focusout", clearErrorMessage);
-    inputRef.current.removeEventListener("focusin", loadErrorMessage);
-  }, [clearErrorMessage, loadErrorMessage]);
+  const removeFocusListeners = useCallback(
+    (element) => () => {
+      element.removeEventListener("focusout", clearErrorMessage);
+      element.removeEventListener("focusin", loadErrorMessage);
+    },
+    [clearErrorMessage, loadErrorMessage]
+  );
 
   useEffect(() => {
     if (inputRef.current) {
-      addFocusListeners();
+      addFocusListeners(inputRef.current);
 
-      return removeFocusListeners;
+      return removeFocusListeners(inputRef.current);
     }
   }, [addFocusListeners, removeFocusListeners]);
 
