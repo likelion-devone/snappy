@@ -54,6 +54,24 @@ const reqWithoutAuth = {
       },
     }),
   },
+  image: {
+    uploadfile: ({ formData }) => ({
+      method: METHOD.POST,
+      url: "/image/uploadfile",
+      headers: {
+        "Content-type": "multipart/form-data",
+      },
+      data: formData,
+    }),
+    uploadfiles: ({ formData }) => ({
+      method: METHOD.POST,
+      url: "/image/uploadfiles",
+      headers: {
+        "Content-type": "multipart/form-data",
+      },
+      data: formData,
+    }),
+  },
 };
 
 const req = {
