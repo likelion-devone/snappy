@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
 import ProfileErrorImage from "asset/logo-404-203220.png";
+import UploadProfileImageLabel from "./UploadProfileImageLabel";
 
 const Wrapper = styled.div`
   display: flex;
@@ -90,3 +91,5 @@ BigProfile.propTypes = {
   bottomRight: PropTypes.element,
   isPhotographer: PropTypes.bool,
 };
+
+BigProfile.UploadLabel = UploadProfileImageLabel;
