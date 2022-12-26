@@ -24,9 +24,13 @@ const StyledSpan = styled.span`
   color: ${({ theme }) => theme.snGreyIcon};
 `;
 
-function FollowerCounter({ count }) {
+/**
+ * @prop {string} count
+ * @prop {string} linkTo 가고자하는 링크
+ */
+function FollowerLink({ count, to }) {
   return (
-    <StyledLink to="/:accountname/follower">
+    <StyledLink to={to}>
       <Count>{count}</Count>
       <StyledSpan>followers</StyledSpan>
     </StyledLink>
@@ -35,22 +39,25 @@ function FollowerCounter({ count }) {
 
 /**
  * @prop {string} count
+ * @prop {string} linkTo 가고자하는 링크
  */
-function FollowingCounter({ count }) {
+function FollowingLink({ count, to }) {
   return (
-    <StyledLink to="/:accountname/following">
+    <StyledLink to={to}>
       <Count>{count}</Count>
       <StyledSpan>followings</StyledSpan>
     </StyledLink>
   );
 }
 
-export { FollowerCounter, FollowingCounter };
+export { FollowerLink, FollowingLink };
 
-FollowerCounter.propTypes = {
+FollowerLink.propTypes = {
   count: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
 };
 
-FollowingCounter.propTypes = {
+FollowingLink.propTypes = {
   count: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
 };
