@@ -20,6 +20,8 @@ const GlobalNavStyle = styled.nav`
   border-top: 1px solid #76767635;
 
   z-index: 100;
+
+  background-color: ${({ theme }) => theme.snWhite};
 `
 
 export default function GlobalNav() {
