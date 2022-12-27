@@ -8,10 +8,13 @@ import TextArea from "component/Post/TextArea/index";
 import LabelImgUpload from "component/Post/LabelImgUpload/index";
 
 import { PROFILE_SIZE } from "constant/size";
-import { useState, useRef } from "react";
+import ROUTE from "constant/route";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import useAPI from "hook/useAPI";
 import { req } from "lib/api/index";
+import routeResolver from "util/routeResolver";
 
 const PostUploadWrapper = styled.div`
   position: relative;
@@ -41,8 +44,11 @@ export default function PostUploadPage() {
   ] = useAPI(req.noAuth.image.uploadfiles);
 
   // 게시물 업로드 API
-  const [isPostUploading, _uploadPostResponse, _uploadPostError, createPost] =
+  const [isPostUploading, uploadPostResponse, uploadPostError, createPost] =
     useAPI(req.post.create);
+
+  // 게시물 업로드 후 HOME 으로 경로 이동
+  const navigate = useNavigate();
 
   const inpImagesRef = useRef(null);
   const textareaRef = useRef(null);
@@ -91,6 +97,20 @@ export default function PostUploadPage() {
         .join(","),
     });
   };
+
+  useEffect(() => {
+    // 게시물 업로드 전
+    if (uploadPostError) {
+      alert("게시물 업로드를 실패했습니다.");
+      return;
+    }
+    // 게시물 업로드 완료 후
+    if (uploadPostResponse) {
+      alert("게시물을 업로드 했습니다.");
+      navigate(routeResolver(ROUTE.HOME));
+      return;
+    }
+  }, [navigate, uploadPostResponse, uploadPostError]);
 
   return (
     <PostUploadWrapper>
