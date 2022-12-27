@@ -1,0 +1,91 @@
+import styled from "styled-components";
+
+import SmallProfile from "component/common/SmallProfile/index";
+import AddedImgList from "component/common/AddedImgList/index";
+import IsUploadPossibleProvider from "component/Post/IsUploadPossibleProvider/index";
+import ImgDataProvider from "component/Post/ImgDataProvider/index";
+import TextArea from "component/Post/TextArea/index";
+import LabelImgUpload from "component/Post/LabelImgUpload/index";
+
+import { PROFILE_SIZE } from "constant/size";
+import { useState, useRef } from "react";
+
+const PostUploadWrapper = styled.div`
+  position: relative;
+`;
+
+const FormSection = styled.form`
+  margin: 20px 16px 0;
+  display: flex;
+`;
+
+// 업로드 파일 인풋 숨기기
+const HiddenUploadFileInput = styled.input`
+  display: none;
+`;
+
+const SIZE_LIMIT = 10 * 1024 * 1024;
+
+export default function PostUploadPage() {
+  const [imgData, setImgData] = useState([]);
+
+  const inpImagesRef = useRef(null);
+  const textareaRef = useRef(null);
+
+  // 업로드 파일 인풋 onChange 이벤트
+  const handleUploadFile = (event) => {
+    const imgFileList = event.target.files;
+    const imgCount = imgData.length;
+
+    const imgList = [];
+    // 이미지 파일 용량, 개수 제한
+    for (const file of imgFileList) {
+      if (file.size > SIZE_LIMIT) {
+        alert("10MB 이상의 이미지는 업로드 할 수 없습니다.");
+        return;
+      }
+      if (imgCount > 2) {
+        alert("3개 이하의 파일을 업로드 하세요.");
+        return;
+      }
+
+      imgList.push(URL.createObjectURL(file));
+    }
+    setImgData(imgList);
+  };
+
+  // 상단 Nav 업로드 버튼 onClick 이벤트
+  const handleSubmitPost = async (event) => {
+    event.preventDefault();
+  };
+
+  return (
+    <PostUploadWrapper>
+      {/* TODO 상단 Nav 업로드 버튼, isActive */}
+      <ImgDataProvider>
+        <FormSection onSubmit={handleSubmitPost}>
+          {/* TODO 버튼 컴포넌트로 변경 */}
+          <button type="submit">업로드</button>
+
+          <SmallProfile size={PROFILE_SIZE.SMALL} />
+
+          <IsUploadPossibleProvider>
+            <TextArea ref={textareaRef} />
+            <LabelImgUpload />
+          </IsUploadPossibleProvider>
+
+          <HiddenUploadFileInput
+            ref={inpImagesRef}
+            type="file"
+            id="imgUpload"
+            accept=".jpg, .gif, .png, .jpeg, .bmp, .tif, .heic"
+            multiple
+            onChange={handleUploadFile}
+          />
+        </FormSection>
+
+        <AddedImgList imgData={imgData} setImgData={setImgData} />
+      </ImgDataProvider>
+    </PostUploadWrapper>
+  );
+}
