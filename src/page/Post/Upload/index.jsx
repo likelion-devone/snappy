@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import useAPI from "hook/useAPI";
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
+import useAuthInfo from "hook/useAuthInfo";
 
 const PostUploadWrapper = styled.div`
   position: relative;
@@ -52,6 +53,7 @@ export default function PostUploadPage() {
 
   const inpImagesRef = useRef(null);
   const textareaRef = useRef(null);
+  const { image: profileImage, accountname } = useAuthInfo();
 
   // 업로드 파일 인풋 onChange 이벤트
   const handleUploadFile = (event) => {
@@ -120,7 +122,11 @@ export default function PostUploadPage() {
           {/* TODO 버튼 컴포넌트로 변경 */}
           <button type="submit">업로드</button>
 
-          <SmallProfile size={PROFILE_SIZE.SMALL} />
+          <SmallProfile
+            size={PROFILE_SIZE.SMALL}
+            src={profileImage}
+            imageTo={routeResolver(ROUTE.PROFILE, accountname)}
+          />
 
           <IsUploadPossibleProvider>
             <TextArea ref={textareaRef} />
