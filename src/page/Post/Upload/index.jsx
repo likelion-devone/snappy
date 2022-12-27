@@ -10,6 +10,9 @@ import LabelImgUpload from "component/Post/LabelImgUpload/index";
 import { PROFILE_SIZE } from "constant/size";
 import { useState, useRef } from "react";
 
+import useAPI from "hook/useAPI";
+import { req } from "lib/api/index";
+
 const PostUploadWrapper = styled.div`
   position: relative;
 `;
@@ -28,6 +31,13 @@ const SIZE_LIMIT = 10 * 1024 * 1024;
 
 export default function PostUploadPage() {
   const [imgData, setImgData] = useState([]);
+
+  const [
+    _isImageUploading,
+    _imageUploadResponse,
+    _imageUploadError,
+    uploadImage,
+  ] = useAPI(req.noAuth.image.uploadfiles);
 
   const inpImagesRef = useRef(null);
   const textareaRef = useRef(null);
@@ -57,6 +67,13 @@ export default function PostUploadPage() {
   // 상단 Nav 업로드 버튼 onClick 이벤트
   const handleSubmitPost = async (event) => {
     event.preventDefault();
+
+    // formData 객체 생성
+    const formData = new FormData();
+    formData.append("image", inpImagesRef.current.files);
+
+    const result = await uploadImage({ formData: formData });
+    console.log(result);
   };
 
   return (
