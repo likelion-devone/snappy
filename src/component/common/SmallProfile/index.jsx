@@ -1,9 +1,11 @@
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 import Side from "./Side";
 
 import { PROFILE_SIZE } from "constant/size";
+import ProfileErrorImage from "asset/logo-404-203220.png";
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,6 +38,7 @@ const Img = styled.img`
   border-radius: 50%;
   flex-shrink: 0;
   position: relative;
+  vertical-align: top;
 
   ${({ size }) => sizeStyleMap[size] ?? ""}
 
@@ -65,46 +68,61 @@ const sizeStyleMap = {
 /**
  * `isNotifying` : 채팅 페이지에서 사용시 노티 표시 여부
  */
-export default function SmallProfile({ size, children, ...props }) {
-  const { isPhotographer, isNotifying } = props;
+export default function SmallProfile({
+  size,
+  src,
+  imageTo,
+  children,
+  isPhotographer,
+  isNotifying,
+}) {
+  const handleImgError = (event) => {
+    console.log(event);
+    event.target.src = ProfileErrorImage;
+  };
 
-  if (process.env.NODE_ENV === "development") {
-    // TODO: 개발 모드 추후 삭제 필요
-    return !children ? (
+  return !children ? (
+    !imageTo ? (
       <Img
-        src={"https://fakeimg.pl/110x110/"}
+        src={src ?? ProfileErrorImage}
         alt="프로필 이미지입니다"
         size={size}
         isPhotographer={isPhotographer}
+        onError={(e) => handleImgError(e)}
       />
     ) : (
-      <Wrapper isNotifying={isNotifying}>
+      <Link to={imageTo}>
         <Img
-          src={"https://fakeimg.pl/110x110/"}
+          src={src ?? ProfileErrorImage}
           alt="프로필 이미지입니다"
           size={size}
           isPhotographer={isPhotographer}
+          onError={(e) => handleImgError(e)}
         />
-        {children}
-      </Wrapper>
-    );
-  }
-
-  return !children ? (
-    <Img
-      src={"https://fakeimg.pl/110x110/"}
-      alt="프로필 이미지입니다"
-      size={size}
-      isPhotographer={isPhotographer}
-    />
-  ) : (
+      </Link>
+    )
+  ) : !imageTo ? (
     <Wrapper isNotifying={isNotifying}>
       <Img
-        src={"https://fakeimg.pl/110x110/"}
+        src={src ?? ProfileErrorImage}
         alt="프로필 이미지입니다"
         size={size}
         isPhotographer={isPhotographer}
+        onError={(e) => handleImgError(e)}
       />
+      {children}
+    </Wrapper>
+  ) : (
+    <Wrapper isNotifying={isNotifying}>
+      <Link to={imageTo}>
+        <Img
+          src={src ?? ProfileErrorImage}
+          alt="프로필 이미지입니다"
+          size={size}
+          isPhotographer={isPhotographer}
+          onError={(e) => handleImgError(e)}
+        />
+      </Link>
       {children}
     </Wrapper>
   );
@@ -112,8 +130,10 @@ export default function SmallProfile({ size, children, ...props }) {
 
 SmallProfile.propTypes = {
   size: PropTypes.oneOf(Object.values(PROFILE_SIZE)).isRequired,
-  isNotifying: PropTypes.bool,
+  src: PropTypes.string.isRequired,
+  imageTo: PropTypes.string.isRequired,
   children: PropTypes.node,
+  isNotifying: PropTypes.bool,
   isPhotographer: PropTypes.bool,
 };
 

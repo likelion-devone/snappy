@@ -37,10 +37,17 @@ export default function useAPI(requestConfigResolver) {
   const request = useCallback(
     async (...params) => {
       setIsLoading(true);
+      setData(null);
+      setError(null);
+
       try {
         let result;
 
-        if (requestConfigResolver.name in req.noAuth) {
+        if (
+          Object.keys(req.noAuth).some(
+            (key) => requestConfigResolver.name in req.noAuth[key]
+          )
+        ) {
           result = await server.noAuth(configResolverRef.current, ...params);
           setData(result);
         } else {
@@ -53,7 +60,9 @@ export default function useAPI(requestConfigResolver) {
       } catch (error) {
         setIsLoading(false);
         setError(error);
-        alert("서버에서 데이터를 가져오지 못했습니다.");
+        if (process.env.NODE_ENV === "development") {
+          alert("서버에서 데이터를 가져오지 못했습니다.");
+        }
       }
     },
     [requestConfigResolver.name]

@@ -9,6 +9,13 @@ const Wrapper = styled.div`
   background: ${({ theme }) => theme.snGreyOff};
   border-radius: 10px;
 
+  z-index: 700;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   display: grid;
   grid-template-columns: repeat(${({ children }) => children.length - 1}, 1fr);
   grid-template-rows: minmax(64px, auto) 46px;

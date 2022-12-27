@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { GLOBAL_NAVBAR_HEIGHT } from "constant/style";
-import ROUTE from "constant/route";
+import { NavLink } from "./component/index";
 
 const GlobalNavStyle = styled.nav`
   display: flex;
@@ -18,7 +17,7 @@ const GlobalNavStyle = styled.nav`
 
   height: ${GLOBAL_NAVBAR_HEIGHT};
 
-  background-color: darkgrey; /* TODO: Global Nav 개발시 제거 */
+  border-top: 1px solid #76767635;
 
   z-index: 100;
 `
@@ -26,10 +25,11 @@ const GlobalNavStyle = styled.nav`
 export default function GlobalNav() {
   return (
     <GlobalNavStyle>
-      <Link to={ROUTE.HOME}>홈</Link>
-      <Link to={ROUTE.CHAT}>채팅</Link>
-      <Link to={ROUTE.POST}>게시물 작성</Link>
-      <Link to={ROUTE.PROFILE}>프로필</Link>
+      <NavLink linkKey="HOME" />
+      <NavLink linkKey="CHAT" />
+      <NavLink linkKey="POST" />
+      <NavLink linkKey="PROFILE" />
     </GlobalNavStyle>
   )
 }
+
