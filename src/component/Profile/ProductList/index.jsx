@@ -50,10 +50,10 @@ const StyleButton = styled.button`
   border: 1px solid ${({ theme }) => theme.snBlack};
 `;
 
-function ProductList({ productdata }) {
+function ProductList({ productData }) {
   return (
     <ProductItemList className="scrollhost">
-      {productdata.map((slide) => {
+      {productData.map((slide) => {
         return (
           <ProductItem key={slide.id}>
             <SingleImg src={slide.itemImage} alt="" />
@@ -70,5 +70,5 @@ function ProductList({ productdata }) {
 export default ProductList;
 
 ProductList.propTypes = {
-  productdata: PropTypes.arrayOf(PropTypes.object),
+  productData: PropTypes.arrayOf(PropTypes.object),
 };

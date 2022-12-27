@@ -120,7 +120,7 @@ const PostDate = styled.time`
 export default function PostCard({ ...post }) {
   let {
     author: { username, accountname, image: profileImage },
-    id,
+    postId,
     content,
     image,
     createdAt,
@@ -150,7 +150,7 @@ export default function PostCard({ ...post }) {
       return;
     }
 
-    deletePost({ postId: id });
+    deletePost({ postId });
   }
   // TODO 게시글 신고
 
@@ -187,7 +187,7 @@ export default function PostCard({ ...post }) {
   const like = async () => {
     const {
       post: { hearted: newHearted, heartCount: newHeartCount },
-    } = await activateLike({ postId: id });
+    } = await activateLike({ postId });
 
     setIsHearted(newHearted);
     setHeartCountState(newHeartCount);
@@ -196,7 +196,7 @@ export default function PostCard({ ...post }) {
   const unlike = async () => {
     const {
       post: { hearted: newHearted, heartCount: newHeartCount },
-    } = await cancelLike({ postId: id });
+    } = await cancelLike({ postId });
 
     setIsHearted(newHearted);
     setHeartCountState(newHeartCount);

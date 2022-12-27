@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import GreyIcon from "asset/logo-profile-172213.png";
+import PostCard from "component/common/PostCard/index";
 
 const SingleImg = styled.img`
   height: 100%;
@@ -35,29 +37,47 @@ const ListFlex = styled.div`
   margin: 0 auto;
 `;
 
-function AlbumView({ photodata }) {
+const handleImgError = (event) => {
+  event.target.src = GreyIcon;
+};
+
+function AlbumView({ postData }) {
   return (
     <AlbumGrid>
-      {photodata.map((slide, index) => {
-        return (
-          <Single key={index}>
-            <SingleImg src={slide.image} alt="" />
-          </Single>
-        );
-      })}
+      {postData
+        .filter((slide) => {
+          if (slide.image.endsWith("undefined")) {
+            return false;
+          }
+          return true;
+        })
+        .map((slide) => {
+          return (
+            <Single key={slide.id}>
+              <SingleImg src={slide.image} alt="" onError={handleImgError} />
+            </Single>
+          );
+        })}
     </AlbumGrid>
   );
 }
 
-function ListView({ photodata }) {
+function ListView({ postData }) {
   return (
     <ListFlex>
-      {photodata.map((slide, index) => {
+      {postData.map((slide) => {
         return (
-          <div className="ListSingle" key={index}>
-            <p>{slide.content}</p>
-            <SingleImg src={slide.image} alt="" />
-          </div>
+          <PostCard
+            key={slide.id}
+            author={slide.author}
+            postId={slide.id}
+            content={slide.content}
+            image={slide.image}
+            createdAt={slide.createdAt}
+            hearted={slide.hearted}
+            heartCount={slide.heartCount}
+            commentCount={slide.commentCount}
+          />
         );
       })}
     </ListFlex>
@@ -67,8 +87,8 @@ function ListView({ photodata }) {
 export { AlbumView, ListView };
 
 AlbumView.propTypes = {
-  photodata: PropTypes.arrayOf(PropTypes.object),
+  postData: PropTypes.arrayOf(PropTypes.object),
 };
 ListView.propTypes = {
-  photodata: PropTypes.arrayOf(PropTypes.object),
+  postData: PropTypes.arrayOf(PropTypes.object),
 };

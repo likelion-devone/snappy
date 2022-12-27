@@ -2,23 +2,22 @@ import Icons from "asset/icon/icons";
 import styled, { css } from "styled-components";
 import { AlbumView, ListView } from "component/Profile/AlbumListView";
 import { useState } from "react";
-import data from "./data.json";
-import productdata from "./productlist.json";
 import BigProfile from "component/common/BigProfile/index";
 import {
-  FollowerCounter,
-  FollowingCounter,
-} from "component/common/BigProfile/FollowCounter/index";
+  FollowerLink,
+  FollowingLink,
+} from "component/common/BigProfile/FollowLink";
 import Button from "component/common/Button/index";
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
 import ProductList from "component/Profile/ProductList/index";
 import { Link } from "react-router-dom";
 import ROUTE from "constant/route";
-import theme from "style/theme";
 import PortfolioTitleImg from "asset/title-portfolio.png";
-import Modal from "component/Profile/Modal/index";
-import Calendar from "component/Profile/Calendar/index";
+
+import useAuthInfo from "hook/useAuthInfo";
+import useFetch from "hook/useFetch";
+import { req } from "lib/api/index";
 
 const Gobacknav = styled.div`
   height: 48px;
@@ -131,18 +130,19 @@ const IconAlbum = styled(Icons.PostAlbum)`
   }
 `;
 
-const ReservationButton = styled.button`
-  height: 50px;
-  border: 1px solid ${(props) => props.theme.snWhite};
-  margin: 0 auto;
-  color: ${(props) => props.theme.snWhite};
-  margin-bottom: 50px;
-`;
-
 function ProfilePage() {
   const [ViewOption, setViewOption] = useState(true);
   const [isListActive, setIsListActive] = useState(true);
-  const [isOpen, setIsOpen] = useState(false);
+  const authInfo = useAuthInfo();
+  const [isProductLoading, productData, productDataError] = useFetch(
+    req.product.load,
+    { accountname: authInfo.accountname }
+  );
+
+  const [isUserPostLoading, postData, postDataError] = useFetch(
+    req.post.userposts,
+    { accountname: authInfo.accountname }
+  );
 
   const ShowListView = () => {
     setViewOption(true);
@@ -159,12 +159,13 @@ function ProfilePage() {
       <Gobacknav></Gobacknav>
       <StyleBigProfile>
         <BigProfile
-          left={<FollowerCounter />}
-          right={<FollowingCounter />}
+          src={"checkchek"}
+          left={<FollowerLink count={authInfo.followerCount} to={""} />}
+          right={<FollowingLink count={authInfo.followingCount} to={""} />}
           bottomRight={<button type="button">업로드</button>}
         />
-        <p className="username">애월읍 YK 포토그래퍼</p>
-        <p className="accountname">@yksnap</p>
+        <p className="username">{authInfo.username}</p>
+        <p className="accountname">@{authInfo.accountname}</p>
         <p className="intro">진심을 담은 사진 속 주인공은 언제나 당신</p>
         <Wrapper>
           <ChatLink to={ROUTE.CHAT}>
@@ -191,22 +192,10 @@ function ProfilePage() {
         <h2 className="title">
           <Portfolio src={PortfolioTitleImg}></Portfolio>
         </h2>
-        <ProductList productdata={productdata}></ProductList>
-        <ReservationButton type="button" onClick={() => setIsOpen(!isOpen)}>
-          Make a Reservation
-        </ReservationButton>
+        <ProductList
+          productData={isProductLoading ? [] : productData.product}
+        ></ProductList>
       </CurrentPortfolio>
-      {/* Test */}
-      {/* Test */}
-      {/* Test */}
-
-      <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-        <Calendar />
-      </Modal>
-
-      {/* Test */}
-      {/* Test */}
-      {/* Test */}
 
       <IconBox>
         <button type="button" onClick={ShowListView}>
@@ -217,9 +206,9 @@ function ProfilePage() {
         </button>
       </IconBox>
       {ViewOption ? (
-        <ListView photodata={data} />
+        <ListView postData={isUserPostLoading ? [] : postData.post} />
       ) : (
-        <AlbumView photodata={data} />
+        <AlbumView postData={isUserPostLoading ? [] : postData.post} />
       )}
     </>
   );
