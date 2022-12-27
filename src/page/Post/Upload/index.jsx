@@ -32,12 +32,17 @@ const SIZE_LIMIT = 10 * 1024 * 1024;
 export default function PostUploadPage() {
   const [imgData, setImgData] = useState([]);
 
+  // 이미지 업로드 API
   const [
     _isImageUploading,
     _imageUploadResponse,
     _imageUploadError,
-    uploadImage,
+    uploadImages,
   ] = useAPI(req.noAuth.image.uploadfiles);
+
+  // 게시물 업로드 API
+  const [isPostUploading, _uploadPostResponse, _uploadPostError, createPost] =
+    useAPI(req.post.create);
 
   const inpImagesRef = useRef(null);
   const textareaRef = useRef(null);
@@ -46,8 +51,8 @@ export default function PostUploadPage() {
   const handleUploadFile = (event) => {
     const imgFileList = event.target.files;
     const imgCount = imgData.length;
-
     const imgList = [];
+
     // 이미지 파일 용량, 개수 제한
     for (const file of imgFileList) {
       if (file.size > SIZE_LIMIT) {
@@ -67,13 +72,24 @@ export default function PostUploadPage() {
   // 상단 Nav 업로드 버튼 onClick 이벤트
   const handleSubmitPost = async (event) => {
     event.preventDefault();
+    if (isPostUploading) {
+      return;
+    }
 
-    // formData 객체 생성
     const formData = new FormData();
-    formData.append("image", inpImagesRef.current.files);
 
-    const result = await uploadImage({ formData: formData });
-    console.log(result);
+    [...inpImagesRef.current.files].forEach((file) => {
+      formData.append("image", file);
+    });
+
+    const results = await uploadImages({ formData: formData });
+
+    createPost({
+      content: textareaRef.current.value,
+      image: results
+        .map((result) => process.env.REACT_APP_BASE_API + result.filename)
+        .join(","),
+    });
   };
 
   return (
