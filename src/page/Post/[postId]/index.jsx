@@ -1,4 +1,5 @@
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import PostCard from "component/common/PostCard/index";
 import useFetch from "hook/useFetch";
@@ -6,13 +7,20 @@ import { req } from "lib/api";
 
 export default function PostDetail() {
   const { postId } = useParams();
+  const navigate = useNavigate();
 
-  const [isPostDetailLoading, postDetail, _postDetailError] = useFetch(
+  const [isPostDetailLoading, postDetail, postDetailError] = useFetch(
     req.post.detail,
     {
       postId,
     }
   );
+
+  useEffect(() => {
+    if (postDetailError) {
+      navigate("404");
+    }
+  }, [postDetailError, navigate]);
 
   // 로딩중이면 데이터가 들어오지 않습니다.
   if (isPostDetailLoading || !postDetail) {
