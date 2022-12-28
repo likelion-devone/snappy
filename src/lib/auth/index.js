@@ -13,12 +13,6 @@ import { req, server } from "lib/api/index";
  * @returns {string | null} 토큰
  */
 const getToken = async () => {
-  const token = getTokenFromLocalStorage();
-
-  if (token) {
-    return token;
-  }
-
   if (process.env.NODE_ENV === "development") {
     const {
       user: { token },
@@ -28,6 +22,12 @@ const getToken = async () => {
     });
 
     setTokenOnLocalStorage(token);
+    return token;
+  }
+
+  const token = getTokenFromLocalStorage();
+
+  if (token) {
     return token;
   }
 
