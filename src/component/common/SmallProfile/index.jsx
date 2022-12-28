@@ -77,7 +77,6 @@ export default function SmallProfile({
   isNotifying,
 }) {
   const handleImgError = (event) => {
-    console.log(event);
     event.target.src = ProfileErrorImage;
   };
 

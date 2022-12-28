@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, isValidElement } from "react"
+import { createContext, useReducer, isValidElement } from "react"
 import PropTypes from "prop-types";
 
 /**
@@ -54,10 +54,6 @@ const topNavInitState = {
 
 export default function TopNavProvider({ children }) {
   const [topNav, topNavDispatch] = useReducer(topNavReducer, topNavInitState);
-
-  useEffect(() => {
-    console.log(topNav);
-  }, [topNav])
 
   return (
     <TopNavContext.Provider value={{ ...topNav, topNavDispatch }}>
