@@ -5,12 +5,23 @@ import PostCard from "component/common/PostCard/index";
 import useFetch from "hook/useFetch";
 import { req } from "lib/api";
 
+import CommentCard from "component/Post/Comment/CommentCard/index";
+
 export default function PostDetail() {
   const { postId } = useParams();
   const navigate = useNavigate();
 
+  // 게시물 상세
   const [isPostDetailLoading, postDetail, postDetailError] = useFetch(
     req.post.detail,
+    {
+      postId,
+    }
+  );
+
+  // 댓글 리스트
+  const [isCommentLoading, commentData, _commentError] = useFetch(
+    req.comment.load,
     {
       postId,
     }
@@ -23,9 +34,10 @@ export default function PostDetail() {
   }, [postDetailError, navigate]);
 
   // 로딩중이면 데이터가 들어오지 않습니다.
-  if (isPostDetailLoading || !postDetail) {
+  if (isPostDetailLoading || !postDetail || isCommentLoading || !commentData) {
     return <>로딩중</>;
   }
+
   return (
     <>
       <PostCard
@@ -38,6 +50,9 @@ export default function PostDetail() {
         heartCount={postDetail.post.heartCount}
         commentCount={postDetail.post.commentCount}
       />
+      {commentData.comments.map((comment) => (
+        <CommentCard key={comment.id} {...comment} />
+      ))}
     </>
   );
 }
