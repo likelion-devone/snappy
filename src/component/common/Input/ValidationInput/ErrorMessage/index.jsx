@@ -5,7 +5,7 @@ import { ValidationInputContext } from "component/common/Input/ValidationInput";
 
 import { FONT_SIZE } from "constant/style";
 
-const ErrorMessage = styled.div`
+const ErrorMessage = styled.p`
   font-style: normal;
   font-weight: 400;
   font-size: ${FONT_SIZE.MEDIUM};

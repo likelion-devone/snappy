@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 
-import LoginModal from "./component/LoginModal";
+import LoginModal from "component/Login/LoginModal";
 
 import srcLogoBw from "asset/logo-bw-212262.png";
 
-const Wrapper = styled.main`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,7 +16,7 @@ const Wrapper = styled.main`
   background-color: ${({ theme }) => theme.snBlue};
 `
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled.h1`
   flex: 1;
 
   display: flex;

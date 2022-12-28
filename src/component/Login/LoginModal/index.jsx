@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import LoginButton from "../LoginButton";
+import LoginButton from "../LoginButton/index";
 
 import LogoKakao from "asset/social/kakao.png";
 import LogoGoogle from "asset/social/google.png";
@@ -11,7 +11,7 @@ import LogoFacebook from "asset/social/facebook.png";
 import { FONT_SIZE } from "constant/style"
 import { ROUTE_LOGIN } from "constant/route";
 
-const LoginModalWrapper = styled.div`
+const LoginModalWrapper = styled.main`
   width: 100%;
   height: ${({ $isModalOpened }) => $isModalOpened ? "320px" : "0"};
 
