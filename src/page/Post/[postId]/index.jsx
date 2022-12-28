@@ -1,11 +1,23 @@
+import styled from "styled-components";
+
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+import CommentCard from "component/Post/Comment/CommentCard/index";
 import PostCard from "component/common/PostCard/index";
 import useFetch from "hook/useFetch";
 import { req } from "lib/api";
 
-import CommentCard from "component/Post/Comment/CommentCard/index";
+const CommentCardWrapper = styled.section`
+  position: relative;
+  margin: 20px 16px 66px;
+  ::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background-color: ${({ theme }) => theme.snGreyOff};
+  }
+`;
 
 export default function PostDetail() {
   const { postId } = useParams();
@@ -50,9 +62,11 @@ export default function PostDetail() {
         heartCount={postDetail.post.heartCount}
         commentCount={postDetail.post.commentCount}
       />
-      {commentData.comments.map((comment) => (
-        <CommentCard key={comment.id} {...comment} />
-      ))}
+      <CommentCardWrapper>
+        {commentData.comments.map((comment) => (
+          <CommentCard key={comment.id} {...comment} />
+        ))}
+      </CommentCardWrapper>
     </>
   );
 }
