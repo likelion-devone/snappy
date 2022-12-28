@@ -5,7 +5,8 @@ import Layout from "component/common/Layout";
 import LoginPage from "./Login";
 import HomePage from "./Home";
 import ProfilePage from "./Profile";
-import PostPage from "./Post";
+import PostUploadPage from "./Post/Upload";
+import PostDetailPage from "./Post/[postId]";
 import ChatPage from "./Chat";
 import NotFoundErrorPage from "./404";
 import JoinPage from "./Login/Join";
@@ -33,12 +34,15 @@ export default function AppRouter() {
           <Route element={<Layout />}>
             <Route path={ROUTE.HOME} element={<HomePage />} />
             <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
-            <Route path={ROUTE.POST} element={<PostPage />} />
+            <Route path={ROUTE.POST}>
+              <Route index element={<PostUploadPage />} />
+              <Route path=":postId" element={<PostDetailPage />} />
+            </Route>
             <Route path={ROUTE.CHAT} element={<ChatPage />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFoundErrorPage />} />
       </Routes>
     </Router>
-  )
+  );
 }

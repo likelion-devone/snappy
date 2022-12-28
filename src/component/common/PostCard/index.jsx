@@ -15,7 +15,6 @@ import { PROFILE_SIZE } from "constant/size";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-// Post Card가 여러개일 경우, 나머지는 margin: 28px 이어야 합니다.
 const PostCardWrapper = styled.section`
   display: flex;
   flex-direction: column;
@@ -26,7 +25,6 @@ const ContentWrapper = styled.div`
   margin-left: 54px;
 `;
 
-// 텍스트 아래에 이미지가 없는 경우 margin-bottom: 18.73px;
 const ContentText = styled.p`
   font-weight: 400;
   font-size: ${FONT_SIZE.BASE};
@@ -62,7 +60,6 @@ const ButtonDotWrapper = styled.div`
 `;
 
 const ButtonDot = styled.button`
-  // 기존 슬라이드 버튼 사이즈는 6px입니다.
   height: 11px;
   width: 11px;
   margin: 0 6px;
@@ -77,7 +74,7 @@ const ButtonDot = styled.button`
 
 const IconWrapper = styled.div`
   display: flex;
-  margin: 15px 0 18px; // 아이콘과 숫자의 상하 간격이 서로 달라 임의로 수정했습니다.
+  margin: 15px 0 18px;
   font-weight: 400;
   font-size: 12px;
   background-color: ${({ theme }) => theme.snGrayIcon};
@@ -118,9 +115,9 @@ const PostDate = styled.time`
 `;
 
 export default function PostCard({ ...post }) {
-  let {
+  const {
     author: { username, accountname, image: profileImage },
-    id,
+    postId,
     content,
     image,
     createdAt,
@@ -150,7 +147,7 @@ export default function PostCard({ ...post }) {
       return;
     }
 
-    deletePost({ postId: id });
+    deletePost({ postId });
   }
   // TODO 게시글 신고
 
@@ -187,7 +184,7 @@ export default function PostCard({ ...post }) {
   const like = async () => {
     const {
       post: { hearted: newHearted, heartCount: newHeartCount },
-    } = await activateLike({ postId: id });
+    } = await activateLike({ postId });
 
     setIsHearted(newHearted);
     setHeartCountState(newHeartCount);
@@ -196,7 +193,7 @@ export default function PostCard({ ...post }) {
   const unlike = async () => {
     const {
       post: { hearted: newHearted, heartCount: newHeartCount },
-    } = await cancelLike({ postId: id });
+    } = await cancelLike({ postId });
 
     setIsHearted(newHearted);
     setHeartCountState(newHeartCount);
@@ -217,26 +214,27 @@ export default function PostCard({ ...post }) {
   };
 
   return (
-    // Link 연결은 추후 로직 변경 시 수정 예정입니다.
     <PostCardWrapper>
-      <Link to={`/profile/${accountname}`}>
-        <SmallProfile size={PROFILE_SIZE.SMALL}>
-          <SmallProfile.Side
-            left={
-              <SmallProfile.Side.Title
-                title={username}
-                subtitle={"@ " + accountname}
-                // TODO src={profileImage}
-              />
-            }
-            right={
-              <button type="button" onClick={openModal}>
-                <Icons.SMoreVertical />
-              </button>
-            }
-          />
-        </SmallProfile>
-      </Link>
+      <SmallProfile
+        size={PROFILE_SIZE.SMALL}
+        src={profileImage}
+        imageTo={`/profile/${accountname}`}
+      >
+        <SmallProfile.Side
+          left={
+            <SmallProfile.Side.Title
+              title={username}
+              subtitle={"@ " + accountname}
+              titleTo={`/profile/${accountname}`}
+            />
+          }
+          right={
+            <button type="button" onClick={openModal}>
+              <Icons.SMoreVertical />
+            </button>
+          }
+        />
+      </SmallProfile>
       {isModalOpened && (
         <>
           <button type="button" onClick={openModal}>
