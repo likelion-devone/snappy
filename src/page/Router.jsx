@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Layout from "component/common/Layout";
 
@@ -8,6 +13,7 @@ import ProfilePage from "./Profile";
 import PostPage from "./Post";
 import ChatPage from "./Chat";
 import NotFoundErrorPage from "./404";
+import ChatRoomPage from "./Chat/ChatRoom";
 
 import ROUTE from "constant/route";
 
@@ -16,15 +22,19 @@ export default function AppRouter() {
     <Router>
       <Routes>
         <Route element={<Layout />}>
-          <Route path={ROUTE.LANDING} element={<></>} /> {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
+          <Route path={ROUTE.LANDING} element={<></>} />{" "}
+          {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
           <Route path={ROUTE.LOGIN} element={<LoginPage />} />
           <Route path={ROUTE.HOME} element={<HomePage />} />
           <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
           <Route path={ROUTE.POST} element={<PostPage />} />
-          <Route path={ROUTE.CHAT} element={<ChatPage />} />
+          <Route path={ROUTE.CHAT}>
+            <Route index element={<ChatPage />} />
+            <Route path="chatroom" element={<ChatRoomPage />} />
+          </Route>
           <Route path="*" element={<NotFoundErrorPage />} />
         </Route>
       </Routes>
     </Router>
-  )
+  );
 }

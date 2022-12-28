@@ -20,7 +20,7 @@ const GlobalNavStyle = styled.nav`
   border-top: 1px solid #76767635;
 
   z-index: 100;
-`
+`;
 
 export default function GlobalNav() {
   return (
@@ -30,6 +30,5 @@ export default function GlobalNav() {
       <NavLink linkKey="POST" />
       <NavLink linkKey="PROFILE" />
     </GlobalNavStyle>
-  )
+  );
 }
-
