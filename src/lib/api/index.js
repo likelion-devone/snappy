@@ -14,14 +14,14 @@ const axiosInstance = {
     headers: {
       "Acess-Control-Allow-Origin": "*",
     },
-    timeout: 10000,
+    // timeout: 10000,
   }),
   withoutAuth: axios.create({
     baseURL: process.env.REACT_APP_BASE_API,
     headers: {
       "Acess-Control-Allow-Origin": "*",
     },
-    timeout: 10000,
+    // timeout: 10000,
   }),
 };
 
@@ -48,9 +48,16 @@ const reqWithoutAuth = {
     }),
     checkAccountname: ({ accountname }) => ({
       method: METHOD.POST,
-      url: "/user/accountnamevaild",
+      url: "/user/accountnamevalid",
       data: {
         user: { accountname },
+      },
+    }),
+    create: ({ username, email, password, accountname, intro, image }) => ({
+      method: METHOD.POST,
+      url: "/user",
+      data: {
+        user: { username, email, password, accountname, intro, image },
       },
     }),
   },
@@ -79,7 +86,7 @@ const req = {
     authInfo: () => ({
       method: METHOD.GET,
       url: "/user/myinfo",
-    }), // 프로필 정보 불러오기
+    }),
     checkToken: () => ({
       method: METHOD.GET,
       url: "user/checktoken",
@@ -278,9 +285,17 @@ const errorHandler = async (axiosRequest) => {
   try {
     const result = await axiosRequest();
 
+    if ("status" in result.data) {
+      throw { response: result };
+    }
+
     return result.data;
   } catch (error) {
     if (error.response) {
+      if (typeof error.response.data === "string") {
+        throw { message: error.response.data, status: error.response.status };
+      }
+
       throw error.response.data;
     }
     console.error(error);
