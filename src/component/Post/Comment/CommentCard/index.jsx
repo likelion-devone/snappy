@@ -6,6 +6,7 @@ import AlertModal from "component/common/AlertModal";
 import DropdownModal from "component/common/DropdownModal/index";
 import useModal from "hook/useModal";
 import useAPI from "hook/useAPI";
+import useAuthInfo from "hook/useAuthInfo";
 import useDropdownModal from "hook/useDropdownModal";
 
 import { req } from "lib/api/index";
@@ -39,12 +40,15 @@ const Comment = styled.p`
 `;
 
 export default function CommentCard({
-  author,
+  author: { _id: authorId, image, accountname, username },
   content,
   createdAt,
   postId,
   commentId,
 }) {
+  const { _id: myId } = useAuthInfo();
+  const isThisPostMine = authorId === myId;
+
   // 삭제 메시지 모달창
   const [
     isDeleteMsgModalOpened,
@@ -52,6 +56,28 @@ export default function CommentCard({
     deleteMsgModalclose,
     deleteMsgModalconfirm,
   ] = useModal(handleDeleteModalButton);
+
+  function handleDeleteModalButton() {
+    if (isDeletingComment) {
+      return;
+    }
+    deleteComment({ postId, commentId });
+  }
+
+  // 신고 메시지 모달창
+  const [
+    isReportMsgModalOpened,
+    reportMsgModalopen,
+    reportMsgModalclose,
+    reportMsgModalconfirm,
+  ] = useModal(handleReportModalButton);
+
+  function handleReportModalButton() {
+    if (isReportingComment) {
+      return;
+    }
+    reportComment({ postId, commentId });
+  }
 
   // 삭제 드롭다운 모달
   const [isDroppedUp, dropUp, dropDown] = useDropdownModal(
@@ -63,16 +89,23 @@ export default function CommentCard({
     dropDown();
   }
 
+  // 신고하기 드롭다운 모달
+  const [_isReportDroppedUp, _reportDropUp, reportDropDown] = useDropdownModal(
+    handleReportDropDownButton
+  );
+
+  function handleReportDropDownButton() {
+    reportMsgModalopen();
+    reportDropDown();
+  }
+
   // 댓글 삭제 API
   const [isDeletingComment, _deleteCommentResponse, _error, deleteComment] =
     useAPI(req.comment.remove);
 
-  function handleDeleteModalButton() {
-    if (isDeletingComment) {
-      return;
-    }
-    deleteComment({ postId, commentId });
-  }
+  // 댓글 신고 API
+  const [isReportingComment, _reportCommentResponse, __error, reportComment] =
+    useAPI(req.comment.report);
 
   // TODO 댓글 작성 API
 
@@ -100,14 +133,14 @@ export default function CommentCard({
         <CommentHeaderWrapper>
           <SmallProfile
             size={PROFILE_SIZE.SMALL}
-            src={author.image}
-            imageTo={`/profile/${author.accountname}`}
+            src={image}
+            imageTo={`/profile/${accountname}`}
           >
             <SmallProfile.Side
               left={
                 <SmallProfile.Side.Title
-                  title={author.username}
-                  titleTo={`/profile/${author.accountname}`}
+                  title={username}
+                  titleTo={`/profile/${accountname}`}
                   attachment={
                     <CreatedTime>{commentTime(createdAt)}</CreatedTime>
                   }
@@ -123,10 +156,30 @@ export default function CommentCard({
         </CommentHeaderWrapper>
 
         <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
-          <DropdownModal.Button onClick={handleDeleteDropDownButton}>
-            삭제
-          </DropdownModal.Button>
+          {!isThisPostMine ? (
+            <DropdownModal.Button onClick={handleReportDropDownButton}>
+              신고하기
+            </DropdownModal.Button>
+          ) : (
+            <>
+              <DropdownModal.Button onClick={handleDeleteDropDownButton}>
+                삭제하기
+              </DropdownModal.Button>
+            </>
+          )}
         </DropdownModal>
+
+        {isReportMsgModalOpened && (
+          <AlertModal isModalOpened={isReportMsgModalOpened}>
+            <AlertModal.Content>댓글을 신고하시겠어요?</AlertModal.Content>
+            <AlertModal.CancleButton handleModalButton={reportMsgModalclose}>
+              취소
+            </AlertModal.CancleButton>
+            <AlertModal.ConfirmButton handleModalButton={reportMsgModalconfirm}>
+              신고
+            </AlertModal.ConfirmButton>
+          </AlertModal>
+        )}
 
         {isDeleteMsgModalOpened && (
           <>
