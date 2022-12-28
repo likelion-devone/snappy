@@ -30,7 +30,25 @@ const Comment = styled.p`
   word-break: break-all;
 `;
 
-export default function CommentCard({ author, content }) {
+export default function CommentCard({ author, content, createdAt }) {
+  function commentTime(time) {
+    const ms = Date.parse(time);
+    const now = Date.now();
+    const gap = (now - ms) / 1000;
+
+    if (gap < 60) {
+      return "방금 전";
+    } else if (gap < 3600) {
+      return `${Math.floor(gap / 60)}분 전`;
+    } else if (gap < 86400) {
+      return `${Math.floor(gap / 3600)}시간 전`;
+    } else if (gap < 2592000) {
+      return `${Math.floor(gap / 86400)}일 전`;
+    } else {
+      return `${Math.floor(gap / 2592000)}달 전`;
+    }
+  }
+
   return (
     <>
       <CommentContentWrapper>
@@ -45,7 +63,9 @@ export default function CommentCard({ author, content }) {
                 <SmallProfile.Side.Title
                   title={author.username}
                   titleTo={`/profile/${author.accountname}`}
-                  attachment={<CreatedTime>5분전</CreatedTime>}
+                  attachment={
+                    <CreatedTime>{commentTime(createdAt)}</CreatedTime>
+                  }
                 />
               }
               right={
@@ -66,4 +86,5 @@ export default function CommentCard({ author, content }) {
 CommentCard.propTypes = {
   author: PropTypes.object,
   content: PropTypes.string,
+  createdAt: PropTypes.string,
 };
