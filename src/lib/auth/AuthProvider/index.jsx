@@ -4,10 +4,10 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { req } from "lib/api";
 import useAPI from "hook/useAPI";
 import { getValidToken } from "lib/auth";
-import { removeTokenOnLocalStorage } from "lib/storage/localStorage";
+import { removeTokenOnLocalStorage, setTokenOnLocalStorage } from "lib/storage/localStorage";
 
 import ROUTE from "constant/route";
-import LandingPage from "page/Landing/index";
+import LandingPage from "page/Landing";
 
 /**
  * @typedef {Object} UserInfo
@@ -51,7 +51,7 @@ export default function AuthProvider() {
   const [_isAuthInfoLoading, _loadedAuthInfo, _authInfoLoadingError, getAuthInfo] = useAPI(
     req.user.authInfo
   );
-  const [_isLoggingIn, _loginResponse, _loginError, login] = useAPI(
+  const [_isLoggingIn, _loginResult, _loginError, login] = useAPI(
     req.noAuth.user.login
   );
 
@@ -61,27 +61,27 @@ export default function AuthProvider() {
     const token = await getValidToken();
 
     if (!token) {
-      navigate(ROUTE.LOGIN, { relative: false });
-      setHaveTriedAutoLogin(true);
+      if (!location.pathname.includes(ROUTE.LOGIN)) {
+        navigate(ROUTE.LOGIN, { relative: false });
+      }
       return;
     }
 
     try {
-      const { user } = await getAuthInfo()
+      const result = await getAuthInfo();
 
-      setAuthInfo(user);
-      if ([ROUTE.LOGIN, ROUTE.LANDING].includes(location.pathname)) {
+      setAuthInfo(result.user);
+      if (location.pathname.includes(ROUTE.LOGIN) || location.pathname === ROUTE.LANDING) {
         navigate(ROUTE.HOME, { relative: false })
       }
     } catch (error) {
       console.error(error);
     }
-
-    setHaveTriedAutoLogin(true);
   }, [navigate, getAuthInfo, location])
 
   useEffect(() => {
-    if ((![ROUTE.LOGIN, ROUTE.LANDING].includes(location.pathname) && !authInfo) || !haveTriedAutoLogin) {
+    if (((location.pathname.includes(ROUTE.LOGIN) || location.pathname === ROUTE.LANDING) && !authInfo) || !haveTriedAutoLogin) {
+      setHaveTriedAutoLogin(true);
       loginWithToken();
     }
   }, [loginWithToken, location, authInfo, haveTriedAutoLogin])
@@ -97,8 +97,11 @@ export default function AuthProvider() {
    */
   const handleLogin = useCallback(
     async ({ email, password }) => {
-      login({ email, password });
-    }, [login]);
+      const { user: { token } } = await login({ email, password })
+      setTokenOnLocalStorage(token);
+      await loginWithToken();
+      navigate(ROUTE.HOME, { relative: false });
+    }, [login, navigate, loginWithToken]);
 
   /**
    * @type {LogoutHandler}
