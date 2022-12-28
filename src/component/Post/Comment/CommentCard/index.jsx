@@ -2,6 +2,14 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import SmallProfile from "component/common/SmallProfile/index";
+import AlertModal from "component/common/AlertModal";
+import DropdownModal from "component/common/DropdownModal/index";
+import useModal from "hook/useModal";
+import useAPI from "hook/useAPI";
+import useDropdownModal from "hook/useDropdownModal";
+
+import { req } from "lib/api/index";
+
 import Icons from "asset/icon/icons";
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
@@ -30,7 +38,44 @@ const Comment = styled.p`
   word-break: break-all;
 `;
 
-export default function CommentCard({ author, content, createdAt }) {
+export default function CommentCard({
+  author,
+  content,
+  createdAt,
+  postId,
+  commentId,
+}) {
+  // 삭제 메시지 모달창
+  const [
+    isDeleteMsgModalOpened,
+    deleteMsgModalopen,
+    deleteMsgModalclose,
+    deleteMsgModalconfirm,
+  ] = useModal(handleDeleteModalButton);
+
+  // 삭제 드롭다운 모달
+  const [isDroppedUp, dropUp, dropDown] = useDropdownModal(
+    handleDeleteDropDownButton
+  );
+
+  function handleDeleteDropDownButton() {
+    deleteMsgModalopen();
+    dropDown();
+  }
+
+  // 댓글 삭제 API
+  const [isDeletingComment, _deleteCommentResponse, _error, deleteComment] =
+    useAPI(req.comment.remove);
+
+  function handleDeleteModalButton() {
+    if (isDeletingComment) {
+      return;
+    }
+    deleteComment({ postId, commentId });
+  }
+
+  // TODO 댓글 작성 API
+
   function commentTime(time) {
     const ms = Date.parse(time);
     const now = Date.now();
@@ -69,13 +114,35 @@ export default function CommentCard({ author, content, createdAt }) {
                 />
               }
               right={
-                <button type="button" onClick>
+                <button type="button" onClick={dropUp}>
                   <Icons.SMoreVertical />
                 </button>
               }
             />
           </SmallProfile>
         </CommentHeaderWrapper>
+
+        <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
+          <DropdownModal.Button onClick={handleDeleteDropDownButton}>
+            삭제
+          </DropdownModal.Button>
+        </DropdownModal>
+
+        {isDeleteMsgModalOpened && (
+          <>
+            <AlertModal isModalOpened={isDeleteMsgModalOpened}>
+              <AlertModal.Content>댓글을 삭제하시겠어요?</AlertModal.Content>
+              <AlertModal.CancleButton handleModalButton={deleteMsgModalclose}>
+                취소
+              </AlertModal.CancleButton>
+              <AlertModal.ConfirmButton
+                handleModalButton={deleteMsgModalconfirm}
+              >
+                삭제
+              </AlertModal.ConfirmButton>
+            </AlertModal>
+          </>
+        )}
 
         <Comment>{content}</Comment>
       </CommentContentWrapper>
@@ -87,4 +154,6 @@ CommentCard.propTypes = {
   author: PropTypes.object,
   content: PropTypes.string,
   createdAt: PropTypes.string,
+  commentId: PropTypes.string,
+  postId: PropTypes.string,
 };
