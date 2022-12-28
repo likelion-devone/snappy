@@ -23,6 +23,12 @@ import LandingPage from "page/Landing";
  */
 
 /**
+ * @typedef {Object} Error
+ * @property {string} message;
+ * @property {number} status;
+ */
+
+/**
  * @typedef {({email: string, password: string}) => void} LoginHandler
  * @description 로그인시 사용하는 함수
  */
@@ -32,7 +38,7 @@ import LandingPage from "page/Landing";
  */
 
 /**
- * @type {React.Context<{authInfo: UserInfo | null, handleLogin: LoginHandler, handleLogout: LogoutHandler }>}
+ * @type {React.Context<{authInfo: UserInfo | null, handleLogin: LoginHandler, handleLogout: LogoutHandler, loginError: Error | null, isLoggingIn: boolean }>}
  */
 export const AuthContext = createContext();
 
@@ -51,7 +57,7 @@ export default function AuthProvider() {
   const [_isAuthInfoLoading, _loadedAuthInfo, _authInfoLoadingError, getAuthInfo] = useAPI(
     req.user.authInfo
   );
-  const [_isLoggingIn, _loginResult, _loginError, login] = useAPI(
+  const [isLoggingIn, _loginResult, loginError, login] = useAPI(
     req.noAuth.user.login
   );
 
@@ -97,10 +103,14 @@ export default function AuthProvider() {
    */
   const handleLogin = useCallback(
     async ({ email, password }) => {
-      const { user: { token } } = await login({ email, password })
-      setTokenOnLocalStorage(token);
-      await loginWithToken();
-      navigate(ROUTE.HOME, { relative: false });
+      try {
+        const { user: { token } } = await login({ email, password });
+        setTokenOnLocalStorage(token);
+        await loginWithToken();
+        navigate(ROUTE.HOME, { relative: false });
+      } catch (error) {
+        // loginError로 에러 헨들링
+      }
     }, [login, navigate, loginWithToken]);
 
   /**
@@ -114,7 +124,7 @@ export default function AuthProvider() {
 
   return (
     <AuthContext.Provider value={{
-      authInfo, handleLogin, handleLogout
+      authInfo, handleLogin, handleLogout, loginError, isLoggingIn
     }}>
       {authInfo || haveTriedAutoLogin ? <Outlet /> : <LandingPage />}
     </AuthContext.Provider>
