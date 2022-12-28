@@ -14,11 +14,11 @@ const StyledLabel = styled.label`
   cursor: pointer;
 `
 
-const UploadProfileImageLabel = forwardRef(function ForwardedUploadProfileImageInput(_, ref) {
+const UploadProfileImageLabel = forwardRef(function ForwardedUploadProfileImageInput(props, ref) {
   return (
     <StyledLabel>
       <Icons.Image title="프로필 업로드 버튼입니다." />
-      <input ref={ref} type="file" className="sr-only" accept="image/*" required />
+      <input ref={ref} type="file" className="sr-only" accept="image/*" required {...props} />
     </StyledLabel>
   )
 })

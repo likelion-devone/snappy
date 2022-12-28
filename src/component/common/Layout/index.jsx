@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import TopNav from "../TopNav";
 import GlobalNav from "./GlobalNav";
-import AuthProvider from "lib/auth/AuthProvider";
 
 import { GLOBAL_NAVBAR_HEIGHT, MAX_WIDTH, MIN_WIDTH, TOP_NAVBAR_HEIGHT } from "constant/style";
 
@@ -19,13 +18,11 @@ const LayoutStyle = styled.main`
 function Layout() {
   return (
     <>
-      <AuthProvider>
-        <TopNav />
-        <LayoutStyle>
-          <Outlet />
-          <GlobalNav />
-        </LayoutStyle>
-      </AuthProvider>
+      <TopNav />
+      <LayoutStyle>
+        <Outlet />
+        <GlobalNav />
+      </LayoutStyle>
     </>
   )
 }
