@@ -47,14 +47,16 @@ const getValidToken = async () => {
     return null;
   }
 
-  const { isValid } = await server(req.user.checkToken);
+  const response = await server(req.user.checkToken);
 
-  if (!isValid) {
-    removeTokenOnLocalStorage();
-    return null;
+  if ("isValid" in response) {
+    if (response.isValid) {
+      return token;
+    }
   }
 
-  return token;
+  removeTokenOnLocalStorage();
+  return null;
 };
 
 export { getValidToken };

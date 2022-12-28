@@ -4,6 +4,7 @@ const MAX_WIDTH = "1024px";
 const MIN_WIDTH = "380px";
 
 const FONT_SIZE = {
+  XX_LARGE: "24px",
   X_LARGE: "18px",
   LARGE: "16px",
   BASE: "14px",

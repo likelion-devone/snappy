@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { returnsPromise } from "util/promise";
 
 /**
  * ValidationInput 사용을 위한 Custom Hook
@@ -17,11 +18,22 @@ export default function useValidationInput(checkValidation) {
       current: { value },
     } = inputRef;
 
-    const errorMessageCalculated = checkValidation(value) || "";
-    setIsPassed(!errorMessageCalculated);
+    if (returnsPromise(checkValidation)) {
+      checkValidation(value).then((result) => {
+        const errorMessageCalculated = result.message;
 
-    setErrorMessage(errorMessageCalculated);
-    errorMessageCache.current = errorMessageCalculated;
+        setIsPassed(!errorMessageCalculated);
+
+        setErrorMessage(errorMessageCalculated);
+        errorMessageCache.current = errorMessageCalculated;
+      });
+    } else {
+      const errorMessageCalculated = checkValidation(value) || "";
+      setIsPassed(!errorMessageCalculated);
+
+      setErrorMessage(errorMessageCalculated);
+      errorMessageCache.current = errorMessageCalculated;
+    }
   }, [checkValidation]);
 
   const clearErrorMessage = useCallback(() => setErrorMessage(""), []);
