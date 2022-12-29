@@ -286,7 +286,9 @@ const errorHandler = async (axiosRequest) => {
     const result = await axiosRequest();
 
     if ("status" in result.data) {
-      throw { response: result };
+      if (result.data.status !== 200) {
+        throw { response: result };
+      }
     }
 
     return result.data;
