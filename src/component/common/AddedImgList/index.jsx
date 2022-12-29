@@ -51,26 +51,24 @@ export default function AddedImgList({ imgData, setImgData, className }) {
   };
 
   return (
-    <>
-      {!!imgData.length && (
-        <UploadedImgList className={className}>
-          {React.Children.toArray(
-            imgData.map((image) => (
-              <UploadImgWrapper>
-                <UploadImg
-                  src={image}
-                  onError={handleImgError}
-                  $isMultiple={imgData.length > 1}
-                />
-                <ButtonDelete type="button" onClick={handleDeleteImg(image)}>
-                  <Icons.Close title="이미지 삭제 버튼입니다." />
-                </ButtonDelete>
-              </UploadImgWrapper>
-            ))
-          )}
-        </UploadedImgList>
-      )}
-    </>
+    !!imgData.length && (
+      <UploadedImgList className={className}>
+        {React.Children.toArray(
+          imgData.map((image) => (
+            <UploadImgWrapper>
+              <UploadImg
+                src={image}
+                onError={handleImgError}
+                $isMultiple={imgData.length > 1}
+              />
+              <ButtonDelete type="button" onClick={handleDeleteImg(image)}>
+                <Icons.Close title="이미지 삭제 버튼입니다." />
+              </ButtonDelete>
+            </UploadImgWrapper>
+          ))
+        )}
+      </UploadedImgList>
+    )
   );
 }
 
