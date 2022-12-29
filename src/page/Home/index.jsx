@@ -8,6 +8,7 @@ import useFetch from "hook/useFetch";
 import useTopNavSetter from "hook/useTopNavSetter";
 
 import { req } from "lib/api";
+import useAuthInfo from "hook/useAuthInfo";
 
 export default function HomePage() {
   const [isSearchOpened, setIsSearchOpened] = useState(false);
@@ -27,17 +28,31 @@ export default function HomePage() {
     )
   });
   const [isPostDataLoading, postData, _error] = useFetch(req.post.feed);
+  const authInfo = useAuthInfo();
 
-  if (isPostDataLoading || !postData) {
+  // 내 게시글도 피드에 보이게 하기
+  const [isMyPostDataLoading, myPostData, __error] = useFetch(
+    req.post.userposts,
+    { accountname: authInfo.accountname }
+  );
+
+  // 로딩중이면 데이터가 들어오지 않습니다.
+  if (isPostDataLoading || !postData || isMyPostDataLoading || !myPostData) {
     return <>로딩중</>;
   }
 
   return (
     <>
       <SearchBar handleClose={toggleSearch} $isSearchOpened={isSearchOpened} />
-      {postData.posts.map((postCard) => (
-        <PostCard key={postCard.id} {...{ ...postCard, postId: postCard.id }} />
-      ))}
+      {[...postData.posts, ...myPostData.post]
+        .sort(
+          (post1, post2) =>
+            new Date(post2.createdAt).getTime() -
+            new Date(post1.createdAt).getTime()
+        )
+        .map((postCard) => (
+          <PostCard key={postCard.id} {...{ ...postCard, postId: postCard.id }} />
+        ))}
     </>
   )
 }
