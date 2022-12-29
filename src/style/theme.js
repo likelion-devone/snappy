@@ -5,6 +5,8 @@ const theme = {
   snGreyMain: "#979797",
   snGreyIcon: "#767676",
   snGreyOff: "#DBDBDB",
+  snGreyLight: "#C4C4C4",
+  snGreyExtraLight: "#F2F2F2",
   snBlack: "#000000",
   snRed: "#EB5757",
   snWhite: "#FFFFFF",

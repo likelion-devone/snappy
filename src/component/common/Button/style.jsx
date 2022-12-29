@@ -8,6 +8,7 @@ const stateStyleMap = {
   activated: css`
     background-color: ${({ theme }) => theme.snWhite};
     color: ${({ theme }) => theme.snGreyIcon};
+    border: 1px solid ${({ theme }) => theme.snGreyOff};
   `,
 };
 
@@ -44,7 +45,4 @@ const sizeStyleMap = {
   `,
 };
 
-export {
-  stateStyleMap,
-  sizeStyleMap
-}
+export { stateStyleMap, sizeStyleMap };

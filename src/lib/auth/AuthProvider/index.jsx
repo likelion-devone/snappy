@@ -1,14 +1,13 @@
 import { createContext, useEffect, useState, useCallback } from "react";
-import PropTypes from "prop-types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { req } from "lib/api";
 import useAPI from "hook/useAPI";
 import { getValidToken } from "lib/auth";
-import { removeTokenOnLocalStorage } from "lib/storage/localStorage";
+import { removeTokenOnLocalStorage, setTokenOnLocalStorage } from "lib/storage/localStorage";
 
 import ROUTE from "constant/route";
-import LandingPage from "page/Landing/index";
+import LandingPage from "page/Landing";
 
 /**
  * @typedef {Object} UserInfo
@@ -24,6 +23,12 @@ import LandingPage from "page/Landing/index";
  */
 
 /**
+ * @typedef {Object} Error
+ * @property {string} message;
+ * @property {number} status;
+ */
+
+/**
  * @typedef {({email: string, password: string}) => void} LoginHandler
  * @description 로그인시 사용하는 함수
  */
@@ -33,7 +38,7 @@ import LandingPage from "page/Landing/index";
  */
 
 /**
- * @type {React.Context<{authInfo: UserInfo | null, handleLogin: LoginHandler, handleLogout: LogoutHandler }>}
+ * @type {React.Context<{authInfo: UserInfo | null, handleLogin: LoginHandler, handleLogout: LogoutHandler, loginError: Error | null, isLoggingIn: boolean }>}
  */
 export const AuthContext = createContext();
 
@@ -44,7 +49,7 @@ export const AuthContext = createContext();
  * 
  * 개발 환경에서는 개발용 계정으로 자동 로그인합니다.
  */
-export default function AuthProvider({ children }) {
+export default function AuthProvider() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -52,7 +57,7 @@ export default function AuthProvider({ children }) {
   const [_isAuthInfoLoading, _loadedAuthInfo, _authInfoLoadingError, getAuthInfo] = useAPI(
     req.user.authInfo
   );
-  const [_isLoggingIn, _loginResponse, _loginError, login] = useAPI(
+  const [isLoggingIn, _loginResult, loginError, login] = useAPI(
     req.noAuth.user.login
   );
 
@@ -62,27 +67,27 @@ export default function AuthProvider({ children }) {
     const token = await getValidToken();
 
     if (!token) {
-      navigate(ROUTE.LOGIN, { relative: false });
-      setHaveTriedAutoLogin(true);
+      if (!location.pathname.includes(ROUTE.LOGIN)) {
+        navigate(ROUTE.LOGIN, { relative: false });
+      }
       return;
     }
 
     try {
-      const { user } = await getAuthInfo()
+      const result = await getAuthInfo();
 
-      setAuthInfo(user);
-      if ([ROUTE.LOGIN, ROUTE.LANDING].includes(location.pathname)) {
+      setAuthInfo(result.user);
+      if (location.pathname.includes(ROUTE.LOGIN) || location.pathname === ROUTE.LANDING) {
         navigate(ROUTE.HOME, { relative: false })
       }
     } catch (error) {
       console.error(error);
     }
-
-    setHaveTriedAutoLogin(true);
   }, [navigate, getAuthInfo, location])
 
   useEffect(() => {
-    if ((![ROUTE.LOGIN, ROUTE.LANDING].includes(location.pathname) && !authInfo) || !haveTriedAutoLogin) {
+    if (((location.pathname.includes(ROUTE.LOGIN) || location.pathname === ROUTE.LANDING) && !authInfo) || !haveTriedAutoLogin) {
+      setHaveTriedAutoLogin(true);
       loginWithToken();
     }
   }, [loginWithToken, location, authInfo, haveTriedAutoLogin])
@@ -98,8 +103,15 @@ export default function AuthProvider({ children }) {
    */
   const handleLogin = useCallback(
     async ({ email, password }) => {
-      login({ email, password });
-    }, [login]);
+      try {
+        const { user: { token } } = await login({ email, password });
+        setTokenOnLocalStorage(token);
+        await loginWithToken();
+        navigate(ROUTE.HOME, { relative: false });
+      } catch (error) {
+        // loginError로 에러 헨들링
+      }
+    }, [login, navigate, loginWithToken]);
 
   /**
    * @type {LogoutHandler}
@@ -112,13 +124,14 @@ export default function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{
-      authInfo, handleLogin, handleLogout
+      authInfo, handleLogin, handleLogout, loginError, isLoggingIn
     }}>
-      {authInfo || haveTriedAutoLogin ? children : <LandingPage />}
+      {authInfo ||
+        (haveTriedAutoLogin &&
+          (location.pathname.includes(ROUTE.LOGIN) ||
+            location.pathname === ROUTE.LANDING))
+        ? <Outlet />
+        : <LandingPage />}
     </AuthContext.Provider>
   );
-}
-
-AuthProvider.propTypes = {
-  children: PropTypes.node
 }
