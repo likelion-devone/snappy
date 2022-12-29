@@ -14,16 +14,17 @@ import { req } from "lib/api/index";
 import Icons from "asset/icon/icons";
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
+import { useEffect } from "react";
 
-const CommentContentWrapper = styled.section`
+const CommentContentWrapper = styled.li`
   margin: 20px 0 12px;
 `;
 
-const CommentHeaderWrapper = styled.div`
+const StyledSmallProfile = styled(SmallProfile)`
   margin-bottom: 4px;
-`;
+`
 
-const CreatedTime = styled.span`
+const CreatedTime = styled.time`
   margin-left: 6px;
   font-weight: 400;
   font-size: ${FONT_SIZE.SMALL};
@@ -48,6 +49,14 @@ export default function CommentCard({
 }) {
   const { _id: myId } = useAuthInfo();
   const isThisPostMine = authorId === myId;
+
+  // 댓글 삭제 API
+  const [isDeletingComment, _deleteCommentResponse, _error, deleteComment] =
+    useAPI(req.comment.remove);
+
+  // 댓글 신고 API
+  const [isReportingComment, reportCommentResponse, __error, reportComment] =
+    useAPI(req.comment.report);
 
   // 삭제 메시지 모달창
   const [
@@ -79,6 +88,12 @@ export default function CommentCard({
     reportComment({ postId, commentId });
   }
 
+  useEffect(() => {
+    if (reportCommentResponse) {
+      alert('댓글 신고가 접수되었습니다.');
+    }
+  }, [reportCommentResponse])
+
   // 삭제 드롭다운 모달
   const [isDroppedUp, dropUp, dropDown] = useDropdownModal(
     handleDeleteDropDownButton
@@ -99,16 +114,9 @@ export default function CommentCard({
     reportDropDown();
   }
 
-  // 댓글 삭제 API
-  const [isDeletingComment, _deleteCommentResponse, _error, deleteComment] =
-    useAPI(req.comment.remove);
-
-  // 댓글 신고 API
-  const [isReportingComment, _reportCommentResponse, __error, reportComment] =
-    useAPI(req.comment.report);
-
   // TODO 댓글 작성 API
 
+  // TODO: 유틸 함수로 바꾸기
   function commentTime(time) {
     const ms = Date.parse(time);
     const now = Date.now();
@@ -128,78 +136,72 @@ export default function CommentCard({
   }
 
   return (
-    <>
-      <CommentContentWrapper>
-        <CommentHeaderWrapper>
-          <SmallProfile
-            size={PROFILE_SIZE.SMALL}
-            src={image}
-            imageTo={`/profile/${accountname}`}
-          >
-            <SmallProfile.Side
-              left={
-                <SmallProfile.Side.Title
-                  title={username}
-                  titleTo={`/profile/${accountname}`}
-                  attachment={
-                    <CreatedTime>{commentTime(createdAt)}</CreatedTime>
-                  }
-                />
-              }
-              right={
-                <button type="button" onClick={dropUp}>
-                  <Icons.SMoreVertical />
-                </button>
+    <CommentContentWrapper>
+      <StyledSmallProfile
+        size={PROFILE_SIZE.SMALL}
+        src={image}
+        imageTo={`/profile/${accountname}`}
+      >
+        <SmallProfile.Side
+          left={
+            <SmallProfile.Side.Title
+              title={username}
+              titleTo={`/profile/${accountname}`}
+              attachment={
+                <CreatedTime dateTime={createdAt}>{commentTime(createdAt)}</CreatedTime>
               }
             />
-          </SmallProfile>
-        </CommentHeaderWrapper>
+          }
+          right={
+            <button type="button" onClick={dropUp}>
+              <Icons.SMoreVertical />
+            </button>
+          }
+        />
+      </StyledSmallProfile>
 
-        <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
-          {!isThisPostMine ? (
-            <DropdownModal.Button onClick={handleReportDropDownButton}>
-              신고하기
-            </DropdownModal.Button>
-          ) : (
-            <>
-              <DropdownModal.Button onClick={handleDeleteDropDownButton}>
-                삭제하기
-              </DropdownModal.Button>
-            </>
-          )}
-        </DropdownModal>
+      <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
+        {!isThisPostMine ? (
+          <DropdownModal.Button onClick={handleReportDropDownButton}>
+            신고하기
+          </DropdownModal.Button>
+        ) : (
+          <DropdownModal.Button onClick={handleDeleteDropDownButton}>
+            삭제하기
+          </DropdownModal.Button>
+        )}
+      </DropdownModal>
 
-        {isReportMsgModalOpened && (
-          <AlertModal isModalOpened={isReportMsgModalOpened}>
-            <AlertModal.Content>댓글을 신고하시겠어요?</AlertModal.Content>
-            <AlertModal.CancleButton handleModalButton={reportMsgModalclose}>
+      {isReportMsgModalOpened && (
+        <AlertModal isModalOpened={isReportMsgModalOpened}>
+          <AlertModal.Content>댓글을 신고하시겠어요?</AlertModal.Content>
+          <AlertModal.CancleButton handleModalButton={reportMsgModalclose}>
+            취소
+          </AlertModal.CancleButton>
+          <AlertModal.ConfirmButton handleModalButton={reportMsgModalconfirm}>
+            신고
+          </AlertModal.ConfirmButton>
+        </AlertModal>
+      )}
+
+      {isDeleteMsgModalOpened && (
+        <>
+          <AlertModal isModalOpened={isDeleteMsgModalOpened}>
+            <AlertModal.Content>댓글을 삭제하시겠어요?</AlertModal.Content>
+            <AlertModal.CancleButton handleModalButton={deleteMsgModalclose}>
               취소
             </AlertModal.CancleButton>
-            <AlertModal.ConfirmButton handleModalButton={reportMsgModalconfirm}>
-              신고
+            <AlertModal.ConfirmButton
+              handleModalButton={deleteMsgModalconfirm}
+            >
+              삭제
             </AlertModal.ConfirmButton>
           </AlertModal>
-        )}
+        </>
+      )}
 
-        {isDeleteMsgModalOpened && (
-          <>
-            <AlertModal isModalOpened={isDeleteMsgModalOpened}>
-              <AlertModal.Content>댓글을 삭제하시겠어요?</AlertModal.Content>
-              <AlertModal.CancleButton handleModalButton={deleteMsgModalclose}>
-                취소
-              </AlertModal.CancleButton>
-              <AlertModal.ConfirmButton
-                handleModalButton={deleteMsgModalconfirm}
-              >
-                삭제
-              </AlertModal.ConfirmButton>
-            </AlertModal>
-          </>
-        )}
-
-        <Comment>{content}</Comment>
-      </CommentContentWrapper>
-    </>
+      <Comment>{content}</Comment>
+    </CommentContentWrapper>
   );
 }
 

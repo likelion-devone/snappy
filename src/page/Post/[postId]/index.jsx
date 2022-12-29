@@ -8,15 +8,8 @@ import PostCard from "component/common/PostCard/index";
 import useFetch from "hook/useFetch";
 import { req } from "lib/api";
 
-const CommentCardWrapper = styled.section`
-  position: relative;
-  margin: 20px 16px 66px;
-  ::before {
-    content: "";
-    display: block;
-    height: 1px;
-    background-color: ${({ theme }) => theme.snGreyOff};
-  }
+const CommentCardWrapper = styled.ol`
+  border-top: 1px solid ${({ theme }) => theme.snGreyOff};
 `;
 
 export default function PostDetail() {
@@ -62,11 +55,21 @@ export default function PostDetail() {
         heartCount={postDetail.post.heartCount}
         commentCount={postDetail.post.commentCount}
       />
-      <CommentCardWrapper>
-        {commentData.comments.map((comment) => (
-          <CommentCard key={comment.id} {...comment} />
-        ))}
-      </CommentCardWrapper>
+      <section>
+        <h2 className="sr-only">댓글란</h2>
+        <CommentCardWrapper>
+          {commentData.comments
+            .sort((comment1, comment2) =>
+              Date.parse(comment1.createdAt) - Date.parse(comment2.createdAt)
+            ).map((comment) => (
+              <CommentCard key={comment.id} {...{
+                ...comment,
+                commentId: comment.id,
+                postId: postDetail.post.id
+              }} />
+            ))}
+        </CommentCardWrapper>
+      </section>
     </>
   );
 }
