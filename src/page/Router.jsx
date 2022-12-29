@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Layout from "component/common/Layout";
 
@@ -13,8 +18,11 @@ import JoinPage from "./Login/Join";
 import AuthorizePage from "./Login/Authorize";
 
 import AuthProvider from "lib/auth/AuthProvider";
+import ProductPage from "./Product";
+import AddProductPage from "./Product/AddProduct/index";
+import EditProductPage from "./Product/EditProduct/index";
 
-import ROUTE, { ROUTE_LOGIN } from "constant/route";
+import ROUTE, { ROUTE_LOGIN, ROUTE_PRODUCT } from "constant/route";
 import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
 
 export default function AppRouter() {
@@ -22,7 +30,7 @@ export default function AppRouter() {
     <Router>
       <Routes>
         <Route element={<AuthProvider />}>
-          <Route path={ROUTE.LOGIN} >
+          <Route path={ROUTE.LOGIN}>
             <Route index element={<LoginPage />} />
             <Route path={ROUTE_LOGIN.JOIN} element={<JoinPage />}>
               <Route path=":pagenum" element={<JoinPageByPagenum />} />
@@ -30,13 +38,22 @@ export default function AppRouter() {
             </Route>
             <Route path={ROUTE_LOGIN.AUTHORIZE} element={<AuthorizePage />} />
           </Route>
-          <Route path={ROUTE.LANDING} element={<></>} /> {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
+          <Route path={ROUTE.LANDING} element={<></>} />{" "}
+          {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
           <Route element={<Layout />}>
             <Route path={ROUTE.HOME} element={<HomePage />} />
             <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
             <Route path={ROUTE.POST}>
               <Route index element={<PostUploadPage />} />
               <Route path=":postId" element={<PostDetailPage />} />
+            </Route>
+            <Route path={ROUTE.PRODUCT} element={<ProductPage />}>
+              <Route index element={<Navigate to={ROUTE.HOME} />} />
+              <Route path={ROUTE_PRODUCT.ADD} element={<AddProductPage />} />
+              <Route
+                path={":productid/" + ROUTE_PRODUCT.EDIT}
+                element={<EditProductPage />}
+              />
             </Route>
             <Route path={ROUTE.CHAT} element={<ChatPage />} />
           </Route>
