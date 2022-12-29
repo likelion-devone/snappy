@@ -24,9 +24,13 @@ import AddProductPage from "./Product/AddProduct/index";
 import EditProductPage from "./Product/EditProduct/index";
 import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
 import FollowerListPage from "./Profile/FollowerListPage/index";
-import FollowingListPage from "./Profile/FollowingLIstPage/index";
+import FollowingListPage from "./Profile/FollowingListPage/index";
 
-import ROUTE, { ROUTE_LOGIN, ROUTE_PRODUCT } from "constant/route";
+import ROUTE, {
+  ROUTE_LOGIN,
+  ROUTE_PRODUCT,
+  ROUTE_PROFILE,
+} from "constant/route";
 
 export default function AppRouter() {
   return (
@@ -49,8 +53,14 @@ export default function AppRouter() {
               <Route index element={<ProfilePage />} />
               <Route path=":accountname">
                 <Route index element={<YourProfilePage />} />
-                <Route path="follower" element={<FollowerListPage />} />
-                <Route path="following" element={<FollowingListPage />} />
+                <Route
+                  path={ROUTE_PROFILE.FOLLOWER}
+                  element={<FollowerListPage />}
+                />
+                <Route
+                  path={ROUTE_PROFILE.FOLLOWING}
+                  element={<FollowingListPage />}
+                />
               </Route>
             </Route>
             <Route path={ROUTE.POST}>

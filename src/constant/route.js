@@ -13,13 +13,16 @@ const ROUTE_LOGIN = {
   AUTHORIZE: "authorize",
 };
 
-export { ROUTE_LOGIN };
-
 const ROUTE_PRODUCT = {
   ADD: "add",
   EDIT: "edit",
 };
 
-export { ROUTE_PRODUCT };
+const ROUTE_PROFILE = {
+  FOLLOWER: "follower",
+  FOLLOWING: "following",
+};
+
+export { ROUTE_PRODUCT, ROUTE_PROFILE, ROUTE_LOGIN };
 
 export default ROUTE;

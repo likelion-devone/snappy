@@ -9,6 +9,8 @@ import SmallProfile from "component/common/SmallProfile/index";
 
 import { BUTTON_STATE } from "constant/button_state";
 import { BUTTON_SIZE, PROFILE_SIZE } from "constant/size";
+import routeResolver from "util/routeResolver";
+import ROUTE from "constant/route";
 
 const FollowerList = styled.ul`
   display: flex;
@@ -33,7 +35,7 @@ export default function FollowerListPage() {
 
   useEffect(() => {
     getFollowerData({ accountname });
-  }, []);
+  }, [getFollowerData, accountname]);
 
   function handleFollowButton(isFollow, targetAccountname) {
     if (isFollow) {
@@ -56,13 +58,18 @@ export default function FollowerListPage() {
       {followerData.map((follower) => {
         return (
           <li key={follower._id}>
-            <SmallProfile size={PROFILE_SIZE.MEDIUM} src={follower.image}>
+            <SmallProfile
+              size={PROFILE_SIZE.MEDIUM}
+              src={follower.image}
+              imageTo={routeResolver(ROUTE.PROFILE, follower.accountname)}
+            >
               <SmallProfile.Side
                 left={
                   <SmallProfile.Side.Title
                     title={follower.username}
                     subtitle={follower.intro}
                     gap={6}
+                    titleTo={routeResolver(ROUTE.PROFILE, follower.accountname)}
                   />
                 }
                 right={
