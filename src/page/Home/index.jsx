@@ -15,6 +15,6 @@ export default function HomePage() {
   }
 
   return postData.posts.map((postCard) => (
-    <PostCard key={postCard.id} {...postCard} />
+    <PostCard key={postCard.id} {...{ ...postCard, postId: postCard.id }} />
   ));
 }
