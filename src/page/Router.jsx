@@ -28,6 +28,7 @@ import FollowingListPage from "./Profile/FollowingListPage/index";
 
 import PostDataProvider from "component/common/PostDataProvider/index";
 import PostDetailDataProvider from "component/common/PostDataProvider/PostDetailDataProvider/index";
+import IsUploadPossibleProvider from "component/Post/IsUploadPossibleProvider/index";
 
 import ROUTE, {
   ROUTE_LOGIN,
@@ -71,7 +72,7 @@ export default function AppRouter() {
               </Route>
             </Route>
             <Route path={ROUTE.POST}>
-              <Route index element={<PostUploadPage />} />
+              <Route index element={<IsUploadPossibleProvider><PostUploadPage /></IsUploadPossibleProvider>} />
               <Route path=":postId" element={<PostDetailDataProvider><PostDetailPage /></PostDetailDataProvider>} />
             </Route>
             <Route path={ROUTE.PRODUCT} element={<ProductPage />}>

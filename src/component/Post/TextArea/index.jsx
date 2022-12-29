@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import StyledTextArea from "./style";
 import { FONT_SIZE } from "constant/style";
-import { IsUploadPossible } from "../IsUploadPossibleProvider/index";
+import { IsUploadPossibleContext } from "../IsUploadPossibleProvider/index";
 
 const Wrapper = styled.div`
   position: relative;
@@ -16,32 +16,28 @@ const DummyTextArea = styled.div`
   font-weight: 400;
   font-size: ${FONT_SIZE.BASE};
   padding: 5px;
-  width: 50%;
   white-space: pre;
 `;
 
 const TextArea = forwardRef(function TextAreaForwarded(_, ref) {
-  const { setPossibleUpload } = useContext(IsUploadPossible);
+  const { isPossibleToUpload, setIsPossibleToUpload } = useContext(IsUploadPossibleContext);
   const [text, setText] = useState("");
 
   const handleTextAreaChange = (event) => {
-    handleTextAreaValidCheck(event);
     let currentText = event.target.value;
+    handleTextAreaValidCheck(currentText);
     setText(currentText);
   };
 
-  const handleTextAreaValidCheck = (event) => {
-    const {
-      target: { value },
-    } = event;
-    const textAreaLength = value.length;
+  const handleTextAreaValidCheck = (currentText) => {
+    const textAreaLength = currentText.length;
 
-    if (!textAreaLength) {
-      setPossibleUpload(false);
+    if (!textAreaLength && isPossibleToUpload) {
+      setIsPossibleToUpload(false);
     }
 
-    if (textAreaLength === 1) {
-      setPossibleUpload(true);
+    if (textAreaLength && !isPossibleToUpload) {
+      setIsPossibleToUpload(true);
     }
   };
 
