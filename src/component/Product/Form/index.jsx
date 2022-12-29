@@ -11,6 +11,7 @@ import Icons from "asset/icon/icons";
 import AddedImgList from "component/common/AddedImgList/index";
 import useAPI from "hook/useAPI";
 import { req } from "lib/api/index";
+import { validateIsFilled, validateOver1, validateUrl } from "util/validation";
 
 const ProductFormWrapper = styled.fieldset`
   min-width: 322px;
@@ -87,15 +88,6 @@ const StyledAddedImgList = styled(AddedImgList)`
   }
 `;
 
-function checkIsFilled(value) {
-  return value ? "" : "빈칸을 채워주세요.";
-}
-function checkPriceValidation(value) {
-  return value && value >= 1
-    ? ""
-    : "비어있거나 1 이상의 숫자인지 확인해주세요.";
-}
-
 const SIZE_LIMIT = 10 * 1024 * 1024;
 
 function ProductForm({ formId }) {
@@ -104,14 +96,12 @@ function ProductForm({ formId }) {
   const { isFormFilled, setIsFormFilled, productData, dispatchProductData } =
     useContext(ProductContext);
 
-  const [imageRef, handleImageValidation, _imageError, isImageFilled] =
-    useValidationInput(checkIsFilled);
   const [nameRef, handleNameValidation, nameError, isNameFilled] =
-    useValidationInput(checkIsFilled);
+    useValidationInput(validateIsFilled);
   const [priceRef, handlePriceValidation, priceError, isPriceFilled] =
-    useValidationInput(checkPriceValidation);
+    useValidationInput(validateOver1);
   const [linkRef, handleLinkValidation, linkError, isLinkFilled] =
-    useValidationInput(checkIsFilled);
+    useValidationInput(validateUrl);
 
   const [imgData, setImgData] = useState([]);
 
@@ -130,35 +120,41 @@ function ProductForm({ formId }) {
   const handleUploadFile = (event) => {
     const imgFileList = event.target.files;
     const imgCount = imgData.length;
-    const imgList = [];
 
-    // 이미지 파일 용량, 개수 제한
-    for (const file of imgFileList) {
-      if (file.size > SIZE_LIMIT) {
-        alert("10MB 이상의 이미지는 업로드 할 수 없습니다.");
-        return;
-      }
-      if (imgCount > 2) {
-        alert("3개 이하의 파일을 업로드 하세요.");
-        return;
-      }
-
-      imgList.push(URL.createObjectURL(file));
+    if (imgCount > 2) {
+      alert("3개 이하의 파일을 업로드 하세요.");
+      return;
     }
-    setImgData(imgList);
-  };
 
-  // useEffect(() => {
-  //   imgContainerRef.current.style.backgroundImage = `url(${
-  //     productData ? productData.itemImage : ""
-  //   })`;
-  // }, [productData]);
+    setImgData((prevImgData) => {
+      prevImgData.forEach((data) => {
+        if (data.startsWith("blob:")) {
+          URL.revokeObjectURL(data);
+        }
+      })
+
+      const imgList = [...prevImgData.filter((url) => !url.startsWith("blob:"))];
+
+      for (const file of imgFileList) {
+        if (file.size > SIZE_LIMIT) {
+          alert("10MB 이상의 이미지는 업로드 할 수 없습니다.");
+          return imgList;
+        }
+
+        imgList.push(URL.createObjectURL(file));
+      }
+
+      return imgList
+    });
+  };
 
   useEffect(() => {
     if (productData) {
       handleNameValidation();
       handlePriceValidation();
       handleLinkValidation();
+
+      setImgData(productData.itemImage.split(','));
     }
   }, [
     handleNameValidation,
@@ -186,6 +182,12 @@ function ProductForm({ formId }) {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    const previouslyExistedImgUrls = imgData.filter((url) => !url.startsWith("blob:"));
+
+    if (!inpImagesRef.current.files.length && !previouslyExistedImgUrls.length) {
+      alert("이미지를 하나 이상 넣어주세요.");
+      return;
+    }
 
     const formData = new FormData();
     [...inpImagesRef.current.files].forEach((file) => {
@@ -193,17 +195,20 @@ function ProductForm({ formId }) {
     });
     const results = await uploadImages({ formData: formData });
 
+    const newImages = results.length
+      ? results
+        .map((result) => process.env.REACT_APP_BASE_API + result.filename) : [];
+
     dispatchProductData({
       type: "set",
       payload: {
         itemName: nameRef.current.value,
         price: parseInt(priceRef.current.value),
         link: linkRef.current.value,
-        itemImage: results.length
-          ? results
-              .map((result) => process.env.REACT_APP_BASE_API + result.filename)
-              .join(",")
-          : "https://mandarin.api.weniv.co.kr/1672086090201.png",
+        itemImage: [
+          ...previouslyExistedImgUrls,
+          ...newImages
+        ].join(",")
       },
     });
   };
@@ -222,7 +227,6 @@ function ProductForm({ formId }) {
             <StyledAddedImgList
               imgData={imgData}
               setImgData={setImgData}
-              className="added-img-list"
             />
           </AddedImgContainer>
           <HiddenUploadFileInput
@@ -244,7 +248,7 @@ function ProductForm({ formId }) {
             maxLength="25"
             placeholder="상품명을 입력해주세요."
             required
-            onChange={handleNameValidation}
+            onKeyUp={handleNameValidation}
             defaultValue={productData ? productData.itemName : ""}
           />
           <ValidationInputWrapper.ErrorMessage />
@@ -258,7 +262,7 @@ function ProductForm({ formId }) {
             id="productPrice"
             placeholder="숫자만 입력 가능합니다."
             required
-            onChange={handlePriceValidation}
+            onKeyUp={handlePriceValidation}
             defaultValue={productData ? productData.price : ""}
           />
           <ValidationInputWrapper.ErrorMessage />
@@ -272,7 +276,7 @@ function ProductForm({ formId }) {
             id="productLink"
             placeholder="URL을 입력해주세요."
             required
-            onChange={handleLinkValidation}
+            onKeyUp={handleLinkValidation}
             defaultValue={productData ? productData.link : ""}
           />
           <ValidationInputWrapper.ErrorMessage />

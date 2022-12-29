@@ -1,5 +1,5 @@
 import ProductForm from "component/Product/Form/index";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import useAPI from "hook/useAPI";
@@ -11,13 +11,10 @@ import useFetch from "hook/useFetch";
 import routeResolver from "util/routeResolver";
 
 export default function EditProductPage() {
-  const [isSubmitBtnClicked, setIsSubmitBtnClicked] = useState(false);
-  console.log(isSubmitBtnClicked);
-
   const { productid } = useParams();
   const navigate = useNavigate();
 
-  // const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useRef(false);
 
   const [isProductDataFetching, initialProductData, initialProductDataError] =
     useFetch(req.product.detail, { productId: productid });
@@ -35,7 +32,6 @@ export default function EditProductPage() {
       return;
     }
     if (initialProductData) {
-      console.log(initialProductData.product);
       dispatchProductData({
         type: "set",
         payload: {
@@ -59,26 +55,22 @@ export default function EditProductPage() {
     }
 
     if (
-      initialProductData &&
-      Object.keys(productData).some(
-        (key) => productData[key] !== initialProductData.product[key]
+      !Object.keys(productData).every(
+        (key) => productData[key] === initialProductData.product[key]
       )
     ) {
       editProduct({ productId: productid, ...productData });
+    } else if (isMounted.current) {
+      alert("수정사항이 없습니다.")
+    } else {
+      isMounted.current = true;
     }
-    // if (
-    //   Object.keys(productData).every(
-    //     (key) => productData[key] === initialProductData.product[key]
-    //   )
-    // ) {
-    //   navigate(ROUTE.CHAT);
-    // }
   }, [
     editProduct,
     productData,
     initialProductData,
     productid,
-    isSubmitBtnClicked,
+    isMounted,
     navigate,
   ]);
 
@@ -90,15 +82,13 @@ export default function EditProductPage() {
           ROUTE.PROFILE,
           initialProductData.product.author.accountname
         )
-        // { replace: true }
       );
       return;
     }
     if (editProductError) {
       alert("수정하다가 에러뜸");
     }
-  }, [editProductResult, editProductError, navigate]);
-  // dependency에 initialProductData.product.author.accountname 추가하면 에러.
+  }, [editProductResult, editProductError, navigate, initialProductData]);
 
   return isProductDataFetching ? (
     <>로딩중</>
@@ -108,10 +98,6 @@ export default function EditProductPage() {
         type="submit"
         form="productForm"
         disabled={!isFormFilled || isProductEditing}
-        onClick={() => {
-          setIsSubmitBtnClicked(true);
-          // console.log(isSubmitBtnClicked);
-        }}
       >
         제출하기
       </button>
