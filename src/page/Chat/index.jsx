@@ -12,7 +12,6 @@ const ChatList = styled.ul`
   justify-content: center;
 
   li {
-    border: 1px solid red;
     margin-bottom: 16px;
   }
   li:last-child {
@@ -50,40 +49,6 @@ export default function ChatPage() {
               />
             </SmallProfile>
           </Link>
-        </li>
-        <li>
-          <SmallProfile
-            src="please fill here"
-            size={PROFILE_SIZE.SMALL}
-            isNotifying={true}
-            imageTo="/image"
-          >
-            <SmallProfile.Side
-              left={
-                <SmallProfile.Side.Title
-                  title="어나더 스냅 스튜디오"
-                  subtitle="70-200mm 망원렌즈를 활용하여 포커싱 아웃된 생동감 있고 드라마틱한 여러분들의 모습을 감도있게 촬영해드립니다."
-                  gap={6}
-                  titleTo="/title"
-                  attachment={<time>5분전</time>}
-                />
-              }
-              right={
-                <time
-                  style={{
-                    color: "#DBDBDB",
-                    fontSize: "10px",
-                    lineHeight: "13px",
-                    fontWeight: "400",
-                    alignSelf: "flex-end",
-                  }}
-                >
-                  {/* TODO style component fontsize use theme, fontsize  */}
-                  2020.10.25
-                </time>
-              }
-            />
-          </SmallProfile>
         </li>
       </ChatList>
     </>

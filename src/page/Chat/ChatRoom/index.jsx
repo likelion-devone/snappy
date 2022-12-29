@@ -10,6 +10,10 @@ import ProfileImg from "asset/profile-img-42.png";
 import { FONT_SIZE } from "constant/style";
 import Icons from "asset/icon/icons";
 import { useNavigate } from "react-router-dom";
+import Button from "component/common/DropdownModal/Button/index";
+import DropdownModal from "component/common/DropdownModal/index";
+import useDropdownModal from "hook/useDropdownModal";
+import ROUTE from "constant/route";
 
 const UserChat = styled.article`
   padding-top: 50px;
@@ -160,19 +164,29 @@ const Send = styled.button`
   margin-right: 16px;
   color: ${(props) => props.theme.snGreyOff};
 `;
-const NavButton = styled.button`
-  border: 3px solid blue;
-`;
-const ButtonModal = styled.button`
-  border: 1px solid red;
-`;
 
 export default function ChatPage() {
   const navigate = useNavigate();
+  const [isExitDroppedUp, dropUpExit, dropDownExit] = useDropdownModal();
+
+  const handleExitButton = () => {
+    dropDownExit();
+    navigate(ROUTE.CHAT);
+  };
   return (
     <>
-      <NavButton onClick={() => navigate(-1)}>back</NavButton>
-      <ButtonModal type="submit">dropdown</ButtonModal>
+      <Button type="button" onClick={() => navigate(-1)}>
+        <Icons.ArrowLeft title="이전페이지로 가기" />
+      </Button>
+      <Button type="button" onClick={dropUpExit}>
+        <Icons.MoreVertical title="이전페이지로 가기" />
+      </Button>
+      <DropdownModal isDroppedUp={isExitDroppedUp} dropDown={dropDownExit}>
+        <DropdownModal.Button onClick={handleExitButton}>
+          채팅방 나가기
+        </DropdownModal.Button>
+      </DropdownModal>
+
       <UserChat>
         <SmallProfile src={ProfileImg} size={PROFILE_SIZE.SMALL} />
 
