@@ -246,7 +246,7 @@ const req = {
     }),
     add: ({ itemName, price, link, itemImage }) => ({
       method: METHOD.POST,
-      url: "/post",
+      url: "/product",
       data: {
         product: {
           itemName,

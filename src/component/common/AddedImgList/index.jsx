@@ -28,6 +28,8 @@ const UploadImg = styled.img`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   transition: all 0.2s;
+
+  vertical-align: top;
 `;
 
 const ButtonDelete = styled.button`
@@ -38,7 +40,7 @@ const ButtonDelete = styled.button`
   height: 22px;
 `;
 
-export default function AddedImgList({ imgData, setImgData }) {
+export default function AddedImgList({ imgData, setImgData, className }) {
   const handleImgError = (event) => {
     event.target.src = ErrorImg;
   };
@@ -49,30 +51,29 @@ export default function AddedImgList({ imgData, setImgData }) {
   };
 
   return (
-    <>
-      {!!imgData.length && (
-        <UploadedImgList>
-          {React.Children.toArray(
-            imgData.map((image) => (
-              <UploadImgWrapper>
-                <UploadImg
-                  src={image}
-                  onError={handleImgError}
-                  $isMultiple={imgData.length > 1}
-                />
-                <ButtonDelete type="button" onClick={handleDeleteImg(image)}>
-                  <Icons.Close title="이미지 삭제 버튼입니다." />
-                </ButtonDelete>
-              </UploadImgWrapper>
-            ))
-          )}
-        </UploadedImgList>
-      )}
-    </>
+    !!imgData.length && (
+      <UploadedImgList className={className}>
+        {React.Children.toArray(
+          imgData.map((image) => (
+            <UploadImgWrapper>
+              <UploadImg
+                src={image}
+                onError={handleImgError}
+                $isMultiple={imgData.length > 1}
+              />
+              <ButtonDelete type="button" onClick={handleDeleteImg(image)}>
+                <Icons.Close title="이미지 삭제 버튼입니다." />
+              </ButtonDelete>
+            </UploadImgWrapper>
+          ))
+        )}
+      </UploadedImgList>
+    )
   );
 }
 
 AddedImgList.propTypes = {
   imgData: PropTypes.array,
   setImgData: PropTypes.func,
+  className: PropTypes.string,
 };

@@ -87,9 +87,7 @@ export default function JoinPageTwo() {
   };
 
   useEffect(() => {
-    console.log(joinData);
     if (joinData.email && joinData.password && joinData.accountname && joinData.image && joinData.username) {
-      console.log('패스');
       createUser(joinData);
     } else if (!joinData.email || !joinData.password) {
       navigate(routeResolver(ROUTE.LOGIN, ROUTE_LOGIN.JOIN, "1"));
@@ -105,7 +103,7 @@ export default function JoinPageTwo() {
     }
 
     if (createUserError) {
-      console.log(createUserError);
+      console.error(createUserError);
       dispatchJoinData({ type: "reset" });
       navigate(routeResolver(ROUTE.LOGIN, ROUTE_LOGIN.JOIN, "1"));
     }

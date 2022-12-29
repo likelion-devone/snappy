@@ -141,16 +141,15 @@ export default function AuthProvider() {
   }, [navigate]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        authInfo,
-        handleLogin,
-        handleLogout,
-        loginError,
-        isLoggingIn,
-      }}
-    >
-      {authInfo ? <Outlet /> : <LandingPage />}
+    <AuthContext.Provider value={{
+      authInfo, handleLogin, handleLogout, loginError, isLoggingIn
+    }}>
+      {authInfo ||
+        (haveTriedAutoLogin &&
+          (location.pathname.includes(ROUTE.LOGIN) ||
+            location.pathname === ROUTE.LANDING))
+        ? <Outlet />
+        : <LandingPage />}
     </AuthContext.Provider>
   );
 }

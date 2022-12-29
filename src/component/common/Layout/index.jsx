@@ -1,8 +1,7 @@
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
-import TopNav from "../TopNav";
-import GlobalNav from "./GlobalNav";
+import { GlobalNav, TopNav, TopNavProvider } from "component/common/Navbar";
 
 import { GLOBAL_NAVBAR_HEIGHT, MAX_WIDTH, MIN_WIDTH, TOP_NAVBAR_HEIGHT } from "constant/style";
 
@@ -17,13 +16,13 @@ const LayoutStyle = styled.main`
 
 function Layout() {
   return (
-    <>
+    <TopNavProvider>
       <TopNav />
       <LayoutStyle>
         <Outlet />
         <GlobalNav />
       </LayoutStyle>
-    </>
+    </TopNavProvider>
   )
 }
 

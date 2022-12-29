@@ -5,6 +5,7 @@ const ROUTE = {
   PROFILE: "/profile",
   POST: "/post",
   CHAT: "/chat",
+  PRODUCT: "/product",
 };
 
 const ROUTE_LOGIN = {
@@ -13,5 +14,12 @@ const ROUTE_LOGIN = {
 };
 
 export { ROUTE_LOGIN };
+
+const ROUTE_PRODUCT = {
+  ADD: "add",
+  EDIT: "edit",
+};
+
+export { ROUTE_PRODUCT };
 
 export default ROUTE;

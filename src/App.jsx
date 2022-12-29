@@ -6,13 +6,16 @@ import GlobalStyle from "style/GlobalStyle";
 import theme from "style/theme";
 import "style/font.css";
 
+
 function App() {
-  return <>
-    <GlobalStyle />
-    <ThemeProvider theme={theme}>
-      <AppRouter />
-    </ThemeProvider>
-  </>;
+  return (
+    <>
+      <GlobalStyle />
+      <ThemeProvider theme={theme}>
+        <AppRouter />
+      </ThemeProvider>
+    </>
+  );
 }
 
 export default App;
