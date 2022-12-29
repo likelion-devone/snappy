@@ -14,11 +14,12 @@ import Button from "component/common/Button/index";
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
 import ProductList from "component/Profile/ProductList/index";
-import ROUTE from "constant/route";
+import ROUTE, { ROUTE_PROFILE } from "constant/route";
 import PortfolioTitleImg from "asset/title-portfolio.png";
 
 import useFetch from "hook/useFetch";
 import { req } from "lib/api/index";
+import routeResolver from "util/routeResolver";
 
 const StyleBigProfile = styled.div`
   display: flex;
@@ -113,9 +114,9 @@ const IconList = styled(Icons.PostList)`
   margin-right: 22.5px;
   path {
     fill: ${({ $isListActive, theme }) =>
-    $isListActive ? theme.snBlue : theme.snGreyOff};
+      $isListActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isListActive, theme }) =>
-    $isListActive ? theme.snBlue : theme.snGreyOff};
+      $isListActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
@@ -123,9 +124,9 @@ const IconAlbum = styled(Icons.PostAlbum)`
   margin-top: 12.25px;
   path {
     fill: ${({ $isAlbumActive, theme }) =>
-    $isAlbumActive ? theme.snBlue : theme.snGreyOff};
+      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isAlbumActive, theme }) =>
-    $isAlbumActive ? theme.snBlue : theme.snGreyOff};
+      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
@@ -135,7 +136,10 @@ function PageDetails({ accountname, $isMyProfile = false }) {
   const [viewOption, setViewOption] = useState(true);
   const [isListActive, setIsListActive] = useState(true);
 
-  const [isProfileDataLoading, profileData, profileDataError] = useFetch(req.profile.personalProfile, { accountname });
+  const [isProfileDataLoading, profileData, profileDataError] = useFetch(
+    req.profile.personalProfile,
+    { accountname }
+  );
 
   const [isProductLoading, productData, productDataError] = useFetch(
     req.product.load,
@@ -149,14 +153,9 @@ function PageDetails({ accountname, $isMyProfile = false }) {
 
   useEffect(() => {
     if (profileDataError || productDataError || postDataError) {
-      navigate('404');
+      navigate("404");
     }
-  }, [
-    profileDataError,
-    productDataError,
-    postDataError,
-    navigate
-  ])
+  }, [profileDataError, productDataError, postDataError, navigate]);
 
   if (isProfileDataLoading || isProductLoading || isUserPostLoading) {
     return <>로딩중</>;
@@ -179,45 +178,62 @@ function PageDetails({ accountname, $isMyProfile = false }) {
       <StyleBigProfile>
         <BigProfile
           src={profile.image}
-          left={<FollowerLink count={profile.followerCount.toString()} to={""} />}
-          right={<FollowingLink count={profile.followingCount.toString()} to={""} />}
+          left={
+            <FollowerLink
+              count={profile.followerCount.toString()}
+              to={routeResolver(
+                ROUTE.PROFILE,
+                accountname,
+                ROUTE_PROFILE.FOLLOWER
+              )}
+            />
+          }
+          right={
+            <FollowingLink
+              count={profile.followingCount.toString()}
+              to={routeResolver(
+                ROUTE.PROFILE,
+                accountname,
+                ROUTE_PROFILE.FOLLOWING
+              )}
+            />
+          }
         />
         <p className="username">{profile.username}</p>
         <p className="accountname">@ {profile.accountname}</p>
         <p className="intro">{profile.intro}</p>
         <Wrapper>
-          {
-            $isMyProfile ?
-              <>
-                <Button
-                  size={BUTTON_SIZE.LARGE_34}
-                  state={BUTTON_STATE.LARGE_34.ACTIVATED}
-                >
-                  프로필 수정
-                </Button>
-                <Button
-                  size={BUTTON_SIZE.LARGE_34}
-                  state={BUTTON_STATE.LARGE_34.ACTIVATED}
-                >
-                  상품 등록
-                </Button>
-              </>
-              :
-              <>
-                <ChatLink to={ROUTE.CHAT}>
-                  <Icons.MessageCircle title="채팅" className="messageCircle" />
-                </ChatLink>
-                <Button
-                  size={BUTTON_SIZE.LARGE_34}
-                  state={BUTTON_STATE.LARGE_34.ABLED}
-                >
-                  팔로우
-                </Button>
-                <ShareLink as="button" onClick={() => alert('공유 기능 개발중')}>
-                  <Icons.Share title="공유" className="shareCircle" />
-                </ShareLink>
-              </>
-          }
+          {$isMyProfile ? (
+            <>
+              <Button
+                size={BUTTON_SIZE.LARGE_34}
+                state={BUTTON_STATE.LARGE_34.ACTIVATED}
+              >
+                프로필 수정
+              </Button>
+              <Button
+                size={BUTTON_SIZE.LARGE_34}
+                state={BUTTON_STATE.LARGE_34.ACTIVATED}
+              >
+                상품 등록
+              </Button>
+            </>
+          ) : (
+            <>
+              <ChatLink to={ROUTE.CHAT}>
+                <Icons.MessageCircle title="채팅" className="messageCircle" />
+              </ChatLink>
+              <Button
+                size={BUTTON_SIZE.LARGE_34}
+                state={BUTTON_STATE.LARGE_34.ABLED}
+              >
+                팔로우
+              </Button>
+              <ShareLink as="button" onClick={() => alert("공유 기능 개발중")}>
+                <Icons.Share title="공유" className="shareCircle" />
+              </ShareLink>
+            </>
+          )}
         </Wrapper>
       </StyleBigProfile>
 
@@ -240,8 +256,14 @@ function PageDetails({ accountname, $isMyProfile = false }) {
             <IconAlbum $isAlbumActive={!isListActive} />
           </button>
         </IconBox>
-        <ListView postData={isUserPostLoading ? [] : postData.post} visible={viewOption} />
-        <AlbumView postData={isUserPostLoading ? [] : postData.post} visible={!viewOption} />
+        <ListView
+          postData={isUserPostLoading ? [] : postData.post}
+          visible={viewOption}
+        />
+        <AlbumView
+          postData={isUserPostLoading ? [] : postData.post}
+          visible={!viewOption}
+        />
       </section>
     </>
   );
@@ -249,7 +271,7 @@ function PageDetails({ accountname, $isMyProfile = false }) {
 
 PageDetails.propTypes = {
   accountname: PropTypes.string.isRequired,
-  $isMyProfile: PropTypes.bool
-}
+  $isMyProfile: PropTypes.bool,
+};
 
 export default PageDetails;

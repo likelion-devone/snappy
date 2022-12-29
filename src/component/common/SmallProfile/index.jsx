@@ -130,7 +130,7 @@ export default function SmallProfile({
 SmallProfile.propTypes = {
   size: PropTypes.oneOf(Object.values(PROFILE_SIZE)).isRequired,
   src: PropTypes.string.isRequired,
-  imageTo: PropTypes.string.isRequired,
+  imageTo: PropTypes.string,
   children: PropTypes.node,
   isNotifying: PropTypes.bool,
   isPhotographer: PropTypes.bool,
