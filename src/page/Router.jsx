@@ -50,10 +50,11 @@ export default function AppRouter() {
             <Route path={ROUTE.PRODUCT} element={<ProductPage />}>
               <Route index element={<Navigate to={ROUTE.HOME} />} />
               <Route path={ROUTE_PRODUCT.ADD} element={<AddProductPage />} />
-              <Route
-                path={":productid/" + ROUTE_PRODUCT.EDIT}
-                element={<EditProductPage />}
-              />
+              <Route path=":productid">
+                {/* TODO: 제품 상세 페이지 개발 */}
+                <Route index element={<Navigate to={ROUTE_PRODUCT.EDIT} />} />
+                <Route path={ROUTE_PRODUCT.EDIT} element={<EditProductPage />} />
+              </Route>
             </Route>
             <Route path={ROUTE.CHAT} element={<ChatPage />} />
           </Route>
