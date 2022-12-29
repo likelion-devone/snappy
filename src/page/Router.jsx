@@ -22,9 +22,11 @@ import AuthProvider from "lib/auth/AuthProvider";
 import ProductPage from "./Product";
 import AddProductPage from "./Product/AddProduct/index";
 import EditProductPage from "./Product/EditProduct/index";
+import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
+import FollowerListPage from "./Profile/FollowerListPage/index";
+import FollowingListPage from "./Profile/FollowingLIstPage/index";
 
 import ROUTE, { ROUTE_LOGIN, ROUTE_PRODUCT } from "constant/route";
-import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
 
 export default function AppRouter() {
   return (
@@ -45,7 +47,11 @@ export default function AppRouter() {
             <Route path={ROUTE.HOME} element={<HomePage />} />
             <Route path={ROUTE.PROFILE}>
               <Route index element={<ProfilePage />} />
-              <Route path=":accountname" element={<YourProfilePage />} />
+              <Route path=":accountname">
+                <Route index element={<YourProfilePage />} />
+                <Route path="follower" element={<FollowerListPage />} />
+                <Route path="following" element={<FollowingListPage />} />
+              </Route>
             </Route>
             <Route path={ROUTE.POST}>
               <Route index element={<PostUploadPage />} />
@@ -57,7 +63,10 @@ export default function AppRouter() {
               <Route path=":productid">
                 {/* TODO: 제품 상세 페이지 개발 */}
                 <Route index element={<Navigate to={ROUTE_PRODUCT.EDIT} />} />
-                <Route path={ROUTE_PRODUCT.EDIT} element={<EditProductPage />} />
+                <Route
+                  path={ROUTE_PRODUCT.EDIT}
+                  element={<EditProductPage />}
+                />
               </Route>
             </Route>
             <Route path={ROUTE.CHAT} element={<ChatPage />} />
