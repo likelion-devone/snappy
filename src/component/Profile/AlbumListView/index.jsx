@@ -2,6 +2,9 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import GreyIcon from "asset/logo-profile-172213.png";
 import PostCard from "component/common/PostCard/index";
+import { Link } from "react-router-dom";
+import routeResolver from "util/routeResolver";
+import ROUTE from "constant/route";
 
 const SingleImg = styled.img`
   height: 100%;
@@ -9,41 +12,46 @@ const SingleImg = styled.img`
   object-fit: cover;
 `;
 
-const Single = styled.div`
-  cursor: pointer;
-`;
-
-const AlbumGrid = styled.div`
+const AlbumGrid = styled.ol`
   display: grid;
-  grid-template-columns: repeat(3, 144px);
-  grid-template-rows: repeat(10, 144px);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  align-content: stretch;
-  justify-content: center;
-  ${Single}:nth-child(1) {
-    grid-column: 1 / 3;
-    grid-row: 1 / 3;
+
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+
+  li:nth-child(13n + 1) {
+    grid-column: span 2;
+    grid-row: span 2;
   }
-  ${Single}:nth-child(5) {
-    grid-column: 2/ 4;
-    grid-row: 4/ 6;
+  li:nth-child(8n) {
+    grid-column: span 2;
+    grid-row: span 2;
   }
+
+  ${({ visible }) => !visible && `
+    position: absolute;
+    left: -200vw;
+  `};
 `;
 
-const ListFlex = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 390px;
-  margin: 0 auto;
-`;
+const ListViewWrapper = styled.ol`
+  ${({ visible }) => !visible && `
+    position: absolute;
+    left: -200vw;
+  `};
+`
 
 const handleImgError = (event) => {
   event.target.src = GreyIcon;
 };
 
-function AlbumView({ postData }) {
+function AlbumView({ postData, visible }) {
+  const imgCount = postData.length;
+
   return (
-    <AlbumGrid>
+    <AlbumGrid visible={visible} imgCount={imgCount}>
       {postData
         .filter((slide) => {
           if (slide.image.endsWith("undefined")) {
@@ -53,34 +61,41 @@ function AlbumView({ postData }) {
         })
         .map((slide) => {
           return (
-            <Single key={slide.id}>
-              <SingleImg src={slide.image} alt="" onError={handleImgError} />
-            </Single>
+            <li key={slide.id}>
+              <Link to={routeResolver(ROUTE.POST, slide.id)}>
+                <SingleImg
+                  src={slide.image.split(',')[0]}
+                  alt={`${slide.author.username}님이 올리신 포스트의 썸네일 이미지입니다.`}
+                  onError={handleImgError}
+                />
+              </Link>
+            </li>
           );
         })}
     </AlbumGrid>
   );
 }
 
-function ListView({ postData }) {
+function ListView({ postData, visible }) {
   return (
-    <ListFlex>
+    <ListViewWrapper visible={visible}>
       {postData.map((slide) => {
         return (
-          <PostCard
-            key={slide.id}
-            author={slide.author}
-            postId={slide.id}
-            content={slide.content}
-            image={slide.image}
-            createdAt={slide.createdAt}
-            hearted={slide.hearted}
-            heartCount={slide.heartCount}
-            commentCount={slide.commentCount}
-          />
+          <li key={slide.id}>
+            <PostCard
+              author={slide.author}
+              postId={slide.id}
+              content={slide.content}
+              image={slide.image}
+              createdAt={slide.createdAt}
+              hearted={slide.hearted}
+              heartCount={slide.heartCount}
+              commentCount={slide.commentCount}
+            />
+          </li>
         );
       })}
-    </ListFlex>
+    </ListViewWrapper>
   );
 }
 
@@ -88,7 +103,9 @@ export { AlbumView, ListView };
 
 AlbumView.propTypes = {
   postData: PropTypes.arrayOf(PropTypes.object),
+  visible: PropTypes.bool.isRequired
 };
 ListView.propTypes = {
   postData: PropTypes.arrayOf(PropTypes.object),
+  visible: PropTypes.bool.isRequired
 };

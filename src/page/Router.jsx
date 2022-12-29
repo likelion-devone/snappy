@@ -5,6 +5,7 @@ import Layout from "component/common/Layout";
 import LoginPage from "./Login";
 import HomePage from "./Home";
 import ProfilePage from "./Profile";
+import YourProfilePage from "./Profile/[accountname]";
 import PostPage from "./Post";
 import ChatPage from "./Chat";
 import NotFoundErrorPage from "./404";
@@ -19,7 +20,10 @@ export default function AppRouter() {
           <Route path={ROUTE.LANDING} element={<></>} /> {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
           <Route path={ROUTE.LOGIN} element={<LoginPage />} />
           <Route path={ROUTE.HOME} element={<HomePage />} />
-          <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
+          <Route path={ROUTE.PROFILE}>
+            <Route index element={<ProfilePage />} />
+            <Route path=":accountname" element={<YourProfilePage />} />
+          </Route>
           <Route path={ROUTE.POST} element={<PostPage />} />
           <Route path={ROUTE.CHAT} element={<ChatPage />} />
           <Route path="*" element={<NotFoundErrorPage />} />

@@ -7,10 +7,11 @@ const SingleImg = styled.img`
   margin-bottom: 30px;
   border: 3px solid ${({ theme }) => theme.snBlack};
   box-shadow: 10px 5px 5px rgba(0, 0, 0, 0);
+
+  object-fit: cover;
 `;
 
-const ProductItem = styled.div`
-  cursor: pointer;
+const ProductItem = styled.li`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,9 +20,10 @@ const ProductItem = styled.div`
   margin: 30px;
 `;
 
-const ProductItemList = styled.div`
+const ProductItemList = styled.ul`
   margin: 0 auto;
-  width: 700px;
+  width: 100%;
+
   flex-grow: 1;
   display: flex;
   overflow-x: scroll;
@@ -42,12 +44,16 @@ const ProductItemList = styled.div`
   }
 `;
 
-const StyleButton = styled.button`
+const StyledLink = styled.a`
   background-color: ${({ theme }) => theme.snWhite};
   margin-top: 10px;
   width: 100px;
   height: 50px;
   border: 1px solid ${({ theme }) => theme.snBlack};
+
+  text-align: center;
+
+  line-height: 50px;
 `;
 
 function ProductList({ productData }) {
@@ -56,10 +62,10 @@ function ProductList({ productData }) {
       {productData.map((slide) => {
         return (
           <ProductItem key={slide.id}>
-            <SingleImg src={slide.itemImage} alt="" />
+            <SingleImg src={slide.itemImage.split(',')[0]} alt={`${slide.itemName}의 사진입니다.`} />
             <p className="productName">Product Name: {slide.itemName}</p>
             <p className="productPrice">Price: {slide.price}</p>
-            <StyleButton type="button">checkout</StyleButton>
+            <StyledLink href={slide.link} target="_blank">checkout</StyledLink>
           </ProductItem>
         );
       })}
