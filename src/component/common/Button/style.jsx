@@ -45,7 +45,4 @@ const sizeStyleMap = {
   `,
 };
 
-export {
-  stateStyleMap,
-  sizeStyleMap
-}
+export { stateStyleMap, sizeStyleMap };

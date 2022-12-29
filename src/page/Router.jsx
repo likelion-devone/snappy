@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Layout from "component/common/Layout";
 
@@ -6,29 +11,60 @@ import LoginPage from "./Login";
 import HomePage from "./Home";
 import ProfilePage from "./Profile";
 import YourProfilePage from "./Profile/[accountname]";
-import PostPage from "./Post";
+import PostUploadPage from "./Post/Upload";
+import PostDetailPage from "./Post/[postId]";
 import ChatPage from "./Chat";
 import NotFoundErrorPage from "./404";
+import JoinPage from "./Login/Join";
+import AuthorizePage from "./Login/Authorize";
 
-import ROUTE from "constant/route";
+import AuthProvider from "lib/auth/AuthProvider";
+import ProductPage from "./Product";
+import AddProductPage from "./Product/AddProduct/index";
+import EditProductPage from "./Product/EditProduct/index";
+
+import ROUTE, { ROUTE_LOGIN, ROUTE_PRODUCT } from "constant/route";
+import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
 
 export default function AppRouter() {
   return (
     <Router>
       <Routes>
-        <Route element={<Layout />}>
-          <Route path={ROUTE.LANDING} element={<></>} /> {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
-          <Route path={ROUTE.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTE.HOME} element={<HomePage />} />
-          <Route path={ROUTE.PROFILE}>
-            <Route index element={<ProfilePage />} />
-            <Route path=":accountname" element={<YourProfilePage />} />
+        <Route element={<AuthProvider />}>
+          <Route path={ROUTE.LOGIN}>
+            <Route index element={<LoginPage />} />
+            <Route path={ROUTE_LOGIN.JOIN} element={<JoinPage />}>
+              <Route path=":pagenum" element={<JoinPageByPagenum />} />
+              <Route index element={<Navigate to="1" />} />
+            </Route>
+            <Route path={ROUTE_LOGIN.AUTHORIZE} element={<AuthorizePage />} />
           </Route>
-          <Route path={ROUTE.POST} element={<PostPage />} />
-          <Route path={ROUTE.CHAT} element={<ChatPage />} />
-          <Route path="*" element={<NotFoundErrorPage />} />
+          <Route path={ROUTE.LANDING} element={<></>} />{" "}
+          {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
+          <Route element={<Layout />}>
+            <Route path={ROUTE.HOME} element={<HomePage />} />
+            <Route path={ROUTE.PROFILE}>
+              <Route index element={<ProfilePage />} />
+              <Route path=":accountname" element={<YourProfilePage />} />
+            </Route>
+            <Route path={ROUTE.POST}>
+              <Route index element={<PostUploadPage />} />
+              <Route path=":postId" element={<PostDetailPage />} />
+            </Route>
+            <Route path={ROUTE.PRODUCT} element={<ProductPage />}>
+              <Route index element={<Navigate to={ROUTE.HOME} />} />
+              <Route path={ROUTE_PRODUCT.ADD} element={<AddProductPage />} />
+              <Route path=":productid">
+                {/* TODO: 제품 상세 페이지 개발 */}
+                <Route index element={<Navigate to={ROUTE_PRODUCT.EDIT} />} />
+                <Route path={ROUTE_PRODUCT.EDIT} element={<EditProductPage />} />
+              </Route>
+            </Route>
+            <Route path={ROUTE.CHAT} element={<ChatPage />} />
+          </Route>
         </Route>
+        <Route path="*" element={<NotFoundErrorPage />} />
       </Routes>
     </Router>
-  )
+  );
 }

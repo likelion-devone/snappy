@@ -1,7 +1,3 @@
-/*
- 랜딩 로그인 홈 프로필 포스트 챗 404
- */
-
 const ROUTE = {
   LANDING: "/",
   LOGIN: "/login",
@@ -9,6 +5,21 @@ const ROUTE = {
   PROFILE: "/profile",
   POST: "/post",
   CHAT: "/chat",
+  PRODUCT: "/product",
 };
+
+const ROUTE_LOGIN = {
+  JOIN: "join",
+  AUTHORIZE: "authorize",
+};
+
+export { ROUTE_LOGIN };
+
+const ROUTE_PRODUCT = {
+  ADD: "add",
+  EDIT: "edit",
+};
+
+export { ROUTE_PRODUCT };
 
 export default ROUTE;

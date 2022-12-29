@@ -2,7 +2,7 @@ import { Home, MessageCircle, Edit, User } from "../index";
 
 import ROUTE from "constant/route";
 
-const NavLinkMap = {
+const NAV_LINK_MAP = {
   HOME: {
     to: ROUTE.HOME,
     icon: Home,
@@ -25,4 +25,4 @@ const NavLinkMap = {
   },
 };
 
-export { NavLinkMap };
+export { NAV_LINK_MAP };
