@@ -52,7 +52,7 @@ export default function AlertModal({ isModalOpened, children }) {
 }
 
 AlertModal.Content = Content;
-AlertModal.CancleButton = Button;
+AlertModal.Cancle = Button;
 AlertModal.ConfirmButton = styled(Button)`
   color: ${({ theme }) => theme.snBlue};
 `;
