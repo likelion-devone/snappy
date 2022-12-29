@@ -19,7 +19,14 @@ export default function HomePage() {
     return <>로딩중</>;
   }
 
-  return postData.posts.map((postCard) => (
-    <PostCard key={postCard.id} {...{ ...postCard, postId: postCard.id }} />
-  ));
+  // 최신순으로 게시글을 확인합니다.
+  return [...postData.posts, ...myPostData.post]
+    .sort(
+      (post1, post2) =>
+        new Date(post2.createdAt).getTime() -
+        new Date(post1.createdAt).getTime()
+    )
+    .map((postCard) => (
+      <PostCard key={postCard.id} {...{ ...postCard, postId: postCard.id }} />
+    ));
 }
