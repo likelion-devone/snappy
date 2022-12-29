@@ -1,3 +1,31 @@
+function validateIsFilled(value) {
+  return value ? "" : "빈칸을 채워주세요.";
+}
+
+function validateUrl(value) {
+  const checkIsFilled = validateIsFilled(value);
+
+  if (checkIsFilled) {
+    return checkIsFilled;
+  }
+
+  if (
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/.test(
+      value
+    )
+  ) {
+    return "";
+  }
+
+  return "올바르지 않은 URL 형식입니다.";
+}
+
+function validateOver1(value) {
+  return value && value >= 1
+    ? ""
+    : "비어있거나 1 이상의 숫자인지 확인해주세요.";
+}
+
 const validateEmail = (str) => {
   if (!str) {
     return "이메일을 입력해주세요.";
@@ -27,4 +55,10 @@ const validatePassword = (str) => {
   return "";
 };
 
-export { validateEmail, validatePassword };
+export {
+  validateEmail,
+  validatePassword,
+  validateIsFilled,
+  validateOver1,
+  validateUrl,
+};
