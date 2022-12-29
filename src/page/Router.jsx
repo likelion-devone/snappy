@@ -10,6 +10,7 @@ import Layout from "component/common/Layout";
 import LoginPage from "./Login";
 import HomePage from "./Home";
 import ProfilePage from "./Profile";
+import YourProfilePage from "./Profile/[accountname]";
 import PostUploadPage from "./Post/Upload";
 import PostDetailPage from "./Post/[postId]";
 import ChatPage from "./Chat";
@@ -42,7 +43,10 @@ export default function AppRouter() {
           {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
           <Route element={<Layout />}>
             <Route path={ROUTE.HOME} element={<HomePage />} />
-            <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
+            <Route path={ROUTE.PROFILE}>
+              <Route index element={<ProfilePage />} />
+              <Route path=":accountname" element={<YourProfilePage />} />
+            </Route>
             <Route path={ROUTE.POST}>
               <Route index element={<PostUploadPage />} />
               <Route path=":postId" element={<PostDetailPage />} />
