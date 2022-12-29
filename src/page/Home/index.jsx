@@ -27,13 +27,14 @@ export default function HomePage() {
       <TopNavElement.SearchButton onClick={toggleSearch} />
     )
   });
+  const { accountname } = useAuthInfo();
+
   const [isPostDataLoading, postData, _error] = useFetch(req.post.feed);
-  const authInfo = useAuthInfo();
 
   // 내 게시글도 피드에 보이게 하기
   const [isMyPostDataLoading, myPostData, __error] = useFetch(
     req.post.userposts,
-    { accountname: authInfo.accountname }
+    { accountname }
   );
 
   // 로딩중이면 데이터가 들어오지 않습니다.
@@ -47,11 +48,24 @@ export default function HomePage() {
       {[...postData.posts, ...myPostData.post]
         .sort(
           (post1, post2) =>
-            new Date(post2.createdAt).getTime() -
-            new Date(post1.createdAt).getTime()
+            Date.parse(post2.createdAt) -
+            Date.parse(post1.createdAt)
         )
         .map((postCard) => (
-          <PostCard key={postCard.id} {...{ ...postCard, postId: postCard.id }} />
+          <PostCard
+            key={postCard.id}
+            authorId={postCard.author._id}
+            username={postCard.author.username}
+            accountname={postCard.author.accountname}
+            profileImage={postCard.author.image}
+            postId={postCard.id}
+            content={postCard.content}
+            image={postCard.image}
+            createdAt={postCard.createdAt}
+            hearted={postCard.hearted}
+            heartCount={postCard.heartCount}
+            commentCount={postCard.commentCount}
+          />
         ))}
     </>
   )

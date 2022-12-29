@@ -54,6 +54,9 @@ function AlbumView({ postData, visible }) {
     <AlbumGrid visible={visible} imgCount={imgCount}>
       {postData
         .filter((slide) => {
+          if (!slide.image) {
+            return false;
+          }
           if (slide.image.endsWith("undefined")) {
             return false;
           }
@@ -83,7 +86,10 @@ function ListView({ postData, visible }) {
         return (
           <li key={slide.id}>
             <PostCard
-              author={slide.author}
+              authorId={slide.author._id}
+              username={slide.author.username}
+              accountname={slide.author.accountname}
+              profileImage={slide.author.image}
               postId={slide.id}
               content={slide.content}
               image={slide.image}

@@ -46,7 +46,10 @@ export default function PostDetail() {
   return (
     <>
       <PostCard
-        author={postDetail.post.author}
+        authorId={postDetail.post.author._id}
+        username={postDetail.post.author.username}
+        accountname={postDetail.post.author.accountname}
+        profileImage={postDetail.post.author.profileImage}
         postId={postDetail.post.id}
         content={postDetail.post.content}
         image={postDetail.post.image}

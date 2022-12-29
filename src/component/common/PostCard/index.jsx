@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import SmallProfile from "../SmallProfile";
 import AlertModal from "component/common/AlertModal";
@@ -13,12 +13,12 @@ import routeResolver from "util/routeResolver";
 
 import Icons from "asset/icon/icons";
 import ErrorImg from "asset/logo-404-343264.png";
-import { FONT_SIZE } from "constant/style";
-import { PROFILE_SIZE } from "constant/size";
-import ROUTE from "constant/route";
 import DropdownModal from "../DropdownModal/index";
 import getTimeGapInKr from "util/getTimeGapInKr";
 import useAuthInfo from "hook/useAuthInfo";
+import { FONT_SIZE } from "constant/style";
+import { PROFILE_SIZE } from "constant/size";
+import ROUTE from "constant/route";
 
 const PostCardWrapper = styled.section`
   display: flex;
@@ -102,7 +102,7 @@ const SvgHeart = styled(Icons.Heart)`
   path {
     ${({ $isHearted, theme }) => $isHearted && "fill:" + theme.snRed + ";"}
     stroke: ${({ $isHearted, theme }) =>
-      $isHearted ? theme.snRed : theme.snGreyIcon};
+    $isHearted ? theme.snRed : theme.snGreyIcon};
   }
 `;
 
@@ -118,20 +118,31 @@ const PostDate = styled.time`
   font-weight: 400;
   line-height: 12px;
 `;
-export default function PostCard({ ...post }) {
-  const {
-    author: { _id: authorId, username, accountname, image: profileImage },
-    postId,
-    content,
-    image,
-    createdAt,
-    hearted,
-    heartCount,
-    commentCount,
-  } = post;
-
+export default function PostCard({
+  authorId,
+  username,
+  accountname,
+  profileImage,
+  postId,
+  content,
+  image,
+  createdAt,
+  hearted,
+  heartCount,
+  commentCount,
+}) {
   const { _id: myId } = useAuthInfo();
   const isThisPostMine = authorId === myId;
+
+  // 게시글 삭제 API
+  const [isDeletingPost, deletePostResponse, deletePosterror, deletePost] = useAPI(
+    req.post.remove
+  );
+
+  // 게시글 신고 API
+  const [isReportingPost, reportPostResponse, reportPosterror, reportPost] = useAPI(
+    req.post.report
+  );
 
   // 슬라이드 버튼
   const [BtnDotCounter, setBtnDotCounter] = useState(0);
@@ -147,6 +158,26 @@ export default function PostCard({ ...post }) {
   // 좋아요 취소
   const [isUnLikeBeingActivated, _cancelLikeResponse, __error, cancelLike] =
     useAPI(req.like.cancle);
+
+  useEffect(() => {
+    if (reportPostResponse) {
+      alert("게시물을 신고했습니다.");
+    }
+    if (reportPosterror) {
+      alert("게시물 신고중 에러가 발생했습니다.");
+      console.error(reportPosterror);
+    }
+  }, [reportPostResponse, reportPosterror]);
+
+  useEffect(() => {
+    if (deletePostResponse) {
+      alert("게시물을 삭제했습니다.");
+    }
+    if (deletePosterror) {
+      alert("게시물 삭제중 에러가 발생했습니다.");
+      console.error(deletePosterror);
+    }
+  }, [deletePostResponse, deletePosterror]);
 
   const like = async () => {
     const {
@@ -185,6 +216,13 @@ export default function PostCard({ ...post }) {
     setIsHearted((prev) => !prev);
   };
 
+  const handleDeleteModalButton = () => {
+    if (isDeletingPost) {
+      return;
+    }
+    deletePost({ postId });
+  }
+
   // 삭제 메시지 모달창
   const [
     isDeleteMsgModalOpened,
@@ -193,11 +231,11 @@ export default function PostCard({ ...post }) {
     deleteMsgModalconfirm,
   ] = useModal(handleDeleteModalButton);
 
-  function handleDeleteModalButton() {
-    if (isDeletingPost) {
+  const handleReportModalButton = () => {
+    if (isReportingPost) {
       return;
     }
-    deletePost({ postId });
+    reportPost({ postId });
   }
 
   // 신고 메시지 모달창
@@ -208,16 +246,9 @@ export default function PostCard({ ...post }) {
     reportMsgModalconfirm,
   ] = useModal(handleReportModalButton);
 
-  function handleReportModalButton() {
-    if (isReportingPost) {
-      return;
-    }
-    reportPost({ postId });
-  }
-
   // 수정 & 삭제 드롭다운 모달
   const [isDroppedUp, dropUp, dropDown] =
-    useDropdownModal(handleDropDownButton);
+    useDropdownModal();
 
   function handleDropDownButton() {
     deleteMsgModalopen();
@@ -225,30 +256,12 @@ export default function PostCard({ ...post }) {
   }
 
   // 신고하기 드롭다운 모달
-  const [_isReportDroppedUp, reportDropUp, reportDropDown] = useDropdownModal(
-    handleReportDropDownButton
-  );
-  // console.log(reportDropUp);
+  const [isReportDroppedUp, reportDropUp, reportDropDown] = useDropdownModal();
 
   function handleReportDropDownButton() {
-    reportMsgModalopen();
     reportDropDown();
+    reportMsgModalopen();
   }
-
-  // 게시글 삭제 API
-  const [isDeletingPost, _deletePostResponse, ___error, deletePost] = useAPI(
-    req.post.remove
-  );
-
-  // 게시글 신고 API
-  const [isReportingPost, _reportPostResponse, ____error, reportPost] = useAPI(
-    req.post.report
-  );
-
-  // 게시글 수정 API
-  const [isEditingPost, _editPostResponse, _____error, editPost] = useAPI(
-    req.post.edit
-  );
 
   // 이미지 여러장
   const multipleImgs = image && image.split(",").length > 1;
@@ -273,61 +286,50 @@ export default function PostCard({ ...post }) {
             />
           }
           right={
-            !isThisPostMine ? (
-              <button type="button" onClick={reportDropUp}>
-                <Icons.SMoreVertical />
-              </button>
-            ) : (
-              <button type="button" onClick={dropUp}>
-                <Icons.SMoreVertical />
-              </button>
-            )
+            <button type="button" onClick={isThisPostMine ? dropUp : reportDropUp}>
+              <Icons.SMoreVertical />
+            </button>
           }
         />
       </SmallProfile>
 
-      <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
-        {!isThisPostMine ? (
+      {isThisPostMine ?
+        <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
+          <DropdownModal.Button onClick={handleDropDownButton}>
+            수정하기
+          </DropdownModal.Button>
+          <DropdownModal.Button onClick={handleDropDownButton}>
+            삭제하기
+          </DropdownModal.Button>
+        </DropdownModal>
+        : <DropdownModal isDroppedUp={isReportDroppedUp} dropDown={reportDropDown}>
           <DropdownModal.Button onClick={handleReportDropDownButton}>
             신고하기
           </DropdownModal.Button>
-        ) : (
-          <>
-            <DropdownModal.Button onClick={handleDropDownButton}>
-              수정하기
-            </DropdownModal.Button>
-            <DropdownModal.Button onClick={handleDropDownButton}>
-              삭제하기
-            </DropdownModal.Button>
-          </>
-        )}
-      </DropdownModal>
+        </DropdownModal>
+      }
+      <AlertModal isModalOpened={isReportMsgModalOpened}>
+        <AlertModal.Content>게시글을 신고하시겠어요?</AlertModal.Content>
+        <AlertModal.Cancle handleModalButton={reportMsgModalclose}>
+          취소
+        </AlertModal.Cancle>
+        <AlertModal.ConfirmButton handleModalButton={reportMsgModalconfirm}>
+          신고
+        </AlertModal.ConfirmButton>
+      </AlertModal>
 
-      <>
-        {isReportMsgModalOpened && (
-          <AlertModal isModalOpened={isReportMsgModalOpened}>
-            <AlertModal.Content>게시글을 신고하시겠어요?</AlertModal.Content>
-            <AlertModal.CancleButton handleModalButton={reportMsgModalclose}>
-              취소
-            </AlertModal.CancleButton>
-            <AlertModal.ConfirmButton handleModalButton={reportMsgModalconfirm}>
-              신고
-            </AlertModal.ConfirmButton>
-          </AlertModal>
-        )}
-        {/* TODO 게시글 수정시 수정 페이지로 이동 */}
-        {isDeleteMsgModalOpened && (
-          <AlertModal isModalOpened={isDeleteMsgModalOpened}>
-            <AlertModal.Content>게시글을 삭제하시겠어요?</AlertModal.Content>
-            <AlertModal.CancleButton handleModalButton={deleteMsgModalclose}>
-              취소
-            </AlertModal.CancleButton>
-            <AlertModal.ConfirmButton handleModalButton={deleteMsgModalconfirm}>
-              삭제
-            </AlertModal.ConfirmButton>
-          </AlertModal>
-        )}
-      </>
+      {/* TODO 게시글 수정시 수정 페이지로 이동 */}
+
+      <AlertModal isModalOpened={isDeleteMsgModalOpened}>
+        <AlertModal.Content>게시글을 삭제하시겠어요?</AlertModal.Content>
+        <AlertModal.Cancle handleModalButton={deleteMsgModalclose}>
+          취소
+        </AlertModal.Cancle>
+        <AlertModal.ConfirmButton handleModalButton={deleteMsgModalconfirm}>
+          삭제
+        </AlertModal.ConfirmButton>
+      </AlertModal>
+
       <ContentWrapper>
         <ContentText>
           <Link to={`/post/${postId}`}>{content}</Link>
@@ -382,14 +384,17 @@ export default function PostCard({ ...post }) {
           </LinkIcon>
         </IconWrapper>
 
-        <PostDate>{getTimeGapInKr(createdAt)}</PostDate>
+        <PostDate dateTime={createdAt}>{getTimeGapInKr(createdAt)}</PostDate>
       </ContentWrapper>
     </PostCardWrapper>
   );
 }
 
 PostCard.propTypes = {
-  author: PropTypes.object,
+  authorId: PropTypes.string,
+  username: PropTypes.string,
+  accountname: PropTypes.string,
+  profileImage: PropTypes.string,
   postId: PropTypes.string,
   content: PropTypes.string,
   image: PropTypes.string,
