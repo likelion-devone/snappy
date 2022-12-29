@@ -75,6 +75,7 @@ export default function SmallProfile({
   children,
   isPhotographer,
   isNotifying,
+  ...props
 }) {
   const handleImgError = (event) => {
     console.log(event);
@@ -89,9 +90,10 @@ export default function SmallProfile({
         size={size}
         isPhotographer={isPhotographer}
         onError={(e) => handleImgError(e)}
+        {...props}
       />
     ) : (
-      <Link to={imageTo}>
+      <Link to={imageTo} {...props}>
         <Img
           src={src ?? ProfileErrorImage}
           alt="프로필 이미지입니다"
@@ -102,7 +104,7 @@ export default function SmallProfile({
       </Link>
     )
   ) : !imageTo ? (
-    <Wrapper isNotifying={isNotifying}>
+    <Wrapper isNotifying={isNotifying} {...props}>
       <Img
         src={src ?? ProfileErrorImage}
         alt="프로필 이미지입니다"
@@ -113,7 +115,7 @@ export default function SmallProfile({
       {children}
     </Wrapper>
   ) : (
-    <Wrapper isNotifying={isNotifying}>
+    <Wrapper isNotifying={isNotifying} {...props}>
       <Link to={imageTo}>
         <Img
           src={src ?? ProfileErrorImage}
