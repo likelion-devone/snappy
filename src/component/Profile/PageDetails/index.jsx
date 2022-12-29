@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
 import Icons from "asset/icon/icons";
@@ -20,6 +20,7 @@ import PortfolioTitleImg from "asset/title-portfolio.png";
 import useFetch from "hook/useFetch";
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
+import { PostDataContext } from "component/common/PostDataProvider/index";
 
 const StyleBigProfile = styled.div`
   display: flex;
@@ -114,9 +115,9 @@ const IconList = styled(Icons.PostList)`
   margin-right: 22.5px;
   path {
     fill: ${({ $isListActive, theme }) =>
-      $isListActive ? theme.snBlue : theme.snGreyOff};
+    $isListActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isListActive, theme }) =>
-      $isListActive ? theme.snBlue : theme.snGreyOff};
+    $isListActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
@@ -124,14 +125,15 @@ const IconAlbum = styled(Icons.PostAlbum)`
   margin-top: 12.25px;
   path {
     fill: ${({ $isAlbumActive, theme }) =>
-      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
+    $isAlbumActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isAlbumActive, theme }) =>
-      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
+    $isAlbumActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
 function PageDetails({ accountname, $isMyProfile = false }) {
   const navigate = useNavigate();
+  const { userPostData, userPostDataError, isUserPostDataLoading, getUserPostData } = useContext(PostDataContext);
 
   const [viewOption, setViewOption] = useState(true);
   const [isListActive, setIsListActive] = useState(true);
@@ -146,18 +148,17 @@ function PageDetails({ accountname, $isMyProfile = false }) {
     { accountname }
   );
 
-  const [isUserPostLoading, postData, postDataError] = useFetch(
-    req.post.userposts,
-    { accountname }
-  );
+  useEffect(() => {
+    getUserPostData({ accountname });
+  }, [getUserPostData, accountname])
 
   useEffect(() => {
-    if (profileDataError || productDataError || postDataError) {
+    if (profileDataError || productDataError || userPostDataError) {
       navigate("404");
     }
-  }, [profileDataError, productDataError, postDataError, navigate]);
+  }, [profileDataError, productDataError, userPostDataError, navigate]);
 
-  if (isProfileDataLoading || isProductLoading || isUserPostLoading) {
+  if (isProfileDataLoading || isProductLoading || isUserPostDataLoading || !userPostData) {
     return <>로딩중</>;
   }
 
@@ -257,11 +258,11 @@ function PageDetails({ accountname, $isMyProfile = false }) {
           </button>
         </IconBox>
         <ListView
-          postData={isUserPostLoading ? [] : postData.post}
+          postData={isUserPostDataLoading ? [] : userPostData}
           visible={viewOption}
         />
         <AlbumView
-          postData={isUserPostLoading ? [] : postData.post}
+          postData={isUserPostDataLoading ? [] : userPostData}
           visible={!viewOption}
         />
       </section>

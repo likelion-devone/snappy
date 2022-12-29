@@ -26,6 +26,9 @@ import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
 import FollowerListPage from "./Profile/FollowerListPage/index";
 import FollowingListPage from "./Profile/FollowingListPage/index";
 
+import PostDataProvider from "component/common/PostDataProvider/index";
+import PostDetailDataProvider from "component/common/PostDataProvider/PostDetailDataProvider/index";
+
 import ROUTE, {
   ROUTE_LOGIN,
   ROUTE_PRODUCT,
@@ -45,14 +48,18 @@ export default function AppRouter() {
             </Route>
             <Route path={ROUTE_LOGIN.AUTHORIZE} element={<AuthorizePage />} />
           </Route>
-          <Route path={ROUTE.LANDING} element={<></>} />{" "}
+          <Route path={ROUTE.LANDING} element={<></>} />
           {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
           <Route element={<Layout />}>
-            <Route path={ROUTE.HOME} element={<HomePage />} />
+            <Route path={ROUTE.HOME} element={
+              <PostDataProvider><HomePage /></PostDataProvider>
+            } />
             <Route path={ROUTE.PROFILE}>
-              <Route index element={<ProfilePage />} />
+              <Route index element={
+                <PostDataProvider><ProfilePage /></PostDataProvider>
+              } />
               <Route path=":accountname">
-                <Route index element={<YourProfilePage />} />
+                <Route index element={<PostDataProvider><YourProfilePage /></PostDataProvider>} />
                 <Route
                   path={ROUTE_PROFILE.FOLLOWER}
                   element={<FollowerListPage />}
@@ -65,7 +72,7 @@ export default function AppRouter() {
             </Route>
             <Route path={ROUTE.POST}>
               <Route index element={<PostUploadPage />} />
-              <Route path=":postId" element={<PostDetailPage />} />
+              <Route path=":postId" element={<PostDetailDataProvider><PostDetailPage /></PostDetailDataProvider>} />
             </Route>
             <Route path={ROUTE.PRODUCT} element={<ProductPage />}>
               <Route index element={<Navigate to={ROUTE.HOME} />} />

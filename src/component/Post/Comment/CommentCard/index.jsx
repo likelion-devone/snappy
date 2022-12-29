@@ -15,6 +15,7 @@ import Icons from "asset/icon/icons";
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
 import { useEffect } from "react";
+import getTimeGapInKr from "util/getTimeGapInKr";
 
 const CommentContentWrapper = styled.li`
   margin: 20px 0 12px;
@@ -116,25 +117,6 @@ export default function CommentCard({
 
   // TODO 댓글 작성 API
 
-  // TODO: 유틸 함수로 바꾸기
-  function commentTime(time) {
-    const ms = Date.parse(time);
-    const now = Date.now();
-    const gap = (now - ms) / 1000;
-
-    if (gap < 60) {
-      return "방금 전";
-    } else if (gap < 3600) {
-      return `${Math.floor(gap / 60)}분 전`;
-    } else if (gap < 86400) {
-      return `${Math.floor(gap / 3600)}시간 전`;
-    } else if (gap < 2592000) {
-      return `${Math.floor(gap / 86400)}일 전`;
-    } else {
-      return `${Math.floor(gap / 2592000)}달 전`;
-    }
-  }
-
   return (
     <CommentContentWrapper>
       <StyledSmallProfile
@@ -148,7 +130,7 @@ export default function CommentCard({
               title={username}
               titleTo={`/profile/${accountname}`}
               attachment={
-                <CreatedTime dateTime={createdAt}>{commentTime(createdAt)}</CreatedTime>
+                <CreatedTime dateTime={createdAt}>{getTimeGapInKr(createdAt)}</CreatedTime>
               }
             />
           }

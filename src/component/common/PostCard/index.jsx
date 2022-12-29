@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
 
 import SmallProfile from "../SmallProfile";
 import AlertModal from "component/common/AlertModal";
@@ -19,6 +19,7 @@ import useAuthInfo from "hook/useAuthInfo";
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
 import ROUTE from "constant/route";
+import { PostDataContext } from "component/common/PostDataProvider/index";
 
 const PostCardWrapper = styled.section`
   display: flex;
@@ -118,6 +119,8 @@ const PostDate = styled.time`
   font-weight: 400;
   line-height: 12px;
 `;
+
+
 export default function PostCard({
   authorId,
   username,
@@ -130,7 +133,11 @@ export default function PostCard({
   hearted,
   heartCount,
   commentCount,
+  $isPostDetailPage = false
 }) {
+  const { getMyPostData, getPostData } = useContext(PostDataContext);
+  const navigate = useNavigate();
+
   const { _id: myId } = useAuthInfo();
   const isThisPostMine = authorId === myId;
 
@@ -172,12 +179,19 @@ export default function PostCard({
   useEffect(() => {
     if (deletePostResponse) {
       alert("게시물을 삭제했습니다.");
+      if ($isPostDetailPage) {
+        navigate(ROUTE.HOME);
+        return;
+      }
+
+      getMyPostData();
+      getPostData();
     }
     if (deletePosterror) {
       alert("게시물 삭제중 에러가 발생했습니다.");
       console.error(deletePosterror);
     }
-  }, [deletePostResponse, deletePosterror]);
+  }, [deletePostResponse, deletePosterror, getMyPostData, getPostData, navigate, $isPostDetailPage]);
 
   const like = async () => {
     const {
@@ -402,4 +416,5 @@ PostCard.propTypes = {
   hearted: PropTypes.bool,
   heartCount: PropTypes.number,
   commentCount: PropTypes.number,
+  $isPostDetailPage: PropTypes.bool
 };

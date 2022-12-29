@@ -57,6 +57,7 @@ export default function PostDetail() {
         hearted={postDetail.post.hearted}
         heartCount={postDetail.post.heartCount}
         commentCount={postDetail.post.commentCount}
+        $isPostDetailPage={true}
       />
       <section>
         <h2 className="sr-only">댓글란</h2>

@@ -1,14 +1,12 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
 import PostCard from "component/common/PostCard/index";
 import SearchBar from "component/Home/SearchBar/index";
 
-import useFetch from "hook/useFetch";
 import useTopNavSetter from "hook/useTopNavSetter";
 
-import { req } from "lib/api";
-import useAuthInfo from "hook/useAuthInfo";
+import { PostDataContext } from "component/common/PostDataProvider/index";
 
 export default function HomePage() {
   const [isSearchOpened, setIsSearchOpened] = useState(false);
@@ -27,15 +25,20 @@ export default function HomePage() {
       <TopNavElement.SearchButton onClick={toggleSearch} />
     )
   });
-  const { accountname } = useAuthInfo();
 
-  const [isPostDataLoading, postData, _error] = useFetch(req.post.feed);
+  const {
+    getMyPostData,
+    getPostData,
+    isMyPostDataLoading,
+    isPostDataLoading,
+    postData,
+    myPostData
+  } = useContext(PostDataContext);
 
-  // 내 게시글도 피드에 보이게 하기
-  const [isMyPostDataLoading, myPostData, __error] = useFetch(
-    req.post.userposts,
-    { accountname }
-  );
+  useEffect(() => {
+    getMyPostData();
+    getPostData();
+  }, [getMyPostData, getPostData]);
 
   // 로딩중이면 데이터가 들어오지 않습니다.
   if (isPostDataLoading || !postData || isMyPostDataLoading || !myPostData) {
@@ -45,7 +48,7 @@ export default function HomePage() {
   return (
     <>
       <SearchBar handleClose={toggleSearch} $isSearchOpened={isSearchOpened} />
-      {[...postData.posts, ...myPostData.post]
+      {[...postData, ...myPostData]
         .sort(
           (post1, post2) =>
             Date.parse(post2.createdAt) -
