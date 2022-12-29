@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import ChatProfile from "asset/profile-img-50.png";
 import SnappyMarkGrey from "asset/snappy_grey.svg";
 import SnappyMarkBlue from "asset/snappy_blue.svg";
 import ChatSampleImg from "asset/ChatSampleImg.jpg";
 import ChatSampleImg2 from "asset/ChatSampleImg2.jpg";
 import SmallProfile from "component/common/SmallProfile";
 import { PROFILE_SIZE } from "constant/size";
-import CommentInput from "./CommentInput";
+import CommentInput from "component/common/Comment/index";
 import ProfileImg from "asset/profile-img-42.png";
 import { FONT_SIZE } from "constant/style";
 import Icons from "asset/icon/icons";

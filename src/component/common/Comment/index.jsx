@@ -1,39 +1,34 @@
-import Icons from "asset/icon/icons";
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Form } from "react-router-dom";
 
-const FormLabel = styled.label`
+const Label = styled.label`
   margin: 0 auto;
-  width: 390px;
   height: 61px;
   margin-top: 30px;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border: 2px solid ${(props) => props.theme.snBlue};
-  .formInput::placeholder {
-    color: ${(props) => props.theme.snGreyOff};
+  color: ${(props) => props.theme.snGreyOff};
+  input {
+    width: 80%;
+    line-height: 200%;
+    border: 1px solid ${(props) => props.theme.snGreyOff};
   }
-  .block {
-    display: block;
-    border: 1px solid blue;
+  input:focus {
+    outline-color: #33afd8;
   }
   .formInput + * {
-    color: ${({ message }) => (message ? "red" : "")};
+    color: ${({ message }) => (message ? (props) => props.theme.snBlue : "")};
   }
 `;
 
 export default function CommentInput({ left, right }) {
   const [message, setMessage] = useState("");
 
-  // message가 true일때
-  // right의 color 바꾸기
   return (
     <form>
-      <FormLabel message={message}>
+      <Label message={message}>
         {left}
         <input
           id="inputID"
@@ -44,7 +39,7 @@ export default function CommentInput({ left, right }) {
           onChange={(e) => setMessage(e.target.value)}
         />
         {right}
-      </FormLabel>
+      </Label>
     </form>
   );
 }
