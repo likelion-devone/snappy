@@ -84,25 +84,33 @@ export default function PostUploadPage() {
       return;
     }
 
-    const formData = new FormData();
+    if (inpImagesRef.current.files.length !== 0) {
+      const formData = new FormData();
 
-    [...inpImagesRef.current.files].forEach((file) => {
-      formData.append("image", file);
-    });
+      [...inpImagesRef.current.files].forEach((file) => {
+        formData.append("image", file);
+      });
 
-    const results = await uploadImages({ formData: formData });
+      const results = await uploadImages({ formData: formData });
+
+      return createPost({
+        content: textareaRef.current.value,
+        image: results
+          .map((result) => process.env.REACT_APP_BASE_API + result.filename)
+          .join(","),
+      });
+    }
 
     createPost({
       content: textareaRef.current.value,
-      image: results
-        .map((result) => process.env.REACT_APP_BASE_API + result.filename)
-        .join(","),
+      image: "",
     });
   };
 
   useEffect(() => {
     // 게시물 업로드 전
     if (uploadPostError) {
+      console.log(uploadPostError);
       alert("게시물 업로드를 실패했습니다.");
       return;
     }
