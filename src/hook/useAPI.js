@@ -44,8 +44,17 @@ export default function useAPI(requestConfigResolver) {
         let result;
 
         if (
-          Object.keys(req.noAuth).some(
-            (key) => requestConfigResolver.name in req.noAuth[key]
+          Object.keys(req.noAuth).some((key) =>
+            Object.keys(req.noAuth[key]).some((requestKey) => {
+              try {
+                return (
+                  requestConfigResolver(params).url ===
+                  req.noAuth[key][requestKey](params).url
+                );
+              } catch (_) {
+                return false;
+              }
+            })
           )
         ) {
           result = await server.noAuth(configResolverRef.current, ...params);
@@ -65,7 +74,7 @@ export default function useAPI(requestConfigResolver) {
         }
       }
     },
-    [requestConfigResolver.name]
+    [requestConfigResolver]
   );
 
   return [isLoading, data, error, request];
