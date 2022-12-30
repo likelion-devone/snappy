@@ -70,6 +70,7 @@ export default function PostEditPage() {
     }
   }, [initialPostDataError, navigate, postId]);
 
+  // 상단 넵바
   const UploadButton = useMemo(
     () => (
       <TopNavElement.Button form="post-upload" $isAbled={isPossibleToUpload}>
@@ -115,29 +116,34 @@ export default function PostEditPage() {
       return;
     }
 
-    setImgData((prevImgData) => {
-      prevImgData.forEach((data) => {
-        if (data.startsWith("blob:")) {
-          URL.revokeObjectURL(data);
+    if (imgFileList.length === 0) {
+      return;
+    }
+
+    if (imgCount)
+      setImgData((prevImgData) => {
+        prevImgData.forEach((data) => {
+          if (data.startsWith("blob:")) {
+            URL.revokeObjectURL(data);
+          }
+        });
+
+        const imgList = [
+          ...prevImgData.filter((url) => !url.startsWith("blob:")),
+        ];
+
+        for (const file of imgFileList) {
+          if (file.size > SIZE_LIMIT) {
+            alert("10MB 이상의 이미지는 업로드 할 수 없습니다.");
+            return imgList;
+          }
+
+          imgList.push(URL.createObjectURL(file));
         }
+
+        setIsPossibleToUpload(imgList.length !== 0);
+        return imgList;
       });
-
-      const imgList = [
-        ...prevImgData.filter((url) => !url.startsWith("blob:")),
-      ];
-
-      for (const file of imgFileList) {
-        if (file.size > SIZE_LIMIT) {
-          alert("10MB 이상의 이미지는 업로드 할 수 없습니다.");
-          return imgList;
-        }
-
-        imgList.push(URL.createObjectURL(file));
-      }
-
-      setIsPossibleToUpload(imgList.length !== 0);
-      return imgList;
-    });
   };
 
   // 상단 Nav 업로드 버튼 onClick 이벤트

@@ -36,24 +36,27 @@ const HiddenUploadFileInput = styled.input`
 const SIZE_LIMIT = 10 * 1024 * 1024;
 
 export default function PostUploadPage() {
-  const { isPossibleToUpload, setIsPossibleToUpload } = useContext(IsUploadPossibleContext);
+  const { isPossibleToUpload, setIsPossibleToUpload } = useContext(
+    IsUploadPossibleContext
+  );
 
-  const UploadButton = useMemo(() => <TopNavElement.Button
-    form="post-upload"
-    $isAbled={isPossibleToUpload}
-  >
-    업로드
-  </TopNavElement.Button>
-    , [isPossibleToUpload]);
+  const UploadButton = useMemo(
+    () => (
+      <TopNavElement.Button form="post-upload" $isAbled={isPossibleToUpload}>
+        업로드
+      </TopNavElement.Button>
+    ),
+    [isPossibleToUpload]
+  );
 
   const { setTopNavRight } = useTopNavSetter({
     left: <TopNavElement.GoBackButton />,
-    right: UploadButton
+    right: UploadButton,
   });
 
   useEffect(() => {
     setTopNavRight(UploadButton);
-  }, [setTopNavRight, UploadButton])
+  }, [setTopNavRight, UploadButton]);
 
   const [imgData, setImgData] = useState([]);
 
@@ -79,17 +82,20 @@ export default function PostUploadPage() {
   // 업로드 파일 인풋 onChange 이벤트
   const handleUploadFile = (event) => {
     const imgFileList = event.target.files;
-    const imgCount = imgData.length;
     const imgList = [];
 
+    if (imgFileList.length > 3) {
+      alert("3개 이하의 파일을 업로드 하세요.");
+      return;
+    }
+
+    if (imgFileList.length === 0) {
+      return;
+    }
     // 이미지 파일 용량, 개수 제한
     for (const file of imgFileList) {
       if (file.size > SIZE_LIMIT) {
         alert("10MB 이상의 이미지는 업로드 할 수 없습니다.");
-        return;
-      }
-      if (imgCount > 2) {
-        alert("3개 이하의 파일을 업로드 하세요.");
         return;
       }
 
