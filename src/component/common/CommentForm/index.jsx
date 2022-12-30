@@ -20,6 +20,7 @@ const Form = styled.form`
   background-color: ${(props) => props.theme.snWhite};
 
   box-shadow: rgba(17, 12, 46, 0.08) 0px -5px 100px 0px;
+  z-index: 100;
 
   .label-comment {
     flex: 1;
@@ -30,6 +31,7 @@ const Form = styled.form`
 
     + button {
       color: ${({ $isFilled, theme }) => $isFilled ? theme.snBlue : theme.snGreyMain};
+      ${({ $isFilled }) => !$isFilled && `pointer-events: none;`}
     }
   }
   .formInput {
@@ -67,6 +69,7 @@ export default function CommentForm({ left, right, placeholder = "Type a message
         <input
           type="text"
           className="formInput"
+          name="inpComment"
           placeholder={placeholder}
           onKeyUp={setIsFilledIfHasContent}
         />

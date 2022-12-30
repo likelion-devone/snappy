@@ -16,11 +16,7 @@ import useDropdownModal from "hook/useDropdownModal";
 import ROUTE from "constant/route";
 
 const ChatRoomWrapper = styled.div`
-  width: 100%;
-  height: 80vh;
-  padding: 3px 10px 0;
-  overflow: scroll;
-  position: relative;
+  margin-bottom: 140px;
 `;
 
 const UserChat = styled.article`
