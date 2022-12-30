@@ -8,7 +8,7 @@ import PostCard from "component/common/PostCard/index";
 import useFetch from "hook/useFetch";
 import { req } from "lib/api";
 import useAPI from "hook/useAPI";
-import CommentForm from "component/common/CommentForm/index";
+import CommentForm from "component/common/Form/CommentForm/index";
 import SmallProfile from "component/common/SmallProfile/index";
 import useAuthInfo from "hook/useAuthInfo";
 import routeResolver from "util/routeResolver";
