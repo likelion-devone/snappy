@@ -62,13 +62,14 @@ export default function BigProfile({
   left,
   right,
   isPhotographer,
+  ...props
 }) {
   const handleImgError = (event) => {
     event.target.src = ProfileErrorImage;
   };
 
   return (
-    <Wrapper bottomRight={bottomRight}>
+    <Wrapper bottomRight={bottomRight} {...props}>
       {left}
       <div className="image-wrapper">
         <Img
