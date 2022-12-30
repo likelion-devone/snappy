@@ -13,6 +13,10 @@ const ROUTE_LOGIN = {
   AUTHORIZE: "authorize",
 };
 
+const ROUTE_CHAT = {
+  CHATROOM: "chatroom",
+};
+
 const ROUTE_PRODUCT = {
   ADD: "add",
   EDIT: "edit",
@@ -23,6 +27,6 @@ const ROUTE_PROFILE = {
   FOLLOWING: "following",
 };
 
-export { ROUTE_PRODUCT, ROUTE_PROFILE, ROUTE_LOGIN };
+export { ROUTE_PRODUCT, ROUTE_PROFILE, ROUTE_CHAT, ROUTE_LOGIN };
 
 export default ROUTE;

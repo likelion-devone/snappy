@@ -19,6 +19,10 @@ import JoinPage from "./Login/Join";
 import AuthorizePage from "./Login/Authorize";
 
 import AuthProvider from "lib/auth/AuthProvider";
+import ChatRoomPage from "./Chat/ChatRoom";
+
+import ROUTE, { ROUTE_LOGIN, ROUTE_CHAT } from "constant/route";
+
 import ProductPage from "./Product";
 import AddProductPage from "./Product/AddProduct/index";
 import EditProductPage from "./Product/EditProduct/index";
@@ -87,7 +91,10 @@ export default function AppRouter() {
                 />
               </Route>
             </Route>
-            <Route path={ROUTE.CHAT} element={<ChatPage />} />
+            <Route path={ROUTE.CHAT}>
+              <Route index element={<ChatPage />} />
+              <Route path={ROUTE_CHAT.CHATROOM} element={<ChatRoomPage />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<NotFoundErrorPage />} />
