@@ -20,7 +20,7 @@ import AuthorizePage from "./Login/Authorize";
 import AuthProvider from "lib/auth/AuthProvider";
 import ChatRoomPage from "./Chat/ChatRoom";
 
-import ROUTE, { ROUTE_LOGIN } from "constant/route";
+import ROUTE, { ROUTE_LOGIN, ROUTE_CHAT } from "constant/route";
 import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
 
 export default function AppRouter() {
@@ -28,7 +28,7 @@ export default function AppRouter() {
     <Router>
       <Routes>
         <Route element={<AuthProvider />}>
-          <Route path={ROUTE.LOGIN} >
+          <Route path={ROUTE.LOGIN}>
             <Route index element={<LoginPage />} />
             <Route path={ROUTE_LOGIN.JOIN} element={<JoinPage />}>
               <Route path=":pagenum" element={<JoinPageByPagenum />} />
@@ -36,7 +36,8 @@ export default function AppRouter() {
             </Route>
             <Route path={ROUTE_LOGIN.AUTHORIZE} element={<AuthorizePage />} />
           </Route>
-          <Route path={ROUTE.LANDING} element={<></>} /> {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
+          <Route path={ROUTE.LANDING} element={<></>} />{" "}
+          {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
           <Route element={<Layout />}>
             <Route path={ROUTE.HOME} element={<HomePage />} />
             <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
@@ -46,7 +47,7 @@ export default function AppRouter() {
             </Route>
             <Route path={ROUTE.CHAT}>
               <Route index element={<ChatPage />} />
-              <Route path="chatroom" element={<ChatRoomPage />} />
+              <Route path={ROUTE_CHAT.CHATROOM} element={<ChatRoomPage />} />
             </Route>
           </Route>
         </Route>

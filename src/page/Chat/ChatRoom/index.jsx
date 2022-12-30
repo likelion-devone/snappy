@@ -15,11 +15,19 @@ import DropdownModal from "component/common/DropdownModal/index";
 import useDropdownModal from "hook/useDropdownModal";
 import ROUTE from "constant/route";
 
+const ChatRoomWrapper = styled.div`
+  width: 100%;
+  height: 80vh;
+  padding: 3px 10px 0;
+  overflow: scroll;
+  position: relative;
+`;
+
 const UserChat = styled.article`
-  padding-top: 50px;
   margin-bottom: 30px;
   display: flex;
   gap: 15px;
+  padding-right: 50px;
 
   .logo {
     object-fit: contain;
@@ -42,14 +50,14 @@ const UserChat = styled.article`
   .chat {
     display: block;
     border: 1.5px solid ${(props) => props.theme.snGreyMain};
-    padding: 3rem;
+    padding: 1.5rem;
     line-height: 1.5;
     background-color: ${(props) => props.theme.snGreyOff};
   }
   .snappyMark {
     width: 20%;
     align-self: flex-end;
-    padding-top: 3rem;
+    padding-top: 1rem;
   }
   .time {
     align-self: flex-end;
@@ -60,14 +68,15 @@ const UserChat = styled.article`
   }
 `;
 
-const SnappyChatImg = styled.article`
+const SnappyImgChatWrapper = styled.article`
   font-size: x-large;
-  padding-top: 50px;
   margin-bottom: 30px;
   display: flex;
   justify-content: flex-end;
+  padding-left: 150px;
 
   .polaroid {
+    margin-right: 20px;
     width: 400px;
     background: #fff;
     padding: 1rem;
@@ -91,7 +100,7 @@ const SnappyChatImg = styled.article`
   .snappyMark {
     width: 20%;
     align-self: flex-end;
-    padding-top: 3rem;
+    padding-top: 1rem;
   }
   .time {
     align-self: flex-end;
@@ -103,14 +112,15 @@ const SnappyChatImg = styled.article`
   }
 `;
 
-const SnappyChat = styled.article`
+const SnappyChatWrapper = styled.article`
   font-size: x-large;
-  padding-top: 50px;
-  padding-right: 10px;
+  margin-bottom: 30px;
   display: flex;
   justify-content: flex-end;
+  padding-left: 150px;
 
   .polaroid {
+    margin-right: 20px;
     width: 400px;
     background: #fff;
     padding: 1rem;
@@ -123,21 +133,17 @@ const SnappyChat = styled.article`
     flex-direction: column;
     font-size: ${FONT_SIZE.BASE};
   }
-  .chatSampleImg {
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-  }
+
   .chat {
     border: 2px solid ${(props) => props.theme.snBlue};
-    padding: 3rem;
+    padding: 1.5rem;
     line-height: 1.5;
     background-color: ${(props) => props.theme.snBlue};
   }
   .snappyMark {
     width: 20%;
     align-self: flex-end;
-    padding-top: 3rem;
+    padding-top: 1rem;
   }
   .time {
     align-self: flex-end;
@@ -149,7 +155,16 @@ const SnappyChat = styled.article`
   }
 `;
 
-const ImageUpload = styled.button`
+const ChatInput = styled(CommentInput)`
+  background-color: ${(props) => props.theme.snBlue};
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  /* border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px; */
+`;
+
+const ImageUploadBtn = styled.button`
   background-color: ${(props) => props.theme.snGreyOff};
   width: 36px;
   height: 36px;
@@ -157,15 +172,19 @@ const ImageUpload = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 16px;
+  margin-left: auto;
 `;
 
 const Send = styled.button`
-  margin-right: 16px;
   color: ${(props) => props.theme.snGreyOff};
+  margin-right: auto;
 `;
 
-export default function ChatPage() {
+const NavIcons = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+export default function ChatRoomPage() {
   const navigate = useNavigate();
   const [isExitDroppedUp, dropUpExit, dropDownExit] = useDropdownModal();
 
@@ -175,109 +194,113 @@ export default function ChatPage() {
   };
   return (
     <>
-      <Button type="button" onClick={() => navigate(-1)}>
-        <Icons.ArrowLeft title="이전페이지로 가기" />
-      </Button>
-      <Button type="button" onClick={dropUpExit}>
-        <Icons.MoreVertical title="이전페이지로 가기" />
-      </Button>
-      <DropdownModal isDroppedUp={isExitDroppedUp} dropDown={dropDownExit}>
-        <DropdownModal.Button onClick={handleExitButton}>
-          채팅방 나가기
-        </DropdownModal.Button>
-      </DropdownModal>
+      <NavIcons>
+        <Button type="button" onClick={() => navigate(-1)}>
+          <Icons.ArrowLeft title="이전페이지로 가기" />
+        </Button>
+        <Button type="button" onClick={dropUpExit}>
+          <Icons.MoreVertical title="이전페이지로 가기" />
+        </Button>
+        <DropdownModal isDroppedUp={isExitDroppedUp} dropDown={dropDownExit}>
+          <DropdownModal.Button onClick={handleExitButton}>
+            채팅방 나가기
+          </DropdownModal.Button>
+        </DropdownModal>
+      </NavIcons>
 
-      <UserChat>
-        <SmallProfile src={ProfileImg} size={PROFILE_SIZE.SMALL} />
+      <ChatRoomWrapper>
+        <UserChat>
+          <SmallProfile src={ProfileImg} size={PROFILE_SIZE.SMALL} />
 
-        <div className="polaroid">
-          <p className="chat">
-            안녕하세요! 올해 결혼 준비로 바쁜
-            <br /> 예비 신부신랑 입니다. <br />
-            작가님의 포트폴리오를 보니, <br />
-            저희가 원하는 스타일로 <br />
-            촬영을 해주시는 것 같아 연락드립니다!
-          </p>
-          <img
-            src={SnappyMarkGrey}
-            alt="스내피 로고 이미지입니다"
-            className="snappyMark"
-          ></img>
-
-          <p className="time">12:39</p>
-        </div>
-      </UserChat>
-      <UserChat>
-        <SmallProfile src={ProfileImg} size={PROFILE_SIZE.SMALL} />
-        <div className="polaroid">
-          <p className="chat">
-            혹시 어나더스튜디오에서 촬영하신 것 같으신데, 예시로 사진 몇 컷 볼
-            수 있을까요?
-          </p>
-          <img
-            src={SnappyMarkGrey}
-            alt="프로필 이미지입니다"
-            className="snappyMark"
-          />
-          <p className="time">1:13</p>
-        </div>
-      </UserChat>
-      <SnappyChatImg>
-        <div className="polaroid">
-          <p className="chat">
+          <div className="polaroid">
+            <p className="chat">
+              안녕하세요! 올해 결혼 준비로 바쁜
+              <br /> 예비 신부신랑 입니다. <br />
+              작가님의 포트폴리오를 보니, <br />
+              저희가 원하는 스타일로 <br />
+              촬영을 해주시는 것 같아 연락드립니다!
+            </p>
             <img
-              src={ChatSampleImg}
-              alt="결혼 촬영 이미지입니다"
-              className="chatSampleImg"
-            />
-          </p>
-          <img
-            src={SnappyMarkBlue}
-            alt="스내피 로고 이미지입니다"
-            className="snappyMark"
-          />
-          <p className="time">1:22</p>
-        </div>
-      </SnappyChatImg>
-      <SnappyChatImg>
-        <div className="polaroid">
-          <p className="chat">
+              src={SnappyMarkGrey}
+              alt="스내피 로고 이미지입니다"
+              className="snappyMark"
+            ></img>
+
+            <p className="time">12:39</p>
+          </div>
+        </UserChat>
+        <UserChat>
+          <SmallProfile src={ProfileImg} size={PROFILE_SIZE.SMALL} />
+          <div className="polaroid">
+            <p className="chat">
+              혹시 어나더스튜디오에서 촬영하신 것 같으신데, 예시로 사진 몇 컷 볼
+              수 있을까요?
+            </p>
             <img
-              src={ChatSampleImg2}
-              alt="결혼 촬영 이미지입니다"
-              className="chatSampleImg"
+              src={SnappyMarkGrey}
+              alt="프로필 이미지입니다"
+              className="snappyMark"
             />
-          </p>
-          <img
-            src={SnappyMarkBlue}
-            alt="프로필 이미지입니다"
-            className="snappyMark"
-          />
-          <p className="time">1:20</p>
-        </div>
-      </SnappyChatImg>
-      <SnappyChat>
-        <div className="polaroid">
-          <p className="chat">
-            편하게 보시고 더 궁금하신 점 있으시면, 문의 남겨놓아주세요. 좋은하루
-            되세요!
-          </p>
-          <img
-            src={SnappyMarkBlue}
-            alt="프로필 이미지입니다"
-            className="snappyMark"
-          />
-          <p className="time">1:25</p>
-        </div>
-      </SnappyChat>
-      <CommentInput
-        left={
-          <ImageUpload type="submit">
-            <Icons.Image className="ImageUploader" />
-          </ImageUpload>
-        }
-        right={<Send>전송</Send>}
-      />
+            <p className="time">1:13</p>
+          </div>
+        </UserChat>
+        <SnappyImgChatWrapper>
+          <div className="polaroid">
+            <p className="chat">
+              <img
+                src={ChatSampleImg}
+                alt="결혼 촬영 이미지입니다"
+                className="chatSampleImg"
+              />
+            </p>
+            <img
+              src={SnappyMarkBlue}
+              alt="스내피 로고 이미지입니다"
+              className="snappyMark"
+            />
+            <p className="time">1:22</p>
+          </div>
+        </SnappyImgChatWrapper>
+        <SnappyImgChatWrapper>
+          <div className="polaroid">
+            <p className="chat">
+              <img
+                src={ChatSampleImg2}
+                alt="결혼 촬영 이미지입니다"
+                className="chatSampleImg"
+              />
+            </p>
+            <img
+              src={SnappyMarkBlue}
+              alt="프로필 이미지입니다"
+              className="snappyMark"
+            />
+            <p className="time">1:20</p>
+          </div>
+        </SnappyImgChatWrapper>
+        <SnappyChatWrapper>
+          <div className="polaroid">
+            <p className="chat">
+              편하게 보시고 더 궁금하신 점 있으시면, 문의 남겨놓아주세요.
+              좋은하루 되세요!
+            </p>
+            <img
+              src={SnappyMarkBlue}
+              alt="프로필 이미지입니다"
+              className="snappyMark"
+            />
+            <p className="time">1:25</p>
+          </div>
+        </SnappyChatWrapper>
+        <ChatInput
+          left={
+            <ImageUploadBtn type="button">
+              <Icons.Image className="ImageUploader" />
+            </ImageUploadBtn>
+          }
+          right={<Send type="button">전송</Send>}
+        />
+      </ChatRoomWrapper>
     </>
   );
 }

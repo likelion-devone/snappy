@@ -5,13 +5,13 @@ import PropTypes from "prop-types";
 const Label = styled.label`
   margin: 0 auto;
   height: 61px;
-  margin-top: 30px;
   display: flex;
   justify-content: space-between;
+  gap: 8px;
   align-items: center;
   color: ${(props) => props.theme.snGreyOff};
   input {
-    width: 80%;
+    width: 70%;
     line-height: 200%;
     border: 1px solid ${(props) => props.theme.snGreyOff};
   }
@@ -23,11 +23,11 @@ const Label = styled.label`
   }
 `;
 
-export default function CommentInput({ left, right }) {
+export default function CommentInput({ left, right, className }) {
   const [message, setMessage] = useState("");
 
   return (
-    <form>
+    <form className={className}>
       <Label message={message}>
         {left}
         <input
@@ -47,4 +47,5 @@ export default function CommentInput({ left, right }) {
 CommentInput.propTypes = {
   left: PropTypes.node.isRequired,
   right: PropTypes.node.isRequired,
+  className: PropTypes.string,
 };

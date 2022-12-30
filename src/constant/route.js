@@ -12,6 +12,10 @@ const ROUTE_LOGIN = {
   AUTHORIZE: "authorize",
 };
 
-export { ROUTE_LOGIN };
+const ROUTE_CHAT = {
+  CHATROOM: "chatroom",
+};
+
+export { ROUTE_LOGIN, ROUTE_CHAT };
 
 export default ROUTE;
