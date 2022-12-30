@@ -1,19 +1,27 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
 
-import Icons from "asset/icon/icons";
 import SmallProfile from "../SmallProfile";
-import AlertModal from "component/common/AlertModal";
+import { AlertModal, DropdownModal } from "component/common/Modal";
+import { PostDataContext } from "component/common/PostDataProvider/index";
+
+import useDropdownModal from "hook/useDropdownModal";
 import useModal from "hook/useModal";
 import useAPI from "hook/useAPI";
 
-import ErrorImg from "asset/logo-404-343264.png";
 import { req } from "lib/api/index";
+import routeResolver from "util/routeResolver";
+import getTimeGapInKr from "util/getTimeGapInKr";
+import useAuthInfo from "hook/useAuthInfo";
+
+import Icons from "asset/icon/icons";
+import ErrorImg from "asset/logo-404-343264.png";
+
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
-
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import ROUTE from "constant/route";
 
 const PostCardWrapper = styled.section`
   display: flex;
@@ -41,7 +49,7 @@ const ContentPostImgWrapper = styled.div`
 `;
 
 const ContentPostImg = styled.img`
-  width: auto;
+  max-width: 95%;
   height: 228px;
   object-fit: contain;
   border-radius: 10px;
@@ -67,7 +75,7 @@ const ButtonDot = styled.button`
   background-color: ${(props) =>
     props.isActive ? props.theme.snBlue : props.theme.snGreyOff};
 
-  &:hover {
+  :hover {
     background-color: ${({ theme }) => theme.snBlue};
   }
 `;
@@ -97,7 +105,7 @@ const SvgHeart = styled(Icons.Heart)`
   path {
     ${({ $isHearted, theme }) => $isHearted && "fill:" + theme.snRed + ";"}
     stroke: ${({ $isHearted, theme }) =>
-      $isHearted ? theme.snRed : theme.snGreyIcon};
+    $isHearted ? theme.snRed : theme.snGreyIcon};
   }
 `;
 
@@ -114,17 +122,36 @@ const PostDate = styled.time`
   line-height: 12px;
 `;
 
-export default function PostCard({ ...post }) {
-  const {
-    author: { username, accountname, image: profileImage },
-    postId,
-    content,
-    image,
-    createdAt,
-    hearted,
-    heartCount,
-    commentCount,
-  } = post;
+
+export default function PostCard({
+  authorId,
+  username,
+  accountname,
+  profileImage,
+  postId,
+  content,
+  image,
+  createdAt,
+  hearted,
+  heartCount,
+  commentCount,
+  $isPostDetailPage = false
+}) {
+  const { getMyPostData, getPostData } = useContext(PostDataContext);
+  const navigate = useNavigate();
+
+  const { _id: myId } = useAuthInfo();
+  const isThisPostMine = authorId === myId;
+
+  // 게시글 삭제 API
+  const [isDeletingPost, deletePostResponse, deletePosterror, deletePost] = useAPI(
+    req.post.remove
+  );
+
+  // 게시글 신고 API
+  const [isReportingPost, reportPostResponse, reportPosterror, reportPost] = useAPI(
+    req.post.report
+  );
 
   // 슬라이드 버튼
   const [BtnDotCounter, setBtnDotCounter] = useState(0);
@@ -133,46 +160,6 @@ export default function PostCard({ ...post }) {
   const [isHearted, setIsHearted] = useState(hearted);
   const [heartCountState, setHeartCountState] = useState(heartCount);
 
-  // 모달 열기
-  const [isModalOpened, openModal, closeModal, confirmModal] = useModal(
-    handleDeleteModalButton
-  );
-
-  const [isDeletingPost, _deletePostResponse, ___error, deletePost] = useAPI(
-    req.post.remove
-  );
-  // TODO 게시글 삭제
-  function handleDeleteModalButton() {
-    if (isDeletingPost) {
-      return;
-    }
-
-    deletePost({ postId });
-  }
-  // TODO 게시글 신고
-
-  // 게시글 생성 날짜
-  const [year, month, day] = formCreatedDate(createdAt);
-
-  function formCreatedDate(datestring) {
-    const postDate = new Date(Date.parse(datestring));
-    const year = postDate.getFullYear();
-    const month = postDate.getMonth() + 1;
-    const day = postDate.getDate();
-    return [year, month, day];
-  }
-
-  const multipleImgs = image && image.split(",").length > 1;
-
-  const handleImgError = (event) => {
-    event.target.src = ErrorImg;
-  };
-
-  const handleHeartButton = (event) => {
-    event.preventDefault();
-    setIsHearted((prev) => !prev);
-  };
-
   // 좋아요
   const [isLikeBeingActivated, _activateLikeResponse, _error, activateLike] =
     useAPI(req.like.activate);
@@ -180,6 +167,33 @@ export default function PostCard({ ...post }) {
   // 좋아요 취소
   const [isUnLikeBeingActivated, _cancelLikeResponse, __error, cancelLike] =
     useAPI(req.like.cancle);
+
+  useEffect(() => {
+    if (reportPostResponse) {
+      alert("게시물을 신고했습니다.");
+    }
+    if (reportPosterror) {
+      alert("게시물 신고중 에러가 발생했습니다.");
+      console.error(reportPosterror);
+    }
+  }, [reportPostResponse, reportPosterror]);
+
+  useEffect(() => {
+    if (deletePostResponse) {
+      alert("게시물을 삭제했습니다.");
+      if ($isPostDetailPage) {
+        navigate(ROUTE.HOME);
+        return;
+      }
+
+      getMyPostData();
+      getPostData();
+    }
+    if (deletePosterror) {
+      alert("게시물 삭제중 에러가 발생했습니다.");
+      console.error(deletePosterror);
+    }
+  }, [deletePostResponse, deletePosterror, getMyPostData, getPostData, navigate, $isPostDetailPage]);
 
   const like = async () => {
     const {
@@ -199,7 +213,7 @@ export default function PostCard({ ...post }) {
     setHeartCountState(newHeartCount);
   };
 
-  // active가 되어있는지, 안되어 있는지 예외 처리해주는 함수
+  // 좋아요 버튼 active 여부에 따른 예외 처리
   const handleHeartClick = () => {
     // 로딩 중일 때 실행
     if (isLikeBeingActivated || isUnLikeBeingActivated) {
@@ -213,63 +227,131 @@ export default function PostCard({ ...post }) {
     like();
   };
 
+  const handleHeartButton = (event) => {
+    event.preventDefault();
+    setIsHearted((prev) => !prev);
+  };
+
+  const handleDeleteModalButton = () => {
+    if (isDeletingPost) {
+      return;
+    }
+    deletePost({ postId });
+  }
+
+  // 삭제 메시지 모달창
+  const [
+    isDeleteMsgModalOpened,
+    deleteMsgModalopen,
+    deleteMsgModalclose,
+    deleteMsgModalconfirm,
+  ] = useModal(handleDeleteModalButton);
+
+  const handleReportModalButton = () => {
+    if (isReportingPost) {
+      return;
+    }
+    reportPost({ postId });
+  }
+
+  // 신고 메시지 모달창
+  const [
+    isReportMsgModalOpened,
+    reportMsgModalopen,
+    reportMsgModalclose,
+    reportMsgModalconfirm,
+  ] = useModal(handleReportModalButton);
+
+  // 수정 & 삭제 드롭다운 모달
+  const [isDroppedUp, dropUp, dropDown] =
+    useDropdownModal();
+
+  function handleDropDownButton() {
+    deleteMsgModalopen();
+    dropDown();
+  }
+
+  // 신고하기 드롭다운 모달
+  const [isReportDroppedUp, reportDropUp, reportDropDown] = useDropdownModal();
+
+  function handleReportDropDownButton() {
+    reportDropDown();
+    reportMsgModalopen();
+  }
+
+  // 이미지 여러장
+  const multipleImgs = image && image.split(",").length > 1;
+
+  const handleImgError = (event) => {
+    event.target.src = ErrorImg;
+  };
+
   return (
     <PostCardWrapper>
       <SmallProfile
         size={PROFILE_SIZE.SMALL}
         src={profileImage}
-        imageTo={`/profile/${accountname}`}
+        imageTo={routeResolver(ROUTE.PROFILE, accountname)}
       >
         <SmallProfile.Side
           left={
             <SmallProfile.Side.Title
               title={username}
               subtitle={"@ " + accountname}
-              titleTo={`/profile/${accountname}`}
+              titleTo={routeResolver(ROUTE.PROFILE, accountname)}
             />
           }
           right={
-            <button type="button" onClick={openModal}>
+            <button type="button" onClick={isThisPostMine ? dropUp : reportDropUp}>
               <Icons.SMoreVertical />
             </button>
           }
         />
       </SmallProfile>
-      {isModalOpened && (
-        <>
-          <button type="button" onClick={openModal}>
-            모달 열기
-            {/* TODO 모달 변경 */}
-          </button>
-          <AlertModal isModalOpened={isModalOpened}>
-            <AlertModal.Content>게시글을 삭제할까요?</AlertModal.Content>
-            <AlertModal.CancleButton handleModalButton={closeModal}>
-              취소
-            </AlertModal.CancleButton>
-            <AlertModal.ConfirmButton handleModalButton={confirmModal}>
-              삭제
-            </AlertModal.ConfirmButton>
-          </AlertModal>
-        </>
-      )}
+
+      {isThisPostMine ?
+        <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
+          <DropdownModal.Button onClick={handleDropDownButton}>
+            수정하기
+          </DropdownModal.Button>
+          <DropdownModal.Button onClick={handleDropDownButton}>
+            삭제하기
+          </DropdownModal.Button>
+        </DropdownModal>
+        : <DropdownModal isDroppedUp={isReportDroppedUp} dropDown={reportDropDown}>
+          <DropdownModal.Button onClick={handleReportDropDownButton}>
+            신고하기
+          </DropdownModal.Button>
+        </DropdownModal>
+      }
+      <AlertModal isModalOpened={isReportMsgModalOpened}>
+        <AlertModal.Content>게시글을 신고하시겠어요?</AlertModal.Content>
+        <AlertModal.Cancle handleModalButton={reportMsgModalclose}>
+          취소
+        </AlertModal.Cancle>
+        <AlertModal.ConfirmButton handleModalButton={reportMsgModalconfirm}>
+          신고
+        </AlertModal.ConfirmButton>
+      </AlertModal>
+
+      {/* TODO 게시글 수정시 수정 페이지로 이동 */}
+
+      <AlertModal isModalOpened={isDeleteMsgModalOpened}>
+        <AlertModal.Content>게시글을 삭제하시겠어요?</AlertModal.Content>
+        <AlertModal.Cancle handleModalButton={deleteMsgModalclose}>
+          취소
+        </AlertModal.Cancle>
+        <AlertModal.ConfirmButton handleModalButton={deleteMsgModalconfirm}>
+          삭제
+        </AlertModal.ConfirmButton>
+      </AlertModal>
+
       <ContentWrapper>
         <ContentText>
-          <Link
-            to={{
-              pathname: `/post/${post.id}`,
-              state: { post },
-            }}
-          >
-            {content}
-          </Link>
+          <Link to={`/post/${postId}`}>{content}</Link>
         </ContentText>
         <ContentPostImgWrapper>
-          <Link
-            to={{
-              pathname: `/post/${post.id}`,
-              state: { post },
-            }}
-          >
+          <Link to={`/post/${postId}`}>
             {image &&
               React.Children.toArray(
                 image
@@ -279,6 +361,7 @@ export default function PostCard({ ...post }) {
                       src={postImg}
                       isActive={index === BtnDotCounter}
                       onError={handleImgError}
+                      onClick={(event) => event.preventDefault()}
                     />
                   ))
               )}
@@ -304,39 +387,36 @@ export default function PostCard({ ...post }) {
         <IconWrapper>
           <ButtonIcon onClick={handleHeartButton}>
             <SvgHeart
-              title="하트 아이콘"
+              title="하트 아이콘 입니다"
               $isHearted={isHearted}
               onClick={handleHeartClick}
             />
             {heartCountState}
           </ButtonIcon>
 
-          <LinkIcon
-            to={{
-              pathname: `/post/${post.id}`,
-              state: { post },
-            }}
-          >
-            <SvgComment title="댓글 아이콘" />
+          <LinkIcon to={`/post/${postId}`}>
+            <SvgComment title="댓글 아이콘 입니다" />
             {commentCount}
           </LinkIcon>
         </IconWrapper>
 
-        <PostDate>
-          {year}년 {month}월 {day}일
-        </PostDate>
+        <PostDate dateTime={createdAt}>{getTimeGapInKr(createdAt)}</PostDate>
       </ContentWrapper>
     </PostCardWrapper>
   );
 }
 
 PostCard.propTypes = {
-  author: PropTypes.object,
-  id: PropTypes.string,
+  authorId: PropTypes.string,
+  username: PropTypes.string,
+  accountname: PropTypes.string,
+  profileImage: PropTypes.string,
+  postId: PropTypes.string,
   content: PropTypes.string,
   image: PropTypes.string,
   createdAt: PropTypes.string,
   hearted: PropTypes.bool,
   heartCount: PropTypes.number,
   commentCount: PropTypes.number,
+  $isPostDetailPage: PropTypes.bool
 };

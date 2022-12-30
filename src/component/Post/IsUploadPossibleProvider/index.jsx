@@ -1,15 +1,24 @@
 import { useState, createContext } from "react";
 import PropTypes from "prop-types";
 
-export const IsUploadPossible = createContext();
+/**
+ * @typedef {Object} IsUploadPossibleContextObject
+ * @property {boolean} isPossibleToUpload
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsPossibleToUpload
+ */
+
+/**
+ * @type {React.Context<IsUploadPossibleContextObject>}
+ */
+export const IsUploadPossibleContext = createContext();
 
 function IsUploadPossibleProvider({ children }) {
-  const [possibleUpload, setPossibleUpload] = useState(false);
+  const [isPossibleToUpload, setIsPossibleToUpload] = useState(false);
 
   return (
-    <IsUploadPossible.Provider value={{ possibleUpload, setPossibleUpload }}>
+    <IsUploadPossibleContext.Provider value={{ isPossibleToUpload, setIsPossibleToUpload }}>
       {children}
-    </IsUploadPossible.Provider>
+    </IsUploadPossibleContext.Provider>
   );
 }
 

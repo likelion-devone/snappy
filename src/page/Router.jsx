@@ -10,6 +10,7 @@ import Layout from "component/common/Layout";
 import LoginPage from "./Login";
 import HomePage from "./Home";
 import ProfilePage from "./Profile";
+import YourProfilePage from "./Profile/[accountname]";
 import PostUploadPage from "./Post/Upload";
 import PostDetailPage from "./Post/[postId]";
 import ChatPage from "./Chat";
@@ -21,7 +22,23 @@ import AuthProvider from "lib/auth/AuthProvider";
 import ChatRoomPage from "./Chat/ChatRoom";
 
 import ROUTE, { ROUTE_LOGIN, ROUTE_CHAT } from "constant/route";
+
+import ProductPage from "./Product";
+import AddProductPage from "./Product/AddProduct/index";
+import EditProductPage from "./Product/EditProduct/index";
 import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
+import FollowerListPage from "./Profile/FollowerListPage/index";
+import FollowingListPage from "./Profile/FollowingListPage/index";
+
+import PostDataProvider from "component/common/PostDataProvider/index";
+import PostDetailDataProvider from "component/common/PostDataProvider/PostDetailDataProvider/index";
+import IsUploadPossibleProvider from "component/Post/IsUploadPossibleProvider/index";
+
+import ROUTE, {
+  ROUTE_LOGIN,
+  ROUTE_PRODUCT,
+  ROUTE_PROFILE,
+} from "constant/route";
 
 export default function AppRouter() {
   return (
@@ -36,14 +53,43 @@ export default function AppRouter() {
             </Route>
             <Route path={ROUTE_LOGIN.AUTHORIZE} element={<AuthorizePage />} />
           </Route>
-          <Route path={ROUTE.LANDING} element={<></>} />{" "}
+          <Route path={ROUTE.LANDING} element={<></>} />
           {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
           <Route element={<Layout />}>
-            <Route path={ROUTE.HOME} element={<HomePage />} />
-            <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
+            <Route path={ROUTE.HOME} element={
+              <PostDataProvider><HomePage /></PostDataProvider>
+            } />
+            <Route path={ROUTE.PROFILE}>
+              <Route index element={
+                <PostDataProvider><ProfilePage /></PostDataProvider>
+              } />
+              <Route path=":accountname">
+                <Route index element={<PostDataProvider><YourProfilePage /></PostDataProvider>} />
+                <Route
+                  path={ROUTE_PROFILE.FOLLOWER}
+                  element={<FollowerListPage />}
+                />
+                <Route
+                  path={ROUTE_PROFILE.FOLLOWING}
+                  element={<FollowingListPage />}
+                />
+              </Route>
+            </Route>
             <Route path={ROUTE.POST}>
-              <Route index element={<PostUploadPage />} />
-              <Route path=":postId" element={<PostDetailPage />} />
+              <Route index element={<IsUploadPossibleProvider><PostUploadPage /></IsUploadPossibleProvider>} />
+              <Route path=":postId" element={<PostDetailDataProvider><PostDetailPage /></PostDetailDataProvider>} />
+            </Route>
+            <Route path={ROUTE.PRODUCT} element={<ProductPage />}>
+              <Route index element={<Navigate to={ROUTE.HOME} />} />
+              <Route path={ROUTE_PRODUCT.ADD} element={<AddProductPage />} />
+              <Route path=":productid">
+                {/* TODO: 제품 상세 페이지 개발 */}
+                <Route index element={<Navigate to={ROUTE_PRODUCT.EDIT} />} />
+                <Route
+                  path={ROUTE_PRODUCT.EDIT}
+                  element={<EditProductPage />}
+                />
+              </Route>
             </Route>
             <Route path={ROUTE.CHAT}>
               <Route index element={<ChatPage />} />

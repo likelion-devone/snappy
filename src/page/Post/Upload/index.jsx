@@ -1,21 +1,23 @@
 import styled from "styled-components";
+import { useState, useRef, useEffect, useContext, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 import SmallProfile from "component/common/SmallProfile/index";
 import AddedImgList from "component/common/AddedImgList/index";
-import IsUploadPossibleProvider from "component/Post/IsUploadPossibleProvider/index";
+import { IsUploadPossibleContext } from "component/Post/IsUploadPossibleProvider/index";
 import ImgDataProvider from "component/Post/ImgDataProvider/index";
 import TextArea from "component/Post/TextArea/index";
 import LabelImgUpload from "component/Post/LabelImgUpload/index";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 import { PROFILE_SIZE } from "constant/size";
 import ROUTE from "constant/route";
-import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
-import useAPI from "hook/useAPI";
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
 import useAuthInfo from "hook/useAuthInfo";
+import useTopNavSetter from "hook/useTopNavSetter";
+import useAPI from "hook/useAPI";
 
 const PostUploadWrapper = styled.div`
   position: relative;
@@ -34,6 +36,25 @@ const HiddenUploadFileInput = styled.input`
 const SIZE_LIMIT = 10 * 1024 * 1024;
 
 export default function PostUploadPage() {
+  const { isPossibleToUpload, setIsPossibleToUpload } = useContext(IsUploadPossibleContext);
+
+  const UploadButton = useMemo(() => <TopNavElement.Button
+    form="post-upload"
+    $isAbled={isPossibleToUpload}
+  >
+    업로드
+  </TopNavElement.Button>
+    , [isPossibleToUpload]);
+
+  const { setTopNavRight } = useTopNavSetter({
+    left: <TopNavElement.GoBackButton />,
+    right: UploadButton
+  });
+
+  useEffect(() => {
+    setTopNavRight(UploadButton);
+  }, [setTopNavRight, UploadButton])
+
   const [imgData, setImgData] = useState([]);
 
   // 이미지 업로드 API
@@ -74,6 +95,8 @@ export default function PostUploadPage() {
 
       imgList.push(URL.createObjectURL(file));
     }
+
+    setIsPossibleToUpload(imgList.length !== 0);
     setImgData(imgList);
   };
 
@@ -84,25 +107,33 @@ export default function PostUploadPage() {
       return;
     }
 
-    const formData = new FormData();
+    if (inpImagesRef.current.files.length !== 0) {
+      const formData = new FormData();
 
-    [...inpImagesRef.current.files].forEach((file) => {
-      formData.append("image", file);
-    });
+      [...inpImagesRef.current.files].forEach((file) => {
+        formData.append("image", file);
+      });
 
-    const results = await uploadImages({ formData: formData });
+      const results = await uploadImages({ formData: formData });
+
+      return createPost({
+        content: textareaRef.current.value,
+        image: results
+          .map((result) => process.env.REACT_APP_BASE_API + result.filename)
+          .join(","),
+      });
+    }
 
     createPost({
       content: textareaRef.current.value,
-      image: results
-        .map((result) => process.env.REACT_APP_BASE_API + result.filename)
-        .join(","),
+      image: "",
     });
   };
 
   useEffect(() => {
     // 게시물 업로드 전
     if (uploadPostError) {
+      console.log(uploadPostError);
       alert("게시물 업로드를 실패했습니다.");
       return;
     }
@@ -118,20 +149,15 @@ export default function PostUploadPage() {
     <PostUploadWrapper>
       {/* TODO 상단 Nav 업로드 버튼, isActive */}
       <ImgDataProvider>
-        <FormSection onSubmit={handleSubmitPost}>
-          {/* TODO 버튼 컴포넌트로 변경 */}
-          <button type="submit">업로드</button>
-
+        <FormSection id="post-upload" onSubmit={handleSubmitPost}>
           <SmallProfile
             size={PROFILE_SIZE.SMALL}
             src={profileImage}
             imageTo={routeResolver(ROUTE.PROFILE, accountname)}
           />
 
-          <IsUploadPossibleProvider>
-            <TextArea ref={textareaRef} />
-            <LabelImgUpload />
-          </IsUploadPossibleProvider>
+          <TextArea ref={textareaRef} />
+          <LabelImgUpload />
 
           <HiddenUploadFileInput
             ref={inpImagesRef}
