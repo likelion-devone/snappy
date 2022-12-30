@@ -17,6 +17,7 @@ import LandingPage from "page/Landing";
  * @property {string} _id;
  * @property {string} username;
  * @property {string} accountname;
+ * @property {string} intro;
  * @property {string} image;
  * @property {boolean} isfollow;
  * @property {Array.<string>} following;
@@ -82,7 +83,11 @@ export default function AuthProvider() {
     try {
       const result = await getAuthInfo();
 
-      setAuthInfo(result.user);
+      setAuthInfo({
+        intro: "",
+        ...result.user
+      }); // intro는 아예 없는 경우도 있습니다. 이럴 때를 대비해 빈 스트링을 넣습니다.
+
       if (
         location.pathname.includes(ROUTE.LOGIN) ||
         location.pathname === ROUTE.LANDING
