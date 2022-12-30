@@ -37,11 +37,11 @@ export default function FollowingListPage() {
     getFollowingData({ accountname });
   }, [accountname, getFollowingData]);
 
-  function handleFollowButton(isFollow, targetAccountname) {
+  async function handleFollowButton(isFollow, targetAccountname) {
     if (isFollow) {
-      unfollow({ accountname: targetAccountname });
+      await unfollow({ accountname: targetAccountname });
     } else {
-      follow({ accountname: targetAccountname });
+      await follow({ accountname: targetAccountname });
     }
     getFollowingData({ accountname }), 5000;
     return;
