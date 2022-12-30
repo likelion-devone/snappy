@@ -3,18 +3,30 @@ import PropTypes from "prop-types";
 
 import Button from "./Button/index";
 import { FONT_SIZE } from "constant/style";
+import { cssModalBackground } from "../style";
+
+const cssOpenModal = css`
+  scale: 1;
+`
+const cssCloseModal = css`
+  scale: 0;
+`
 
 const Wrapper = styled.div`
+  ${cssModalBackground}
+
+  align-items: center;
+  justify-content: center;
+
+  ${({ $isModalOpened }) =>
+    $isModalOpened ? cssOpenModal : cssCloseModal
+  }
+`
+
+const Modal = styled.div`
   width: 252px;
   background: ${({ theme }) => theme.snGreyOff};
   border-radius: 10px;
-
-  z-index: 700;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 
   display: grid;
   grid-template-columns: repeat(${({ children }) => children.length - 1}, 1fr);
@@ -32,6 +44,11 @@ const Wrapper = styled.div`
   & *:first-child {
     grid-column: 1 / ${({ children }) => children.length};
   }
+
+  transition: all 0.5s ease;
+  ${({ $isModalOpened }) =>
+    $isModalOpened ? cssOpenModal : cssCloseModal
+  }
 `;
 
 const Content = styled.p`
@@ -48,7 +65,13 @@ const Content = styled.p`
 `;
 
 export default function AlertModal({ isModalOpened, children }) {
-  return isModalOpened && <Wrapper>{children}</Wrapper>;
+  return (
+    <Wrapper $isModalOpened={isModalOpened}>
+      <Modal $isModalOpened={isModalOpened}>
+        {children}
+      </Modal>
+    </Wrapper>
+  );
 }
 
 AlertModal.Content = Content;

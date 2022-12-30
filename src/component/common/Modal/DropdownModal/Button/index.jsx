@@ -14,10 +14,10 @@ const StyledButton = styled.button`
   font-family: inherit;
 `;
 
-export default function Button({ children, onClick }) {
+export default function Button({ children, onClick, ...props }) {
   return (
     <li>
-      <StyledButton type="button" onClick={onClick}>
+      <StyledButton type="button" onClick={onClick} {...props}>
         {children}
       </StyledButton>
     </li>

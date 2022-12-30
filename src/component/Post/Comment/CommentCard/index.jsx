@@ -1,9 +1,9 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import SmallProfile from "component/common/SmallProfile/index";
-import AlertModal from "component/common/AlertModal";
-import DropdownModal from "component/common/DropdownModal/index";
+import { AlertModal, DropdownModal } from "component/common/Modal";
 import useModal from "hook/useModal";
 import useAPI from "hook/useAPI";
 import useAuthInfo from "hook/useAuthInfo";
@@ -14,7 +14,6 @@ import { req } from "lib/api/index";
 import Icons from "asset/icon/icons";
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
-import { useEffect } from "react";
 import getTimeGapInKr from "util/getTimeGapInKr";
 
 const CommentContentWrapper = styled.li`

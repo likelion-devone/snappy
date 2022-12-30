@@ -4,22 +4,24 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
 
 import SmallProfile from "../SmallProfile";
-import AlertModal from "component/common/AlertModal";
+import { AlertModal, DropdownModal } from "component/common/Modal";
+import { PostDataContext } from "component/common/PostDataProvider/index";
+
 import useDropdownModal from "hook/useDropdownModal";
 import useModal from "hook/useModal";
 import useAPI from "hook/useAPI";
+
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
+import getTimeGapInKr from "util/getTimeGapInKr";
+import useAuthInfo from "hook/useAuthInfo";
 
 import Icons from "asset/icon/icons";
 import ErrorImg from "asset/logo-404-343264.png";
-import DropdownModal from "../DropdownModal/index";
-import getTimeGapInKr from "util/getTimeGapInKr";
-import useAuthInfo from "hook/useAuthInfo";
+
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
 import ROUTE from "constant/route";
-import { PostDataContext } from "component/common/PostDataProvider/index";
 
 const PostCardWrapper = styled.section`
   display: flex;

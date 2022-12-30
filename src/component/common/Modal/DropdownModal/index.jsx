@@ -3,6 +3,7 @@ import { useRef } from "react";
 import styled from "styled-components";
 
 import Button from "./Button/index";
+import { cssModalBackground } from "../style";
 
 //https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Using_Touch_Events
 //https://nohack.tistory.com/123
@@ -10,19 +11,8 @@ import Button from "./Button/index";
 //https://ui.toast.com/weekly-pick/ko_20220106
 
 const ModalSection = styled.section`
-  z-index: 500;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
+  ${cssModalBackground}
   align-items: flex-end;
-
-  background-color: rgba(0, 0, 0, 0.3);
 `;
 
 const Modal = styled.ul`
