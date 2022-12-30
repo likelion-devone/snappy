@@ -8,20 +8,57 @@ import PostCard from "component/common/PostCard/index";
 import useFetch from "hook/useFetch";
 import { req } from "lib/api";
 import useAPI from "hook/useAPI";
+import CommentForm from "component/common/CommentForm/index";
+import SmallProfile from "component/common/SmallProfile/index";
+import useAuthInfo from "hook/useAuthInfo";
+import routeResolver from "util/routeResolver";
+import ROUTE from "constant/route";
+import { PROFILE_SIZE } from "constant/size";
 
 const CommentCardWrapper = styled.ol`
   border-top: 1px solid ${({ theme }) => theme.snGreyOff};
+  margin-bottom: 140px;
 `;
 
 export default function PostDetail() {
   const { postId } = useParams();
   const navigate = useNavigate();
+  const { image: authProfileImage } = useAuthInfo();
 
   // 게시물 상세
   const [isPostDetailLoading, postDetail, postDetailError] = useFetch(req.post.detail, { postId });
 
   // 댓글 리스트
   const [isCommentLoading, commentData, _commentError, getComments] = useAPI(req.comment.load);
+
+  // 댓글 작성
+  const [isCommentCreating, createCommentResult, createCommentError, createComment] = useAPI(req.comment.create);
+  const createCommentIfNotCreating = (event) => {
+    event.preventDefault();
+
+    if (isCommentCreating) {
+      alert("댓글을 게시하고 있습니다.");
+      return;
+    }
+    const { target: { inpComment: { value } } } = event;
+    if (!value) {
+      return;
+    }
+
+    createComment({
+      postId,
+      content: value
+    });
+  }
+
+  useEffect(() => {
+    if (createCommentResult) {
+      getComments({ postId });
+    }
+    if (createCommentError) {
+      alert("댓글 게시중 오류가 발생했습니다.")
+    }
+  }, [createCommentResult, createCommentError, getComments, postId])
 
   useEffect(() => {
     getComments({ postId });
@@ -56,6 +93,17 @@ export default function PostDetail() {
       />
       <section>
         <h2 className="sr-only">댓글란</h2>
+        <CommentForm
+          left={
+            <SmallProfile
+              src={authProfileImage}
+              imageTo={routeResolver(ROUTE.PROFILE)}
+              size={PROFILE_SIZE.X_SMALL}
+            />
+          }
+          right={<button type="submit">게시</button>}
+          onSubmit={createCommentIfNotCreating}
+        />
         <CommentCardWrapper>
           {commentData.comments
             .sort((comment1, comment2) =>
