@@ -38,7 +38,10 @@ const SIZE_LIMIT = 10 * 1024 * 1024;
 
 export default function PostEditPage() {
   const { postId } = useParams();
+  const navigate = useNavigate();
   const [imgData, setImgData] = useState([]);
+  const inpImagesRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const { isPossibleToUpload, setIsPossibleToUpload } = useContext(
     IsUploadPossibleContext
@@ -56,9 +59,16 @@ export default function PostEditPage() {
         return;
       }
       setImgData(initialPostData.post.image.split(","));
-      console.log(initialPostData);
     }
   }, [initialPostData]);
+
+  useEffect(() => {
+    if (initialPostDataError) {
+      alert("게시물을 불러오는 데 실패했습니다.");
+      navigate(routeResolver(ROUTE.POST, postId));
+      return;
+    }
+  }, [initialPostDataError, navigate, postId]);
 
   const UploadButton = useMemo(
     () => (
@@ -92,18 +102,15 @@ export default function PostEditPage() {
   );
 
   // 게시물 업로드 후 HOME 으로 경로 이동
-  const navigate = useNavigate();
 
-  const inpImagesRef = useRef(null);
-  const textareaRef = useRef(null);
   const { image: profileImage, accountname } = useAuthInfo();
 
   // 업로드 파일 인풋 onChange 이벤트
   const handleUploadFile = (event) => {
     const imgFileList = event.target.files;
-    const imgCount = imgData.length;
+    const imgCount = imgData.filter((url) => !url.startsWith("blob:")).length;
 
-    if (imgCount > 2) {
+    if (imgCount + imgFileList.length > 3) {
       alert("3개 이하의 파일을 업로드 하세요.");
       return;
     }
@@ -126,7 +133,6 @@ export default function PostEditPage() {
         }
 
         imgList.push(URL.createObjectURL(file));
-        console.log(imgList);
       }
 
       setIsPossibleToUpload(imgList.length !== 0);
@@ -144,14 +150,6 @@ export default function PostEditPage() {
     const previouslyExistedImgUrls = imgData.filter(
       (url) => !url.startsWith("blob:")
     );
-
-    // if (
-    //   !inpImagesRef.current.files.length &&
-    //   !previouslyExistedImgUrls.length
-    // ) {
-    //   alert("이미지를 하나 이상 넣어주세요.");
-    //   return;
-    // }
 
     if (inpImagesRef.current.files.length !== 0) {
       const formData = new FormData();
