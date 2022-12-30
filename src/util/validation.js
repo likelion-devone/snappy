@@ -55,10 +55,36 @@ const validatePassword = (str) => {
   return "";
 };
 
+const validateUsername = (str) => {
+  if (!str) {
+    return "사용자 이름을 입력해주세요.";
+  }
+
+  if (str.length < 2 || str.length > 10) {
+    return "2~10자 이내여야 합니다.";
+  }
+
+  return "";
+};
+
+const validateAccountname = (str) => {
+  if (!str) {
+    return "계정 ID를 입력해주세요.";
+  }
+
+  if (/[^a-zA-Z0-9._]/.test(str)) {
+    return "영문, 숫자, 밑줄 및 마침표만 사용할 수 있습니다.";
+  }
+
+  return "";
+};
+
 export {
   validateEmail,
   validatePassword,
   validateIsFilled,
   validateOver1,
   validateUrl,
+  validateUsername,
+  validateAccountname,
 };
