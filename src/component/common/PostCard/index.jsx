@@ -8,13 +8,13 @@ import { AlertModal, DropdownModal } from "component/common/Modal";
 import { PostDataContext } from "component/common/PostDataProvider/index";
 
 import useDropdownModal from "hook/useDropdownModal";
+import useAuthInfo from "hook/useAuthInfo";
 import useModal from "hook/useModal";
 import useAPI from "hook/useAPI";
 
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
 import getTimeGapInKr from "util/getTimeGapInKr";
-import useAuthInfo from "hook/useAuthInfo";
 
 import Icons from "asset/icon/icons";
 import ErrorImg from "asset/logo-404-343264.png";
@@ -37,9 +37,11 @@ const ContentText = styled.p`
   font-weight: 400;
   font-size: ${FONT_SIZE.BASE};
   line-height: 18px;
-  margin: 16px 0;
-  width: fit-content;
   word-break: break-all;
+  a {
+    display: block;
+    padding: 16px 0;
+  }
 `;
 
 const ContentPostImgWrapper = styled.div`
@@ -321,6 +323,7 @@ export default function PostCard({
 
   return (
     <PostCardWrapper>
+      <h2 className="sr-only">게시물</h2>
       <SmallProfile
         size={PROFILE_SIZE.SMALL}
         src={profileImage}
@@ -385,25 +388,25 @@ export default function PostCard({
       </AlertModal>
 
       <ContentWrapper>
-        <ContentText>
-          <Link to={`/post/${postId}`}>{content}</Link>
-        </ContentText>
+        {content && (
+          <ContentText>
+            <Link to={`/post/${postId}`}>{content}</Link>
+          </ContentText>
+        )}
         <ContentPostImgWrapper>
-          <Link to={`/post/${postId}`}>
-            {image &&
-              React.Children.toArray(
-                image.split(",").map((postImg, index) => (
-                  <ContentPostImg
-                    src={postImg}
-                    isActive={index === BtnDotCounter}
-                    onError={handleImgError}
-                    onClick={(event) => {
-                      event.preventDefault();
-                    }}
-                  />
-                ))
-              )}
-          </Link>
+          {image &&
+            React.Children.toArray(
+              image.split(",").map((postImg, index) => (
+                <ContentPostImg
+                  src={postImg}
+                  isActive={index === BtnDotCounter}
+                  onError={handleImgError}
+                  onClick={(event) => {
+                    event.preventDefault();
+                  }}
+                />
+              ))
+            )}
 
           {multipleImgs && (
             <ButtonDotWrapper>
