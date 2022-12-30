@@ -5,7 +5,7 @@ import ChatSampleImg from "asset/ChatSampleImg.jpg";
 import ChatSampleImg2 from "asset/ChatSampleImg2.jpg";
 import SmallProfile from "component/common/SmallProfile";
 import { PROFILE_SIZE } from "constant/size";
-import CommentInput from "component/common/Input/CommentInput/index";
+import CommentForm from "component/common/CommentForm";
 import ProfileImg from "asset/profile-img-42.png";
 import { FONT_SIZE } from "constant/style";
 import Icons from "asset/icon/icons";
@@ -16,11 +16,7 @@ import useDropdownModal from "hook/useDropdownModal";
 import ROUTE from "constant/route";
 
 const ChatRoomWrapper = styled.div`
-  width: 100%;
-  height: 80vh;
-  padding: 3px 10px 0;
-  overflow: scroll;
-  position: relative;
+  margin-bottom: 140px;
 `;
 
 const UserChat = styled.article`
@@ -155,29 +151,11 @@ const SnappyChatWrapper = styled.article`
   }
 `;
 
-const ChatInput = styled(CommentInput)`
-  background-color: ${(props) => props.theme.snWhite};
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
-  /* border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px; */
-`;
-
 const ImageUploadBtn = styled.button`
   background-color: ${(props) => props.theme.snGreyOff};
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-`;
-
-const Send = styled.button`
-  color: ${(props) => props.theme.snGreyMain};
-  margin-right: auto;
 `;
 
 const NavIcons = styled.div`
@@ -292,13 +270,14 @@ export default function ChatRoomPage() {
             <p className="time">1:25</p>
           </div>
         </SnappyChatWrapper>
-        <ChatInput
+        <CommentForm
           left={
             <ImageUploadBtn type="button">
-              <Icons.Image className="ImageUploader" />
+              <Icons.Image className="ImageUploader" title="채팅 이미지 업로드 버튼입니다." />
             </ImageUploadBtn>
           }
-          right={<Send type="button">전송</Send>}
+          right={<button type="button">전송</button>}
+          onSubmit={(event) => event.preventDefault()}
         />
       </ChatRoomWrapper>
     </>
