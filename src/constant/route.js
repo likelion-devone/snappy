@@ -23,6 +23,7 @@ const ROUTE_PRODUCT = {
 };
 
 const ROUTE_PROFILE = {
+  EDIT: "edit",
   FOLLOWER: "follower",
   FOLLOWING: "following",
 };

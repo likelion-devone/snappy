@@ -1,9 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-
-import Icons from "asset/icon/icons";
 import styled from "styled-components";
+
 import { AlbumView, ListView } from "component/Profile/AlbumListView";
 import BigProfile from "component/common/BigProfile/index";
 import {
@@ -11,16 +10,18 @@ import {
   FollowingLink,
 } from "component/common/BigProfile/FollowLink";
 import Button from "component/common/Button/index";
-import { BUTTON_SIZE } from "constant/size";
-import { BUTTON_STATE } from "constant/button_state";
 import ProductList from "component/Profile/ProductList/index";
-import ROUTE, { ROUTE_PROFILE } from "constant/route";
-import PortfolioTitleImg from "asset/title-portfolio.png";
+import { PostDataContext } from "component/common/PostDataProvider/index";
 
 import useFetch from "hook/useFetch";
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
-import { PostDataContext } from "component/common/PostDataProvider/index";
+
+import Icons from "asset/icon/icons";
+import PortfolioTitleImg from "asset/title-portfolio.png";
+import ROUTE, { ROUTE_PRODUCT, ROUTE_PROFILE } from "constant/route";
+import { BUTTON_SIZE } from "constant/size";
+import { BUTTON_STATE } from "constant/button_state";
 
 const StyleBigProfile = styled.div`
   display: flex;
@@ -131,6 +132,29 @@ const IconAlbum = styled(Icons.PostAlbum)`
   }
 `;
 
+const StyledButtonForLink = styled(Button)`
+  line-height: 34px;
+  text-align: center;
+`
+
+function LinkButton({ to, children }) {
+  return (
+    <StyledButtonForLink
+      as={Link}
+      size={BUTTON_SIZE.LARGE_34}
+      state={BUTTON_STATE.LARGE_34.ACTIVATED}
+      to={to}
+    >
+      {children}
+    </StyledButtonForLink>
+  )
+}
+
+LinkButton.propTypes = {
+  to: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
+}
+
 function PageDetails({ accountname, $isMyProfile = false }) {
   const navigate = useNavigate();
   const { userPostData, userPostDataError, isUserPostDataLoading, getUserPostData } = useContext(PostDataContext);
@@ -206,18 +230,16 @@ function PageDetails({ accountname, $isMyProfile = false }) {
         <Wrapper>
           {$isMyProfile ? (
             <>
-              <Button
-                size={BUTTON_SIZE.LARGE_34}
-                state={BUTTON_STATE.LARGE_34.ACTIVATED}
+              <LinkButton
+                to={routeResolver(ROUTE.PROFILE, ROUTE_PROFILE.EDIT)}
               >
                 프로필 수정
-              </Button>
-              <Button
-                size={BUTTON_SIZE.LARGE_34}
-                state={BUTTON_STATE.LARGE_34.ACTIVATED}
+              </LinkButton>
+              <LinkButton
+                to={routeResolver(ROUTE.PRODUCT, ROUTE_PRODUCT.ADD)}
               >
                 상품 등록
-              </Button>
+              </LinkButton>
             </>
           ) : (
             <>

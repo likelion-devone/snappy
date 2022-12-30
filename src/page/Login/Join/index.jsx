@@ -1,6 +1,19 @@
 import { createContext, useReducer } from "react";
 import { Outlet } from "react-router-dom";
 
+/**
+ * @typedef {Object} JoinData
+ * @property {string} email;
+ * @property {string} password;
+ * @property {string} username;
+ * @property {string} accountname;
+ * @property {string} intro;
+ * @property {string} image;
+ */
+
+/**
+ * @type {React.Context<{joinData: JoinData, dispatchJoinData: React.DispatchWithoutAction}>}
+ */
 export const JoinDataContext = createContext();
 
 const joinDataInitState = {

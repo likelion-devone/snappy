@@ -27,6 +27,7 @@ import EditProductPage from "./Product/EditProduct/index";
 import JoinPageByPagenum from "./Login/Join/[pagenum]/index";
 import FollowerListPage from "./Profile/FollowerListPage/index";
 import FollowingListPage from "./Profile/FollowingListPage/index";
+import ProfileEditPage from "./Profile/Edit/index";
 
 import PostDataProvider from "component/common/PostDataProvider/index";
 import PostDetailDataProvider from "component/common/PostDataProvider/PostDetailDataProvider/index";
@@ -61,6 +62,9 @@ export default function AppRouter() {
             <Route path={ROUTE.PROFILE}>
               <Route index element={
                 <PostDataProvider><ProfilePage /></PostDataProvider>
+              } />
+              <Route path={ROUTE_PROFILE.EDIT} element={
+                <ProfileEditPage />
               } />
               <Route path=":accountname">
                 <Route index element={<PostDataProvider><YourProfilePage /></PostDataProvider>} />

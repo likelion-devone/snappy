@@ -49,7 +49,9 @@ export default function useAPI(requestConfigResolver) {
               try {
                 return (
                   requestConfigResolver(params).url ===
-                  req.noAuth[key][requestKey](params).url
+                    req.noAuth[key][requestKey](params).url &&
+                  requestConfigResolver.name ===
+                    req.noAuth[key][requestKey].name
                 );
               } catch (_) {
                 return false;

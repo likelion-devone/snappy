@@ -1,18 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
+import SmallProfile from "component/common/SmallProfile";
+import CommentForm from "component/common/Form/CommentForm/index";
+import Button from "component/common/Modal/DropdownModal/Button/index";
+import { DropdownModal } from "component/common/Modal/index";
+
+import useDropdownModal from "hook/useDropdownModal";
+
 import SnappyMarkGrey from "asset/snappy_grey.svg";
 import SnappyMarkBlue from "asset/snappy_blue.svg";
 import ChatSampleImg from "asset/ChatSampleImg.jpg";
 import ChatSampleImg2 from "asset/ChatSampleImg2.jpg";
-import SmallProfile from "component/common/SmallProfile";
-import { PROFILE_SIZE } from "constant/size";
-import CommentForm from "component/common/CommentForm";
 import ProfileImg from "asset/profile-img-42.png";
-import { FONT_SIZE } from "constant/style";
 import Icons from "asset/icon/icons";
-import { useNavigate } from "react-router-dom";
-import Button from "component/common/Modal/DropdownModal/Button/index";
-import { DropdownModal } from "component/common/Modal/index";
-import useDropdownModal from "hook/useDropdownModal";
+
+import { PROFILE_SIZE } from "constant/size";
+import { FONT_SIZE } from "constant/style";
 import ROUTE from "constant/route";
 
 const ChatRoomWrapper = styled.div`
