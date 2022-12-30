@@ -5,7 +5,7 @@ import ChatSampleImg from "asset/ChatSampleImg.jpg";
 import ChatSampleImg2 from "asset/ChatSampleImg2.jpg";
 import SmallProfile from "component/common/SmallProfile";
 import { PROFILE_SIZE } from "constant/size";
-import CommentInput from "component/common/Comment/index";
+import CommentInput from "component/common/Input/CommentInput/index";
 import ProfileImg from "asset/profile-img-42.png";
 import { FONT_SIZE } from "constant/style";
 import Icons from "asset/icon/icons";
@@ -156,7 +156,7 @@ const SnappyChatWrapper = styled.article`
 `;
 
 const ChatInput = styled(CommentInput)`
-  background-color: ${(props) => props.theme.snBlue};
+  background-color: ${(props) => props.theme.snWhite};
   position: sticky;
   bottom: 0;
   z-index: 1;
@@ -176,7 +176,7 @@ const ImageUploadBtn = styled.button`
 `;
 
 const Send = styled.button`
-  color: ${(props) => props.theme.snGreyOff};
+  color: ${(props) => props.theme.snGreyMain};
   margin-right: auto;
 `;
 
