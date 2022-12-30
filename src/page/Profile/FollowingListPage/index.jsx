@@ -1,8 +1,8 @@
 import styled from "styled-components";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+
 import useAPI from "hook/useAPI";
-import { useEffect, useRef } from "react";
-import { req } from "lib/api/index";
 
 import Button from "component/common/Button/index";
 import SmallProfile from "component/common/SmallProfile/index";
@@ -10,7 +10,9 @@ import SmallProfile from "component/common/SmallProfile/index";
 import { BUTTON_STATE } from "constant/button_state";
 import { BUTTON_SIZE, PROFILE_SIZE } from "constant/size";
 import ROUTE from "constant/route";
+
 import routeResolver from "util/routeResolver";
+import { req } from "lib/api/index";
 
 const FollowerList = styled.ul`
   display: flex;
@@ -37,17 +39,15 @@ export default function FollowingListPage() {
     getFollowingData({ accountname });
   }, [accountname, getFollowingData]);
 
-  function handleFollowButton(isFollow, targetAccountname) {
+  async function handleFollowButton(isFollow, targetAccountname) {
     if (isFollow) {
-      unfollow({ accountname: targetAccountname });
+      await unfollow({ accountname: targetAccountname });
     } else {
-      follow({ accountname: targetAccountname });
+      await follow({ accountname: targetAccountname });
     }
     getFollowingData({ accountname }), 5000;
     return;
   }
-
-  const buttonRef = useRef();
 
   return isFollowingLoading || !followingData ? (
     "로딩중"
@@ -75,7 +75,6 @@ export default function FollowingListPage() {
                 }
                 right={
                   <Button
-                    ref={buttonRef}
                     size={BUTTON_SIZE.X_SMALL}
                     state={
                       following.isfollow

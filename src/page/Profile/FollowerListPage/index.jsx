@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import useAPI from "hook/useAPI";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { req } from "lib/api/index";
 
 import Button from "component/common/Button/index";
@@ -37,19 +37,15 @@ export default function FollowerListPage() {
     getFollowerData({ accountname });
   }, [getFollowerData, accountname]);
 
-  function handleFollowButton(isFollow, targetAccountname) {
+  async function handleFollowButton(isFollow, targetAccountname) {
     if (isFollow) {
-      unfollow({ accountname: targetAccountname });
-      console.log("unfollowed");
+      await unfollow({ accountname: targetAccountname });
     } else {
-      follow({ accountname: targetAccountname });
-      console.log("followed");
+      await follow({ accountname: targetAccountname });
     }
-    getFollowerData({ accountname }), 5000;
+    getFollowerData({ accountname });
     return;
   }
-
-  const buttonRef = useRef();
 
   return isFollowerLoading || !followerData ? (
     "로딩중"
@@ -74,7 +70,6 @@ export default function FollowerListPage() {
                 }
                 right={
                   <Button
-                    ref={buttonRef}
                     size={BUTTON_SIZE.X_SMALL}
                     state={
                       follower.isfollow
