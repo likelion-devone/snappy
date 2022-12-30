@@ -32,9 +32,11 @@ import IsUploadPossibleProvider from "component/Post/IsUploadPossibleProvider/in
 
 import ROUTE, {
   ROUTE_LOGIN,
+  ROUTE_POST,
   ROUTE_PRODUCT,
   ROUTE_PROFILE,
 } from "constant/route";
+import PostEditPage from "./Post/Edit/index";
 
 export default function AppRouter() {
   return (
@@ -52,15 +54,32 @@ export default function AppRouter() {
           <Route path={ROUTE.LANDING} element={<></>} />
           {/* 랜딩 페이지는 AuthProvider에서 렌더링합니다. */}
           <Route element={<Layout />}>
-            <Route path={ROUTE.HOME} element={
-              <PostDataProvider><HomePage /></PostDataProvider>
-            } />
+            <Route
+              path={ROUTE.HOME}
+              element={
+                <PostDataProvider>
+                  <HomePage />
+                </PostDataProvider>
+              }
+            />
             <Route path={ROUTE.PROFILE}>
-              <Route index element={
-                <PostDataProvider><ProfilePage /></PostDataProvider>
-              } />
+              <Route
+                index
+                element={
+                  <PostDataProvider>
+                    <ProfilePage />
+                  </PostDataProvider>
+                }
+              />
               <Route path=":accountname">
-                <Route index element={<PostDataProvider><YourProfilePage /></PostDataProvider>} />
+                <Route
+                  index
+                  element={
+                    <PostDataProvider>
+                      <YourProfilePage />
+                    </PostDataProvider>
+                  }
+                />
                 <Route
                   path={ROUTE_PROFILE.FOLLOWER}
                   element={<FollowerListPage />}
@@ -72,8 +91,34 @@ export default function AppRouter() {
               </Route>
             </Route>
             <Route path={ROUTE.POST}>
-              <Route index element={<IsUploadPossibleProvider><PostUploadPage /></IsUploadPossibleProvider>} />
-              <Route path=":postId" element={<PostDetailDataProvider><PostDetailPage /></PostDetailDataProvider>} />
+              <Route
+                index
+                element={
+                  <IsUploadPossibleProvider>
+                    <PostUploadPage />
+                  </IsUploadPossibleProvider>
+                }
+              />
+              <Route path=":postId">
+                <Route
+                  index
+                  element={
+                    <PostDetailDataProvider>
+                      <PostDetailPage />
+                    </PostDetailDataProvider>
+                  }
+                />
+                <Route
+                  path={ROUTE_POST.EDIT}
+                  element={
+                    <PostDetailDataProvider>
+                      <IsUploadPossibleProvider>
+                        <PostEditPage />
+                      </IsUploadPossibleProvider>
+                    </PostDetailDataProvider>
+                  }
+                />
+              </Route>
             </Route>
             <Route path={ROUTE.PRODUCT} element={<ProductPage />}>
               <Route index element={<Navigate to={ROUTE.HOME} />} />
