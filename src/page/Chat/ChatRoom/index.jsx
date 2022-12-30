@@ -10,8 +10,8 @@ import ProfileImg from "asset/profile-img-42.png";
 import { FONT_SIZE } from "constant/style";
 import Icons from "asset/icon/icons";
 import { useNavigate } from "react-router-dom";
-import Button from "component/common/DropdownModal/Button/index";
-import DropdownModal from "component/common/DropdownModal/index";
+import Button from "component/common/Modal/DropdownModal/Button/index";
+import { DropdownModal } from "component/common/Modal/index";
 import useDropdownModal from "hook/useDropdownModal";
 import ROUTE from "constant/route";
 

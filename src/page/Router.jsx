@@ -21,8 +21,6 @@ import AuthorizePage from "./Login/Authorize";
 import AuthProvider from "lib/auth/AuthProvider";
 import ChatRoomPage from "./Chat/ChatRoom";
 
-import ROUTE, { ROUTE_LOGIN, ROUTE_CHAT } from "constant/route";
-
 import ProductPage from "./Product";
 import AddProductPage from "./Product/AddProduct/index";
 import EditProductPage from "./Product/EditProduct/index";
@@ -38,6 +36,7 @@ import ROUTE, {
   ROUTE_LOGIN,
   ROUTE_PRODUCT,
   ROUTE_PROFILE,
+  ROUTE_CHAT
 } from "constant/route";
 
 export default function AppRouter() {
