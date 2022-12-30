@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import CommentCard from "component/Post/Comment/CommentCard/index";
+import CommentCard from "component/Post/CommentCard/index";
 import PostCard from "component/common/PostCard/index";
 import useFetch from "hook/useFetch";
 import { req } from "lib/api";
+import useAPI from "hook/useAPI";
 
 const CommentCardWrapper = styled.ol`
   border-top: 1px solid ${({ theme }) => theme.snGreyOff};
@@ -17,20 +18,14 @@ export default function PostDetail() {
   const navigate = useNavigate();
 
   // 게시물 상세
-  const [isPostDetailLoading, postDetail, postDetailError] = useFetch(
-    req.post.detail,
-    {
-      postId,
-    }
-  );
+  const [isPostDetailLoading, postDetail, postDetailError] = useFetch(req.post.detail, { postId });
 
   // 댓글 리스트
-  const [isCommentLoading, commentData, _commentError] = useFetch(
-    req.comment.load,
-    {
-      postId,
-    }
-  );
+  const [isCommentLoading, commentData, _commentError, getComments] = useAPI(req.comment.load);
+
+  useEffect(() => {
+    getComments({ postId });
+  }, [getComments, postId])
 
   useEffect(() => {
     if (postDetailError) {
@@ -49,7 +44,7 @@ export default function PostDetail() {
         authorId={postDetail.post.author._id}
         username={postDetail.post.author.username}
         accountname={postDetail.post.author.accountname}
-        profileImage={postDetail.post.author.profileImage}
+        profileImage={postDetail.post.author.image}
         postId={postDetail.post.id}
         content={postDetail.post.content}
         image={postDetail.post.image}
@@ -70,7 +65,9 @@ export default function PostDetail() {
                 ...comment,
                 commentId: comment.id,
                 postId: postDetail.post.id
-              }} />
+              }}
+                getComments={getComments}
+              />
             ))}
         </CommentCardWrapper>
       </section>
