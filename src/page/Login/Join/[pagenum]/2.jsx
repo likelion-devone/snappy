@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "component/common/Button";
 import LoginLayout from "component/Login/Layout";
 import { ProfileForm } from "component/common/Form";
+import LinkToLogin from "component/Login/LinkToLogin/index";
 import { JoinDataContext } from "..";
 
 import useAPI from "hook/useAPI";
@@ -62,6 +63,7 @@ export default function JoinPageTwo() {
       >
         Snappy 시작하기 📷
       </Button>
+      <LinkToLogin />
     </LoginLayout>
   )
 }

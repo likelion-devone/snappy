@@ -4,15 +4,17 @@ import { useNavigate } from "react-router-dom";
 
 import { ValidationInputWrapper } from "component/common/Input";
 import LoginLayout from "component/Login/Layout";
-import useAPI from "hook/useAPI";
-import useValidationInput from "hook/useValidationInput";
-import { req } from "lib/api";
 import Button from "component/common/Button/index";
+import LinkToLogin from "component/Login/LinkToLogin/index";
 
 import { validateEmail as validateEmailOnLocal, validatePassword as validatePasswordOnLocal } from "util/validation";
 import routeResolver from "util/routeResolver";
+import { req } from "lib/api";
 
 import { JoinDataContext } from "../index";
+
+import useAPI from "hook/useAPI";
+import useValidationInput from "hook/useValidationInput";
 
 import ROUTE, { ROUTE_LOGIN } from "constant/route";
 import { BUTTON_STATE } from "constant/button_state";
@@ -79,6 +81,7 @@ export default function JoinPageOne() {
           다음
         </Button>
       </JoinForm>
+      <LinkToLogin />
     </LoginLayout>
   )
 }

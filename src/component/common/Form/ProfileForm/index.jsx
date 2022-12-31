@@ -32,7 +32,7 @@ const StyledBigProfile = styled(BigProfile)`
  * @param {ProfileFormParam} param
  * @returns 
  */
-export default function ProfileForm({ formId, initialProfileData, dispatchProfileData }) {
+export default function ProfileForm({ formId, initialProfileData, dispatchProfileData, ...props }) {
   const labelImageForUploadRef = useRef(null);
   const introRef = useRef(null);
   /**
@@ -152,7 +152,7 @@ export default function ProfileForm({ formId, initialProfileData, dispatchProfil
   }, [initialProfileData, introRef, usernameRef, accountnameRef])
 
   return (
-    <Form id={formId} onSubmit={validateValues}>
+    <Form id={formId} onSubmit={validateValues} {...props}>
       <StyledBigProfile
         src={profileSrc}
         bottomRight={

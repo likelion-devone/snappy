@@ -1,8 +1,9 @@
 import styled from "styled-components"
 import PropTypes from "prop-types";
-import { FONT_SIZE, MAX_WIDTH, MIN_WIDTH } from "constant/style";
-import { Link } from "react-router-dom";
-import ROUTE from "constant/route";
+
+import { cssLayout } from "component/common/Layout/style";
+
+import { FONT_SIZE } from "constant/style";
 
 const Title = styled.h1`
   margin: 24px auto 40px;
@@ -26,34 +27,19 @@ const Subtitle = styled.p`
 `
 
 const Wrapper = styled.main`
-  margin: 0 auto 20px;
-  padding: 0 15px;
-
-  width: min(${MAX_WIDTH}, 100%);
-  min-width: ${MIN_WIDTH};
-
-  text-align: center;
-`
-
-const StyledLink = styled(Link)`
-  display: block;
+  padding: 1px 15px 0;
   text-align: center;
 
-  font-weight: 400;
-  font-size: ${FONT_SIZE.MEDIUM};
-  line-height: 15px;
-
-  color: ${({ theme }) => theme.snGreyIcon};
+  ${cssLayout}
 `
 
 export default function LoginLayout({ title, subtitle, children }) {
   return (
-    <>
+    <Wrapper>
       <Title>{title}</Title>
       {subtitle && <Subtitle>{subtitle}</Subtitle>}
-      <Wrapper>{children}</Wrapper>
-      <StyledLink to={ROUTE.LOGIN}>로그인으로 돌아가기</StyledLink>
-    </>
+      {children}
+    </Wrapper>
   )
 }
 
