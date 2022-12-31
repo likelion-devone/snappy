@@ -21,7 +21,7 @@ import useTopNavSetter from "hook/useTopNavSetter";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 const ChatRoomWrapper = styled.div`
-  margin-bottom: 140px;
+  margin-bottom: 80px;
 `;
 
 const UserChat = styled.article`

@@ -1,26 +1,36 @@
 import styled from "styled-components";
-
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import CommentCard from "component/Post/CommentCard/index";
 import PostCard from "component/common/PostCard/index";
-import useFetch from "hook/useFetch";
-import { req } from "lib/api";
-import useAPI from "hook/useAPI";
 import CommentForm from "component/common/Form/CommentForm/index";
 import SmallProfile from "component/common/SmallProfile/index";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
+
+import useFetch from "hook/useFetch";
+import useAPI from "hook/useAPI";
 import useAuthInfo from "hook/useAuthInfo";
+import useTopNavSetter from "hook/useTopNavSetter";
+
+import { req } from "lib/api";
 import routeResolver from "util/routeResolver";
+
 import ROUTE from "constant/route";
 import { PROFILE_SIZE } from "constant/size";
 
 const CommentCardWrapper = styled.ol`
   border-top: 1px solid ${({ theme }) => theme.snGreyOff};
-  margin-bottom: 140px;
+  margin-bottom: 80px;
 `;
 
 export default function PostDetail() {
+  useTopNavSetter({
+    title: "포스트 상세 페이지",
+    left: <TopNavElement.GoBackButton />,
+    right: <></>
+  })
+
   const { postId } = useParams();
   const navigate = useNavigate();
   const { image: authProfileImage } = useAuthInfo();
@@ -103,6 +113,7 @@ export default function PostDetail() {
           }
           right={<button type="submit">게시</button>}
           onSubmit={createCommentIfNotCreating}
+          placeholder="댓글을 입력해주세요."
         />
         <CommentCardWrapper>
           {commentData.comments
