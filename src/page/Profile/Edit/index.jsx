@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-import ProfileForm from "component/common/Form/ProfileForm/index";
+import { ProfileForm } from "component/common/Form";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 import useAuthInfo from "hook/useAuthInfo";

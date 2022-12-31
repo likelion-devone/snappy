@@ -13,11 +13,7 @@ import { req } from "lib/api";
 import isBlobUrl from "util/isBlobUrl";
 
 const Form = styled.form`
-  text-align: center;
-
-  button {
-    margin-top: 30px;
-  }
+  margin-bottom: 30px;
 `
 
 const StyledBigProfile = styled(BigProfile)`
@@ -56,7 +52,11 @@ export default function ProfileForm({ formId, initialProfileData, dispatchProfil
     }
 
     const result = await validateAccountnameOnServer({ accountname: value });
-    console.log(result);
+
+    if (!initialProfileData) {
+      return result;
+    }
+
     return result.message !== "이미 가입된 계정ID 입니다." && value !== initialProfileData.accountname ? result : { message: "사용 가능한 계정ID 입니다." };
   }
 

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import SmallProfile from "component/common/SmallProfile";
-import CommentForm from "component/common/Form/CommentForm/index";
+import { CommentForm } from "component/common/Form";
 import { DropdownModal } from "component/common/Modal/index";
 
 import useDropdownModal from "hook/useDropdownModal";

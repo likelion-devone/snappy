@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import Button from "component/common/Button";
 import LoginLayout from "component/Login/Layout";
-import ProfileForm from "component/common/Form/ProfileForm/index";
+import { ProfileForm } from "component/common/Form";
 import { JoinDataContext } from "..";
 
 import useAPI from "hook/useAPI";
