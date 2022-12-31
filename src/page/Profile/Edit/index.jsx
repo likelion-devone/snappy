@@ -1,10 +1,16 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+
 import ProfileForm from "component/common/Form/ProfileForm/index";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
+
 import useAuthInfo from "hook/useAuthInfo";
 import useFetch from "hook/useFetch";
-import { req } from "lib/api/index";
 import useAPI from "hook/useAPI";
-import { useNavigate } from "react-router-dom";
+import useTopNavSetter from "hook/useTopNavSetter";
+
+import { req } from "lib/api/index";
+
 import ROUTE from "constant/route";
 
 /**
@@ -56,6 +62,25 @@ export default function ProfileEditPage() {
 
   const [profileData, dispatchProfileData] = useReducer(profileDataReducer, null);
 
+  const UploadButton = useMemo(
+    () => (
+      <TopNavElement.Button form="profileForm" $isAbled={!isProfileEditing}>
+        저장
+      </TopNavElement.Button>
+    ),
+    [isProfileEditing]
+  );
+
+  const { setTopNavRight } = useTopNavSetter({
+    title: "프로필 수정 페이지",
+    left: <TopNavElement.GoBackButton />,
+    right: UploadButton
+  })
+
+  useEffect(() => {
+    setTopNavRight(UploadButton);
+  }, [setTopNavRight, UploadButton]);
+
   useEffect(() => {
     if (initialProfileDataError) {
       navigate(ROUTE.PROFILE);
@@ -63,18 +88,14 @@ export default function ProfileEditPage() {
   }, [initialProfileDataError, navigate])
 
   useEffect(() => {
-    if (isProfileEditing) {
-      alert("프로필 수정중입니다. 잠시 기다려주세요.");
-      return;
-    }
     if (profileData) {
-      if (Object.keys(initialProfileData).every((key) => initialProfileData[key] === profileData[key])) {
+      if (Object.keys(profileData).every((key) => initialProfileData.profile[key] === profileData[key])) {
         alert("수정된 내역이 없습니다.");
         return;
       }
       editProfile(profileData);
     }
-  }, [isProfileEditing, initialProfileData, profileData, editProfile]);
+  }, [initialProfileData, profileData, editProfile]);
 
   useEffect(() => {
     if (editProfileResult) {
@@ -90,10 +111,5 @@ export default function ProfileEditPage() {
     return <>로딩중</>;
   }
 
-  return (
-    <>
-      <button type="submit" form="profileForm">제출하기</button>
-      <ProfileForm formId="profileForm" initialProfileData={initialProfileData.profile} dispatchProfileData={dispatchProfileData} />
-    </>
-  )
+  return <ProfileForm formId="profileForm" initialProfileData={initialProfileData.profile} dispatchProfileData={dispatchProfileData} />
 }

@@ -18,6 +18,7 @@ function ProfilePage() {
   const [isLogoutAlertModalOpened, openLogoutAlertModal, closeLogoutAlertModal, confirmLogoutAlertModal] = useModal(handleLogout);
 
   useTopNavSetter({
+    title: "프로필 페이지",
     left: <TopNavElement.GoBackButton />,
     right: (
       <TopNavElement.MoreButton onClick={openProfileMoreModal} />
