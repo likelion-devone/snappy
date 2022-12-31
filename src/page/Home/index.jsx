@@ -83,6 +83,7 @@ export default function HomePage() {
         Date.parse(post1.createdAt)
     );
 
+  console.log("🚀 ~ file: index.jsx:80 ~ HomePage ~ postDataSorted", postDataSorted)
   return (
     <>
       <SearchBar handleClose={toggleSearch} $isSearchOpened={isSearchOpened} />
@@ -102,12 +103,13 @@ export default function HomePage() {
               hearted={postCard.hearted}
               heartCount={postCard.heartCount}
               commentCount={postCard.commentCount}
+              updatedAt={postCard.updatedAt}
             />
           ))
           :
           <NoFollowingsWrapper>
             <h2 className="sr-only">유저 팔로우 없음 안내</h2>
-            <img className="logo" src={LogoBw} alt="스내피 로고" />
+            <img className="logo" src={LogoBw} alt="내피가 팔을 흔들고 있는 모습입니다." />
             <p className="guide">유저를 검색해 팔로우 해보세요!</p>
             <Button
               size={BUTTON_SIZE.LARGE_44}

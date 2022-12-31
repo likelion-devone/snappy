@@ -96,6 +96,7 @@ export default function PostDetail() {
         content={postDetail.post.content}
         image={postDetail.post.image}
         createdAt={postDetail.post.createdAt}
+        updatedAt={postDetail.post.updatedAt}
         hearted={postDetail.post.hearted}
         heartCount={postDetail.post.heartCount}
         commentCount={postDetail.post.commentCount}
