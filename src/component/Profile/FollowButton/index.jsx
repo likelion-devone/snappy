@@ -9,7 +9,7 @@ import { req } from "lib/api/index";
 import { BUTTON_STATE } from "constant/button_state";
 import { BUTTON_SIZE } from "constant/size";
 
-export default function FollowButton({ initialIsFollowing, accountname }) {
+export default function FollowButton({ initialIsFollowing, accountname, $isSizeLarge34 = false }) {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   // Single Source Of Truth
 
@@ -44,6 +44,22 @@ export default function FollowButton({ initialIsFollowing, accountname }) {
     }
   }, [unfollowError])
 
+  if ($isSizeLarge34) {
+    return (
+      <Button
+        size={BUTTON_SIZE.LARGE_34}
+        state={
+          isFollowing
+            ? BUTTON_STATE.LARGE_34.ACTIVATED
+            : BUTTON_STATE.LARGE_34.ABLED
+        }
+        onClick={handleFollowButton}
+      >
+        {isLoading ? "로딩중" : (isFollowing ? "언팔로우" : "팔로우")}
+      </Button>
+    )
+  }
+
   return (
     <Button
       size={BUTTON_SIZE.X_SMALL}
@@ -62,4 +78,5 @@ export default function FollowButton({ initialIsFollowing, accountname }) {
 FollowButton.propTypes = {
   initialIsFollowing: PropTypes.bool.isRequired,
   accountname: PropTypes.string.isRequired,
+  $isSizeLarge34: PropTypes.bool
 }

@@ -1,5 +1,6 @@
 import { createContext, useReducer, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 import { ProfileForm } from "component/common/Form";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
@@ -12,6 +13,10 @@ import useTopNavSetter from "hook/useTopNavSetter";
 import { req } from "lib/api/index";
 
 import ROUTE from "constant/route";
+
+const StyledProfileForm = styled(ProfileForm)`
+  margin-top: 15px;
+`
 
 /**
  * @typedef {Object} ProfileData
@@ -111,5 +116,5 @@ export default function ProfileEditPage() {
     return <>로딩중</>;
   }
 
-  return <ProfileForm formId="profileForm" initialProfileData={initialProfileData.profile} dispatchProfileData={dispatchProfileData} />
+  return <StyledProfileForm formId="profileForm" initialProfileData={initialProfileData.profile} dispatchProfileData={dispatchProfileData} />
 }

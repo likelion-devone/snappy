@@ -1,6 +1,6 @@
 const GLOBAL_NAVBAR_HEIGHT = "60px";
 const TOP_NAVBAR_HEIGHT = "48px";
-const MAX_WIDTH = "1024px";
+const MAX_WIDTH = "800px";
 const MIN_WIDTH = "380px";
 
 const FONT_SIZE = {

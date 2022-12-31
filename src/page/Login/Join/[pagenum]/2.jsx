@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "component/common/Button";
 import LoginLayout from "component/Login/Layout";
 import { ProfileForm } from "component/common/Form";
+import LinkToLogin from "component/Login/LinkToLogin/index";
 import { JoinDataContext } from "..";
 
 import useAPI from "hook/useAPI";
@@ -38,13 +39,15 @@ export default function JoinPageTwo() {
       handleLogin({ email, password });
       return;
     }
+  }, [createUserResult, handleLogin, joinData]);
 
+  useEffect(() => {
     if (createUserError) {
       console.error(createUserError);
       dispatchJoinData({ type: "reset" });
       navigate(routeResolver(ROUTE.LOGIN, ROUTE_LOGIN.JOIN, "1"));
     }
-  }, [createUserResult, createUserError, handleLogin, joinData, dispatchJoinData, navigate]);
+  }, [createUserError, navigate, dispatchJoinData]);
 
   return (
     <LoginLayout title="프로필 설정" subtitle="나중에 언제든지 변경할 수 있습니다.">
@@ -60,6 +63,7 @@ export default function JoinPageTwo() {
       >
         Snappy 시작하기 📷
       </Button>
+      <LinkToLogin />
     </LoginLayout>
   )
 }

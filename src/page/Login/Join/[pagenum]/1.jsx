@@ -4,15 +4,17 @@ import { useNavigate } from "react-router-dom";
 
 import { ValidationInputWrapper } from "component/common/Input";
 import LoginLayout from "component/Login/Layout";
-import useAPI from "hook/useAPI";
-import useValidationInput from "hook/useValidationInput";
-import { req } from "lib/api";
 import Button from "component/common/Button/index";
+import LinkToLogin from "component/Login/LinkToLogin/index";
 
 import { validateEmail as validateEmailOnLocal, validatePassword as validatePasswordOnLocal } from "util/validation";
 import routeResolver from "util/routeResolver";
+import { req } from "lib/api";
 
 import { JoinDataContext } from "../index";
+
+import useAPI from "hook/useAPI";
+import useValidationInput from "hook/useValidationInput";
 
 import ROUTE, { ROUTE_LOGIN } from "constant/route";
 import { BUTTON_STATE } from "constant/button_state";
@@ -20,6 +22,9 @@ import { BUTTON_SIZE } from "constant/size";
 
 const JoinForm = styled.form`
   text-align: center;
+  ${Button} {
+    margin-top: 30px;
+  }
 `
 
 export default function JoinPageOne() {
@@ -66,8 +71,17 @@ export default function JoinPageOne() {
           <ValidationInputWrapper.Input ref={passwordRef} id="password" type="password" labelText="비밀번호" placeholder="비밀번호를 설정해 주세요." />
           <ValidationInputWrapper.ErrorMessage />
         </ValidationInputWrapper>
-        <Button size={BUTTON_SIZE.X_LARGE} state={isEmailValidationLoading ? BUTTON_STATE.X_LARGE.DISABLED : BUTTON_STATE.X_LARGE.ABLED} type="submit">다음</Button>
+        <Button
+          size={BUTTON_SIZE.X_LARGE}
+          state={isEmailValidationLoading
+            ? BUTTON_STATE.X_LARGE.DISABLED
+            : BUTTON_STATE.X_LARGE.ABLED}
+          type="submit"
+        >
+          다음
+        </Button>
       </JoinForm>
+      <LinkToLogin />
     </LoginLayout>
   )
 }

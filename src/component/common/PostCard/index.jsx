@@ -163,6 +163,7 @@ export default function PostCard({
   content,
   image,
   createdAt,
+  updatedAt,
   hearted,
   heartCount,
   commentCount,
@@ -473,7 +474,7 @@ export default function PostCard({
           </LinkIcon>
         </IconWrapper>
 
-        <PostDate dateTime={createdAt}>{getTimeGapInKr(createdAt)}</PostDate>
+        <PostDate dateTime={createdAt}>{getTimeGapInKr(createdAt)}{createdAt !== updatedAt && ` (${getTimeGapInKr(updatedAt)} 수정됨)`}</PostDate>
       </ContentWrapper>
     </PostCardWrapper>
   );
@@ -488,6 +489,7 @@ PostCard.propTypes = {
   content: PropTypes.string,
   image: PropTypes.string,
   createdAt: PropTypes.string,
+  updatedAt: PropTypes.string,
   hearted: PropTypes.bool,
   heartCount: PropTypes.number,
   commentCount: PropTypes.number,

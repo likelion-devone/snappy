@@ -1,12 +1,25 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
+import SnappyLogoProfile from "asset/logo-profile-172213.png"
+import { MAX_WIDTH } from "constant/style";
+
 const GlobalStyle = createGlobalStyle`
   ${reset}
   body {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     * {
-    box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    @media (min-width: ${MAX_WIDTH}) {
+      background: url(${SnappyLogoProfile}) 200px;
+      ::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -10;
+        background-color: #ffffff70;
+      }
     }
   }
   a {

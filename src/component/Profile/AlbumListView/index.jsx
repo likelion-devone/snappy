@@ -94,6 +94,7 @@ function ListView({ postData, visible }) {
               content={slide.content}
               image={slide.image}
               createdAt={slide.createdAt}
+              updatedAt={slide.updatedAt}
               hearted={slide.hearted}
               heartCount={slide.heartCount}
               commentCount={slide.commentCount}

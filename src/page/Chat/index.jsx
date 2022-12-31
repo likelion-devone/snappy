@@ -8,7 +8,7 @@ import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 const ChatList = styled.ul`
   width: min(800px, 100%);
-  margin: 0 auto;
+  margin: 15px auto 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
