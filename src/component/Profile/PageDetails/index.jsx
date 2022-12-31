@@ -22,6 +22,7 @@ import PortfolioTitleImg from "asset/title-portfolio.png";
 import ROUTE, { ROUTE_PRODUCT, ROUTE_PROFILE } from "constant/route";
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
+import { FONT_SIZE } from "constant/style";
 
 const StyleBigProfile = styled.div`
   display: flex;
@@ -110,6 +111,17 @@ const IconBox = styled.div`
   width: fit-content;
   height: 44px;
 `;
+
+const NoPostIndicator = styled.p`
+  margin-top: 100px;
+
+  text-align: center;
+  font-weight: 400;
+  font-size: ${FONT_SIZE.BASE};
+  line-height: 14px;
+
+  color: ${({ theme }) => theme.snGreyIcon};
+`
 
 const IconList = styled(Icons.PostList)`
   margin-top: 12.25px;
@@ -287,6 +299,9 @@ function PageDetails({ accountname, $isMyProfile = false }) {
           postData={isUserPostDataLoading ? [] : userPostData}
           visible={!viewOption}
         />
+        {userPostData.length === 0 &&
+          <NoPostIndicator>아직 포스트가 없습니다.</NoPostIndicator>
+        }
       </section>
     </>
   );
