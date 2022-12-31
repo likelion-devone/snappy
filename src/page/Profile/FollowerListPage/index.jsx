@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 import useAPI from "hook/useAPI";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { req } from "lib/api/index";
 
 import Button from "component/common/Button/index";
@@ -43,7 +44,6 @@ export default function FollowerListPage() {
     } else {
       await follow({ accountname: targetAccountname });
     }
-    getFollowerData({ accountname });
     return;
   }
 
@@ -69,23 +69,11 @@ export default function FollowerListPage() {
                   />
                 }
                 right={
-                  <Button
-                    size={BUTTON_SIZE.X_SMALL}
-                    state={
-                      follower.isfollow
-                        ? BUTTON_STATE.X_SMALL.ACTIVATED
-                        : BUTTON_STATE.X_SMALL.ABLED
-                    }
-                    onClick={() => {
-                      handleFollowButton(
-                        follower.isfollow,
-                        follower.accountname
-                      );
-                    }}
-                  >
-                    {follower.isfollow ? "취소" : "팔로우"}
-                  </Button>
-                }
+                  <FollowButton
+                    initialIsFollowing={follower.isfollow}
+                    accountname={follower.accountname}
+                    handleFollowButton={handleFollowButton}
+                  />}
               />
             </SmallProfile>
           </li>
@@ -93,4 +81,34 @@ export default function FollowerListPage() {
       })}
     </FollowerList>
   );
+}
+
+function FollowButton({ initialIsFollowing, accountname, handleFollowButton }) {
+  const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
+  // Single Source Of Truth
+  return (
+    <Button
+      size={BUTTON_SIZE.X_SMALL}
+      state={
+        isFollowing
+          ? BUTTON_STATE.X_SMALL.ACTIVATED
+          : BUTTON_STATE.X_SMALL.ABLED
+      }
+      onClick={() => {
+        handleFollowButton(
+          isFollowing,
+          accountname
+        );
+        setIsFollowing((prev) => !prev)
+      }}
+    >
+      {isFollowing ? "취소" : "팔로우"}
+    </Button>
+  )
+}
+
+FollowButton.propTypes = {
+  initialIsFollowing: PropTypes.bool.isRequired,
+  accountname: PropTypes.string.isRequired,
+  handleFollowButton: PropTypes.func.isRequired
 }
