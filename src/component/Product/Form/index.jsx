@@ -126,6 +126,10 @@ function ProductForm({ formId }) {
       return;
     }
 
+    if (imgFileList.length === 0) {
+      return;
+    }
+
     setImgData((prevImgData) => {
       prevImgData.forEach((data) => {
         if (data.startsWith("blob:")) {

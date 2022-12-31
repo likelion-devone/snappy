@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 
 import Icons from "asset/icon/icons";
 import ErrorImg from "asset/logo-404-343264.png";
-import React from "react";
+import React, { useContext } from "react";
+import { IsUploadPossibleContext } from "component/Post/IsUploadPossibleProvider/index";
 
 // 이미지 프리뷰
 const UploadedImgList = styled.ul`
@@ -41,6 +42,10 @@ const ButtonDelete = styled.button`
 `;
 
 export default function AddedImgList({ imgData, setImgData, className }) {
+  const { isPossibleToUpload, setIsPossibleToUpload } = useContext(
+    IsUploadPossibleContext
+  );
+
   const handleImgError = (event) => {
     event.target.src = ErrorImg;
   };
@@ -48,6 +53,10 @@ export default function AddedImgList({ imgData, setImgData, className }) {
   //  X 버튼 클릭 시 이미지 프리뷰 리스트에서 제거
   const handleDeleteImg = (blobToRemove) => () => {
     setImgData((prev) => prev.filter((image) => image !== blobToRemove));
+    // TODO: 시우님께 알립니다! 아래 부분 때문에 isPossibleUploadProvider를 잘 써주셔야 합니다.
+    if (!isPossibleToUpload) {
+      setIsPossibleToUpload(true);
+    }
   };
 
   return (
