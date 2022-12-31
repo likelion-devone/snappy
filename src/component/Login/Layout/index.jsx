@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import PropTypes from "prop-types";
-import { FONT_SIZE } from "constant/style";
+import { FONT_SIZE, MAX_WIDTH, MIN_WIDTH } from "constant/style";
 
 const Title = styled.h1`
   margin: 24px auto 40px;
@@ -24,8 +24,13 @@ const Subtitle = styled.p`
 `
 
 const Wrapper = styled.main`
-  width: 100%;
-  padding: 0 34px;
+  margin: 0 auto;
+  padding: 0 15px;
+
+  width: min(${MAX_WIDTH}, 100%);
+  min-width: ${MIN_WIDTH};
+
+  text-align: center;
 `
 
 export default function LoginLayout({ title, subtitle, children }) {
