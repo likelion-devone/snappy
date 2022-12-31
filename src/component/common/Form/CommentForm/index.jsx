@@ -1,11 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { GLOBAL_NAVBAR_HEIGHT } from "constant/style";
 
 const Form = styled.form`
   position: fixed;
-  bottom: ${GLOBAL_NAVBAR_HEIGHT};
+  bottom: 0;
   left: 0;
   right: 0;
 
