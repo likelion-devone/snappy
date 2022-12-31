@@ -21,7 +21,7 @@ import ErrorImg from "asset/logo-404-343264.png";
 
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
-import ROUTE from "constant/route";
+import ROUTE, { ROUTE_POST } from "constant/route";
 
 const PostCardWrapper = styled.section`
   display: flex;
@@ -137,7 +137,7 @@ const SvgHeart = styled(Icons.Heart)`
   path {
     ${({ $isHearted, theme }) => $isHearted && "fill:" + theme.snRed + ";"}
     stroke: ${({ $isHearted, theme }) =>
-      $isHearted ? theme.snRed : theme.snGreyIcon};
+    $isHearted ? theme.snRed : theme.snGreyIcon};
   }
 `;
 
@@ -177,10 +177,24 @@ export default function PostCard({
   // 게시글 삭제 API
   const [isDeletingPost, deletePostResponse, deletePosterror, deletePost] =
     useAPI(req.post.remove);
+  const deletePostIfNotDeleting = () => {
+    if (isDeletingPost) {
+      alert("게시글을 삭제중입니다. 잠시 기다려주세요.")
+      return;
+    }
+    deletePost({ postId });
+  }
 
   // 게시글 신고 API
   const [isReportingPost, reportPostResponse, reportPosterror, reportPost] =
     useAPI(req.post.report);
+  const reportPostIfNotReporting = () => {
+    if (isReportingPost) {
+      alert("게시글을 신고중입니다. 잠시 기다려주세요.")
+      return;
+    }
+    reportPost({ postId });
+  }
 
   // 슬라이드 버튼
   const [BtnDotCounter, setBtnDotCounter] = useState(0);
@@ -268,27 +282,13 @@ export default function PostCard({
     setIsHearted((prev) => !prev);
   };
 
-  const handleDeleteModalButton = () => {
-    if (isDeletingPost) {
-      return;
-    }
-    deletePost({ postId });
-  };
-
   // 삭제 메시지 모달창
   const [
     isDeleteMsgModalOpened,
     deleteMsgModalopen,
     deleteMsgModalclose,
     deleteMsgModalconfirm,
-  ] = useModal(handleDeleteModalButton);
-
-  const handleReportModalButton = () => {
-    if (isReportingPost) {
-      return;
-    }
-    reportPost({ postId });
-  };
+  ] = useModal(deletePostIfNotDeleting);
 
   // 신고 메시지 모달창
   const [
@@ -296,21 +296,23 @@ export default function PostCard({
     reportMsgModalopen,
     reportMsgModalclose,
     reportMsgModalconfirm,
-  ] = useModal(handleReportModalButton);
+  ] = useModal(reportPostIfNotReporting);
 
   // 수정 & 삭제 드롭다운 모달
   const [isDroppedUp, dropUp, dropDown] = useDropdownModal();
 
-  function handleDropDownButton() {
+  function handleEditDropdownButton() {
+    navigate(routeResolver(ROUTE.POST, postId, ROUTE_POST.EDIT));
+  }
+
+  function handleDeleteDropdownButton() {
     deleteMsgModalopen();
-    dropDown();
   }
 
   // 신고하기 드롭다운 모달
   const [isReportDroppedUp, reportDropUp, reportDropDown] = useDropdownModal();
 
   function handleReportDropDownButton() {
-    reportDropDown();
     reportMsgModalopen();
   }
 
@@ -350,10 +352,10 @@ export default function PostCard({
 
       {isThisPostMine ? (
         <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
-          <DropdownModal.Button onClick={handleDropDownButton}>
+          <DropdownModal.Button onClick={handleEditDropdownButton}>
             수정하기
           </DropdownModal.Button>
-          <DropdownModal.Button onClick={handleDropDownButton}>
+          <DropdownModal.Button onClick={handleDeleteDropdownButton}>
             삭제하기
           </DropdownModal.Button>
         </DropdownModal>
@@ -367,6 +369,7 @@ export default function PostCard({
           </DropdownModal.Button>
         </DropdownModal>
       )}
+
       <AlertModal isModalOpened={isReportMsgModalOpened}>
         <AlertModal.Content>게시글을 신고하시겠어요?</AlertModal.Content>
         <AlertModal.Cancle handleModalButton={reportMsgModalclose}>
