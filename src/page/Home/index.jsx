@@ -13,6 +13,7 @@ import { FONT_SIZE, GLOBAL_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT } from "constant/sty
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
 
+import { ReactComponent as SnappyTitleLogoBlack } from "asset/snappy_black.svg";
 import LogoBw from "asset/logo-bw-212262.png";
 
 const NoFollowingsWrapper = styled.section`
@@ -27,7 +28,7 @@ const NoFollowingsWrapper = styled.section`
   .logo {
     width: 150px;
     vertical-align: top;
-    transform: translate(-10px);
+    transform: translate(-12px);
   }
   .guide {
     margin: 23px 0;
@@ -49,9 +50,7 @@ export default function HomePage() {
 
   useTopNavSetter({
     left: (
-      <TopNavElement.Title>
-        Snappy Feed
-      </TopNavElement.Title>
+      <SnappyTitleLogoBlack width={100} />
     ),
     right: (
       <TopNavElement.SearchButton onClick={toggleSearch} />
