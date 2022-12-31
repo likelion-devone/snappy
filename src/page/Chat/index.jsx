@@ -3,6 +3,8 @@ import { PROFILE_SIZE } from "constant/size";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ProfileImg from "asset/profile-img-42.png";
+import useTopNavSetter from "hook/useTopNavSetter";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 const ChatList = styled.ul`
   width: min(800px, 100%);
@@ -27,6 +29,12 @@ const Time = styled.p`
 `;
 
 export default function ChatPage() {
+  useTopNavSetter({
+    title: "채팅 목록 페이지",
+    left: <TopNavElement.GoBackButton />,
+    right: <TopNavElement.MoreButton /> // TODO: 채팅 목록 페이지에서 MoreButton 기능 필요
+  })
+
   return (
     <ChatList>
       <li>

@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import SmallProfile from "component/common/SmallProfile";
 import CommentForm from "component/common/Form/CommentForm/index";
-import Button from "component/common/Modal/DropdownModal/Button/index";
 import { DropdownModal } from "component/common/Modal/index";
 
 import useDropdownModal from "hook/useDropdownModal";
@@ -18,6 +17,8 @@ import Icons from "asset/icon/icons";
 import { PROFILE_SIZE } from "constant/size";
 import { FONT_SIZE } from "constant/style";
 import ROUTE from "constant/route";
+import useTopNavSetter from "hook/useTopNavSetter";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 const ChatRoomWrapper = styled.div`
   margin-bottom: 140px;
@@ -162,34 +163,34 @@ const ImageUploadBtn = styled.button`
   border-radius: 50%;
 `;
 
-const NavIcons = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
 export default function ChatRoomPage() {
   const navigate = useNavigate();
   const [isExitDroppedUp, dropUpExit, dropDownExit] = useDropdownModal();
+
+  useTopNavSetter({
+    left: (
+      <>
+        <TopNavElement.GoBackButton />
+        <TopNavElement.Title>
+          최고의 사진작가 <span className="sr-only">채팅 상세 페이지</span>
+        </TopNavElement.Title>
+      </>
+    ),
+    right: <TopNavElement.MoreButton onClick={dropUpExit} />
+  })
 
   const handleExitButton = () => {
     dropDownExit();
     navigate(ROUTE.CHAT);
   };
+
   return (
     <>
-      <NavIcons>
-        <Button type="button" onClick={() => navigate(-1)}>
-          <Icons.ArrowLeft title="이전페이지로 가기" />
-        </Button>
-        <Button type="button" onClick={dropUpExit}>
-          <Icons.MoreVertical title="이전페이지로 가기" />
-        </Button>
-        <DropdownModal isDroppedUp={isExitDroppedUp} dropDown={dropDownExit}>
-          <DropdownModal.Button onClick={handleExitButton}>
-            채팅방 나가기
-          </DropdownModal.Button>
-        </DropdownModal>
-      </NavIcons>
-
+      <DropdownModal isDroppedUp={isExitDroppedUp} dropDown={dropDownExit}>
+        <DropdownModal.Button onClick={handleExitButton}>
+          채팅방 나가기
+        </DropdownModal.Button>
+      </DropdownModal>
       <ChatRoomWrapper>
         <UserChat>
           <SmallProfile src={ProfileImg} size={PROFILE_SIZE.SMALL} />

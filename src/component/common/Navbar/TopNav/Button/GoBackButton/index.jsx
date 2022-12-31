@@ -6,6 +6,7 @@ import Icons from "asset/icon/icons";
 
 const Button = styled.button`
   height: 22px;
+  margin-right: 10px;
 `
 
 export default function GoBackButton({ onClick, title = "뒤로 가기" }) {
