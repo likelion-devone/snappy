@@ -12,17 +12,26 @@ import {
 import Button from "component/common/Button/index";
 import ProductList from "component/Profile/ProductList/index";
 import { PostDataContext } from "component/common/PostDataProvider/index";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
+import { AlertModal, DropdownModal } from "component/common/Modal/index";
 
 import useFetch from "hook/useFetch";
+import useTopNavSetter from "hook/useTopNavSetter";
+import useDropdownModal from "hook/useDropdownModal";
+import useModal from "hook/useModal";
+
 import { req } from "lib/api/index";
+import { AuthContext } from "lib/auth/AuthProvider/index";
 import routeResolver from "util/routeResolver";
 
 import Icons from "asset/icon/icons";
 import PortfolioTitleImg from "asset/title-portfolio.png";
+
 import ROUTE, { ROUTE_PRODUCT, ROUTE_PROFILE } from "constant/route";
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
 import { FONT_SIZE } from "constant/style";
+import FollowButton from "../FollowButton/index";
 
 const StyleBigProfile = styled.div`
   display: flex;
@@ -178,6 +187,19 @@ LinkButton.propTypes = {
 function PageDetails({ accountname, $isMyProfile = false }) {
   const navigate = useNavigate();
   const { userPostData, userPostDataError, isUserPostDataLoading, getUserPostData } = useContext(PostDataContext);
+  const { handleLogout } = useContext(AuthContext);
+
+
+  const [isProfileMoreModalOpened, openProfileMoreModal, closeProfileMoreModal] = useDropdownModal();
+  const [isLogoutAlertModalOpened, openLogoutAlertModal, closeLogoutAlertModal, confirmLogoutAlertModal] = useModal(handleLogout);
+
+  useTopNavSetter({
+    title: "프로필 페이지",
+    left: <TopNavElement.GoBackButton />,
+    right: (
+      <TopNavElement.MoreButton onClick={openProfileMoreModal} />
+    )
+  });
 
   const [viewOption, setViewOption] = useState(true);
   const [isListActive, setIsListActive] = useState(true);
@@ -266,12 +288,7 @@ function PageDetails({ accountname, $isMyProfile = false }) {
               <ChatLink to={ROUTE.CHAT}>
                 <Icons.MessageCircle title="채팅" className="messageCircle" />
               </ChatLink>
-              <Button
-                size={BUTTON_SIZE.LARGE_34}
-                state={BUTTON_STATE.LARGE_34.ABLED}
-              >
-                팔로우
-              </Button>
+              <FollowButton initialIsFollowing={profile.isfollowing} accountname={accountname} $isSizeLarge34={true} />
               <ShareLink as="button" onClick={() => alert("공유 기능 개발중")}>
                 <Icons.Share title="공유" className="shareCircle" />
               </ShareLink>
@@ -311,6 +328,17 @@ function PageDetails({ accountname, $isMyProfile = false }) {
           <NoPostIndicator>아직 포스트가 없습니다.</NoPostIndicator>
         }
       </section>
+
+      <DropdownModal dropDown={closeProfileMoreModal} isDroppedUp={isProfileMoreModalOpened}>
+        <DropdownModal.Button onClick={openLogoutAlertModal}>
+          로그아웃
+        </DropdownModal.Button>
+      </DropdownModal>
+      <AlertModal isModalOpened={isLogoutAlertModalOpened}>
+        <AlertModal.Content>로그아웃 하시겠스내피? 📷</AlertModal.Content>
+        <AlertModal.Cancle handleModalButton={closeLogoutAlertModal}>취소</AlertModal.Cancle>
+        <AlertModal.ConfirmButton handleModalButton={confirmLogoutAlertModal}>로그아웃</AlertModal.ConfirmButton>
+      </AlertModal>
     </>
   );
 }
