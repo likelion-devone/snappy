@@ -5,5 +5,5 @@
  * @returns {boolean}
  */
 export default function isBlobUrl(str) {
-  return /^blob:.*/.test(str);
+  return /^blob:.*/.test(str) || /^test:.*/.test(str);
 }

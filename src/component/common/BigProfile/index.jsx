@@ -40,6 +40,8 @@ const Img = styled.img`
   width: 110px;
   height: 110px;
 
+  object-fit: cover;
+
   overflow: hidden;
   border-radius: 50%;
   vertical-align: top;

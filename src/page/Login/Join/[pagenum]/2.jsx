@@ -38,13 +38,15 @@ export default function JoinPageTwo() {
       handleLogin({ email, password });
       return;
     }
+  }, [createUserResult, handleLogin, joinData]);
 
+  useEffect(() => {
     if (createUserError) {
       console.error(createUserError);
       dispatchJoinData({ type: "reset" });
       navigate(routeResolver(ROUTE.LOGIN, ROUTE_LOGIN.JOIN, "1"));
     }
-  }, [createUserResult, createUserError, handleLogin, joinData, dispatchJoinData, navigate]);
+  }, [createUserError, navigate, dispatchJoinData]);
 
   return (
     <LoginLayout title="프로필 설정" subtitle="나중에 언제든지 변경할 수 있습니다.">
