@@ -15,27 +15,12 @@ const productReducer = (state, action) => {
   }
 };
 
-// const initialProductData = {
-//   itemName: "",
-//   price: 0,
-//   link: "",
-//   itemImage: "",
-// };
-
 export default function ProductProvider({ children }) {
   const [productData, dispatchProductData] = useReducer(productReducer, null);
 
   const [isFormFilled, setIsFormFilled] = useState(false);
+  // TODO: IsUploadPossibleProvider랑 합치기
 
-  // const [itemName, setItemName] = useState();
-  // const [price, setPrice] = useState();
-  // const [link, setLink] = useState();
-  // const [itemImage, setItemImage] = useState();
-
-  // const value = {
-  //   state: { product: { itemName, price, link, itemImage } },
-  //   actions: { setItemName, setPrice, setLink, setItemImage },
-  // };
   return (
     <ProductContext.Provider
       value={{

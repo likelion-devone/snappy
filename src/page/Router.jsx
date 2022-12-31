@@ -130,13 +130,24 @@ export default function AppRouter() {
             </Route>
             <Route path={ROUTE.PRODUCT} element={<ProductPage />}>
               <Route index element={<Navigate to={ROUTE.HOME} />} />
-              <Route path={ROUTE_PRODUCT.ADD} element={<AddProductPage />} />
+              <Route
+                path={ROUTE_PRODUCT.ADD}
+                element={
+                  <IsUploadPossibleProvider>
+                    <AddProductPage />
+                  </IsUploadPossibleProvider>
+                }
+              />
               <Route path=":productid">
                 {/* TODO: 제품 상세 페이지 개발 */}
                 <Route index element={<Navigate to={ROUTE_PRODUCT.EDIT} />} />
                 <Route
                   path={ROUTE_PRODUCT.EDIT}
-                  element={<EditProductPage />}
+                  element={
+                    <IsUploadPossibleProvider>
+                      <EditProductPage />
+                    </IsUploadPossibleProvider>
+                  }
                 />
               </Route>
             </Route>
