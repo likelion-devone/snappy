@@ -40,6 +40,8 @@ const Img = styled.img`
   position: relative;
   vertical-align: top;
 
+  object-fit: cover;
+
   ${({ size }) => sizeStyleMap[size] ?? ""}
 
   ${({ isPhotographer }) =>

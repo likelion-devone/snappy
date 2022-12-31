@@ -73,7 +73,7 @@ const StyledAddedImgList = styled(AddedImgList)`
 
   li {
     background-color: white;
-    width: 203px;
+    width: fit-content;
     height: 100%;
     margin: 0;
     flex-shrink: 0;
@@ -82,7 +82,7 @@ const StyledAddedImgList = styled(AddedImgList)`
   }
 
   img {
-    max-width: 360px;
+    width: auto;
     height: 100%;
     object-fit: contain;
   }
@@ -208,8 +208,8 @@ function ProductForm({ formId }) {
 
     const newImages = results.length
       ? results.map(
-          (result) => process.env.REACT_APP_BASE_API + result.filename
-        )
+        (result) => process.env.REACT_APP_BASE_API + result.filename
+      )
       : [];
 
     dispatchProductData({
