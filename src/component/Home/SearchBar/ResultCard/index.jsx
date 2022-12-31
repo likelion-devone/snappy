@@ -1,32 +1,44 @@
-import SmallProfile from "component/common/SmallProfile/index";
-import ROUTE from "constant/route";
-import { PROFILE_SIZE } from "constant/size";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+
+import SmallProfile from "component/common/SmallProfile/index";
+
 import routeResolver from "util/routeResolver";
 
+import ROUTE from "constant/route";
+import { PROFILE_SIZE } from "constant/size";
+
 const Wrapper = styled.li`
+  position: relative;
   margin: 17px 0;
 `
 
-export default function ResultCard({ _id, username, accountname, image }) {
-  const profilePageRoute = routeResolver(ROUTE.PROFILE, _id)
+const StyledLink = styled(Link)`
+  position: absolute;
+  inset: 0;
+  color: transparent;
+`
+
+export default function ResultCard({ username, accountname, image }) {
+  const profilePageRoute = routeResolver(ROUTE.PROFILE, accountname)
 
   return (
     <Wrapper>
       <SmallProfile
         size={PROFILE_SIZE.MEDIUM}
         src={image}
-        imageTo={profilePageRoute}
       >
-        <SmallProfile.Side.Title title={username} subtitle={`@ ${accountname}`} gap={6} titleTo={profilePageRoute} />
+        <SmallProfile.Side.Title title={username} subtitle={`@ ${accountname}`} gap={6} />
       </SmallProfile>
+      <StyledLink to={profilePageRoute}>
+        {username}님의 프로필로 이동하기
+      </StyledLink>
     </Wrapper>
   )
 }
 
 ResultCard.propTypes = {
-  _id: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   accountname: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
