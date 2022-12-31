@@ -19,6 +19,7 @@ import useAuthInfo from "hook/useAuthInfo";
 import useTopNavSetter from "hook/useTopNavSetter";
 import useAPI from "hook/useAPI";
 import useFetch from "hook/useFetch";
+import isBlobUrl from "util/isBlobUrl";
 
 const PostUploadWrapper = styled.div`
   position: relative;
@@ -109,7 +110,7 @@ export default function PostEditPage() {
   // 업로드 파일 인풋 onChange 이벤트
   const handleUploadFile = (event) => {
     const imgFileList = event.target.files;
-    const imgCount = imgData.filter((url) => !url.startsWith("blob:")).length;
+    const imgCount = imgData.filter((url) => !isBlobUrl(url)).length;
 
     if (imgCount + imgFileList.length > 3) {
       alert("3개 이하의 파일을 업로드 하세요.");
@@ -129,7 +130,7 @@ export default function PostEditPage() {
         });
 
         const imgList = [
-          ...prevImgData.filter((url) => !url.startsWith("blob:")),
+          ...prevImgData.filter((url) => !isBlobUrl(url))
         ];
 
         for (const file of imgFileList) {
@@ -154,7 +155,7 @@ export default function PostEditPage() {
     }
 
     const previouslyExistedImgUrls = imgData.filter(
-      (url) => !url.startsWith("blob:")
+      (url) => !isBlobUrl(url)
     );
 
     if (inpImagesRef.current.files.length !== 0) {
@@ -167,8 +168,8 @@ export default function PostEditPage() {
 
       const newImages = results.length
         ? results.map(
-            (result) => process.env.REACT_APP_BASE_API + result.filename
-          )
+          (result) => process.env.REACT_APP_BASE_API + result.filename
+        )
         : [];
 
       return editPost({

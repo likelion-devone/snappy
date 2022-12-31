@@ -12,6 +12,7 @@ import AddedImgList from "component/common/AddedImgList/index";
 import useAPI from "hook/useAPI";
 import { req } from "lib/api/index";
 import { validateIsFilled, validateOver1, validateUrl } from "util/validation";
+import isBlobUrl from "util/isBlobUrl";
 
 const ProductFormWrapper = styled.fieldset`
   min-width: 322px;
@@ -119,7 +120,8 @@ function ProductForm({ formId }) {
   // 업로드 파일 인풋 onChange 이벤트
   const handleUploadFile = (event) => {
     const imgFileList = event.target.files;
-    const imgCount = imgData.filter((url) => !url.startsWith("blob:")).length;
+
+    const imgCount = imgData.filter((url) => !isBlobUrl(url)).length;
 
     if (imgCount + imgFileList.length > 3) {
       alert("3개 이하의 파일을 업로드 하세요.");
@@ -138,7 +140,7 @@ function ProductForm({ formId }) {
       });
 
       const imgList = [
-        ...prevImgData.filter((url) => !url.startsWith("blob:")),
+        ...prevImgData.filter((url) => !isBlobUrl(url)),
       ];
 
       for (const file of imgFileList) {
@@ -189,7 +191,7 @@ function ProductForm({ formId }) {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const previouslyExistedImgUrls = imgData.filter(
-      (url) => !url.startsWith("blob:")
+      (url) => !isBlobUrl(url)
     );
 
     if (
