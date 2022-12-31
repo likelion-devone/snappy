@@ -39,6 +39,7 @@ export default function EditProductPage() {
   );
 
   const { setTopNavRight } = useTopNavSetter({
+    title: "상품 수정 페이지",
     left: <TopNavElement.GoBackButton />,
     right: UploadButton,
   });
