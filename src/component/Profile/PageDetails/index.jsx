@@ -31,13 +31,18 @@ const StyleBigProfile = styled.div`
   margin-top: 30px;
 
   .username {
+    display: block;
     margin-top: 16px;
     margin-bottom: 6px;
     font-weight: 700;
+    font-size: ${FONT_SIZE.LARGE};
+    line-height: 20px;
   }
 
   .accountname {
-    font-weight: 400px;
+    font-weight: 400;
+    font-size: ${FONT_SIZE.MEDIUM};
+    line-height: 14px;
     color: ${(props) => props.theme.snGreyIcon};
     margin-bottom: 16px;
   }
@@ -45,6 +50,9 @@ const StyleBigProfile = styled.div`
   .intro {
     color: ${(props) => props.theme.snGreyIcon};
     margin-bottom: 24px;
+    font-weight: 400;
+    font-size: ${FONT_SIZE.BASE};
+    line-height: 18px;
   }
 `;
 
@@ -236,7 +244,7 @@ function PageDetails({ accountname, $isMyProfile = false }) {
             />
           }
         />
-        <p className="username">{profile.username}</p>
+        <strong className="username">{profile.username}</strong>
         <p className="accountname">@ {profile.accountname}</p>
         <p className="intro">{profile.intro}</p>
         <Wrapper>
