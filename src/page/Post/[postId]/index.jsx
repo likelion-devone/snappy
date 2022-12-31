@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import CommentCard from "component/Post/CommentCard/index";
 import PostCard from "component/common/PostCard/index";
-import CommentForm from "component/common/Form/CommentForm/index";
+import { CommentForm } from "component/common/Form";
 import SmallProfile from "component/common/SmallProfile/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
