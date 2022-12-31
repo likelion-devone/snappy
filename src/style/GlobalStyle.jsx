@@ -15,9 +15,9 @@ const GlobalStyle = createGlobalStyle`
       background: url(${SnappyLogoProfile}) 200px;
       ::before {
         content: "";
-        position: absolute;
-        z-index: -10;
+        position: fixed;
         inset: 0;
+        z-index: -10;
         background-color: #ffffff70;
       }
     }
