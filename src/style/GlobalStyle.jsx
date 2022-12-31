@@ -12,12 +12,16 @@ const GlobalStyle = createGlobalStyle`
       box-sizing: border-box;
     }
     @media (min-width: ${MAX_WIDTH}) {
-      background: url(${SnappyLogoProfile}) 200px;
-      ::before {
+      ::before, ::after {
         content: "";
         position: fixed;
         inset: 0;
         z-index: -10;
+      }
+      ::before {
+        background: url(${SnappyLogoProfile}) 200px;
+      }
+      ::after {
         background-color: #ffffff70;
       }
     }
