@@ -22,12 +22,15 @@ const ROUTE_PRODUCT = {
   EDIT: "edit",
 };
 
+const ROUTE_POST = {
+  EDIT: "edit",
+};
 const ROUTE_PROFILE = {
   EDIT: "edit",
   FOLLOWER: "follower",
   FOLLOWING: "following",
 };
 
-export { ROUTE_PRODUCT, ROUTE_PROFILE, ROUTE_CHAT, ROUTE_LOGIN };
+export { ROUTE_PRODUCT, ROUTE_POST, ROUTE_PROFILE, ROUTE_CHAT, ROUTE_LOGIN };
 
 export default ROUTE;

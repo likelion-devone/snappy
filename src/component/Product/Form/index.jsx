@@ -119,9 +119,9 @@ function ProductForm({ formId }) {
   // 업로드 파일 인풋 onChange 이벤트
   const handleUploadFile = (event) => {
     const imgFileList = event.target.files;
-    const imgCount = imgData.length;
+    const imgCount = imgData.filter((url) => !url.startsWith("blob:")).length;
 
-    if (imgCount > 2) {
+    if (imgCount + imgFileList.length > 3) {
       alert("3개 이하의 파일을 업로드 하세요.");
       return;
     }
@@ -131,9 +131,11 @@ function ProductForm({ formId }) {
         if (data.startsWith("blob:")) {
           URL.revokeObjectURL(data);
         }
-      })
+      });
 
-      const imgList = [...prevImgData.filter((url) => !url.startsWith("blob:"))];
+      const imgList = [
+        ...prevImgData.filter((url) => !url.startsWith("blob:")),
+      ];
 
       for (const file of imgFileList) {
         if (file.size > SIZE_LIMIT) {
@@ -144,7 +146,7 @@ function ProductForm({ formId }) {
         imgList.push(URL.createObjectURL(file));
       }
 
-      return imgList
+      return imgList;
     });
   };
 
@@ -154,7 +156,7 @@ function ProductForm({ formId }) {
       handlePriceValidation();
       handleLinkValidation();
 
-      setImgData(productData.itemImage.split(','));
+      setImgData(productData.itemImage.split(","));
     }
   }, [
     handleNameValidation,
@@ -182,9 +184,14 @@ function ProductForm({ formId }) {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const previouslyExistedImgUrls = imgData.filter((url) => !url.startsWith("blob:"));
+    const previouslyExistedImgUrls = imgData.filter(
+      (url) => !url.startsWith("blob:")
+    );
 
-    if (!inpImagesRef.current.files.length && !previouslyExistedImgUrls.length) {
+    if (
+      !inpImagesRef.current.files.length &&
+      !previouslyExistedImgUrls.length
+    ) {
       alert("이미지를 하나 이상 넣어주세요.");
       return;
     }
@@ -196,8 +203,10 @@ function ProductForm({ formId }) {
     const results = await uploadImages({ formData: formData });
 
     const newImages = results.length
-      ? results
-        .map((result) => process.env.REACT_APP_BASE_API + result.filename) : [];
+      ? results.map(
+          (result) => process.env.REACT_APP_BASE_API + result.filename
+        )
+      : [];
 
     dispatchProductData({
       type: "set",
@@ -205,10 +214,7 @@ function ProductForm({ formId }) {
         itemName: nameRef.current.value,
         price: parseInt(priceRef.current.value),
         link: linkRef.current.value,
-        itemImage: [
-          ...previouslyExistedImgUrls,
-          ...newImages
-        ].join(",")
+        itemImage: [...previouslyExistedImgUrls, ...newImages].join(","),
       },
     });
   };
@@ -224,10 +230,7 @@ function ProductForm({ formId }) {
             <label htmlFor="imgUpload" className="img-upload-label">
               <SvgUploadFile />
             </label>
-            <StyledAddedImgList
-              imgData={imgData}
-              setImgData={setImgData}
-            />
+            <StyledAddedImgList imgData={imgData} setImgData={setImgData} />
           </AddedImgContainer>
           <HiddenUploadFileInput
             ref={inpImagesRef}
