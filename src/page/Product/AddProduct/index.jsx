@@ -1,10 +1,13 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ProductContext } from "component/Product/ProductProvider";
 import ProductForm from "component/Product/Form/index";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 import useAPI from "hook/useAPI";
+import useTopNavSetter from "hook/useTopNavSetter";
+
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
 
@@ -15,6 +18,25 @@ export default function AddProductPage() {
   const { isFormFilled, productData } = useContext(ProductContext);
   const [isProductAdding, addProductResult, addProductError, addProduct] =
     useAPI(req.product.add);
+
+  const UploadButton = useMemo(
+    () => (
+      <TopNavElement.Button form="productForm" $isAbled={isFormFilled || isProductAdding}>
+        저장
+      </TopNavElement.Button>
+    ),
+    [isFormFilled, isProductAdding]
+  );
+
+  const { setTopNavRight } = useTopNavSetter({
+    title: "상품 등록 페이지",
+    left: <TopNavElement.GoBackButton />,
+    right: UploadButton,
+  });
+
+  useEffect(() => {
+    setTopNavRight(UploadButton);
+  }, [setTopNavRight, UploadButton]);
 
   useEffect(() => {
     if (!productData) {
@@ -40,16 +62,5 @@ export default function AddProductPage() {
     }
   }, [addProductResult, addProductError, navigate]);
 
-  return (
-    <>
-      <button
-        type="submit"
-        form="productForm"
-        disabled={!isFormFilled || isProductAdding}
-      >
-        제출하기
-      </button>
-      <ProductForm formId="productForm" />
-    </>
-  );
+  return <ProductForm formId="productForm" />;
 }

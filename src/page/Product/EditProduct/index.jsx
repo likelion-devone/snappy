@@ -1,14 +1,18 @@
-import ProductForm from "component/Product/Form/index";
-import { useEffect, useContext, useRef } from "react";
+import { useEffect, useContext, useRef, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import useAPI from "hook/useAPI";
-import { req } from "lib/api/index";
 import { ProductContext } from "component/Product/ProductProvider";
+import ProductForm from "component/Product/Form/index";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
+
+import useFetch from "hook/useFetch";
+import useAPI from "hook/useAPI";
+
+import { req } from "lib/api/index";
+import routeResolver from "util/routeResolver";
 
 import ROUTE from "constant/route";
-import useFetch from "hook/useFetch";
-import routeResolver from "util/routeResolver";
+import useTopNavSetter from "hook/useTopNavSetter";
 
 export default function EditProductPage() {
   const { productid } = useParams();
@@ -24,6 +28,24 @@ export default function EditProductPage() {
 
   const [isProductEditing, editProductResult, editProductError, editProduct] =
     useAPI(req.product.edit);
+
+  const UploadButton = useMemo(
+    () => (
+      <TopNavElement.Button form="productForm" $isAbled={!isFormFilled || isProductEditing}>
+        저장
+      </TopNavElement.Button>
+    ),
+    [isFormFilled, isProductEditing]
+  );
+
+  const { setTopNavRight } = useTopNavSetter({
+    left: <TopNavElement.GoBackButton />,
+    right: UploadButton,
+  });
+
+  useEffect(() => {
+    setTopNavRight(UploadButton);
+  }, [setTopNavRight, UploadButton]);
 
   useEffect(() => {
     if (initialProductDataError) {
@@ -92,19 +114,9 @@ export default function EditProductPage() {
 
   return isProductDataFetching ? (
     <>로딩중</>
-  ) : (
-    <>
-      <button
-        type="submit"
-        form="productForm"
-        disabled={!isFormFilled || isProductEditing}
-      >
-        제출하기
-      </button>
-      <ProductForm
-        formId="productForm"
-        initialProductData={initialProductData}
-      />
-    </>
-  );
+  ) :
+    <ProductForm
+      formId="productForm"
+      initialProductData={initialProductData}
+    />
 }
