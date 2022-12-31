@@ -16,6 +16,7 @@ import { ReactComponent as Search } from "asset/icon/icon-search.svg";
 import { ReactComponent as Share } from "asset/icon/icon-share.svg";
 import { ReactComponent as SnappyWord } from "asset/icon/icon-snappy-word.svg";
 import { ReactComponent as User } from "asset/icon/icon-user.svg";
+import { ReactComponent as Slide } from "asset/icon/icon-slide-btn.svg";
 
 import styled from "styled-components";
 
@@ -48,5 +49,6 @@ const Icons = {
   SnappyWord,
   User,
   SMoreVertical,
+  Slide,
 };
 export default Icons;

@@ -8,13 +8,13 @@ import { AlertModal, DropdownModal } from "component/common/Modal";
 import { PostDataContext } from "component/common/PostDataProvider/index";
 
 import useDropdownModal from "hook/useDropdownModal";
+import useAuthInfo from "hook/useAuthInfo";
 import useModal from "hook/useModal";
 import useAPI from "hook/useAPI";
 
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
 import getTimeGapInKr from "util/getTimeGapInKr";
-import useAuthInfo from "hook/useAuthInfo";
 
 import Icons from "asset/icon/icons";
 import ErrorImg from "asset/logo-404-343264.png";
@@ -37,25 +37,30 @@ const ContentText = styled.p`
   font-weight: 400;
   font-size: ${FONT_SIZE.BASE};
   line-height: 18px;
-  margin: 16px 0;
-  width: fit-content;
   word-break: break-all;
+  a {
+    display: block;
+    padding: 16px 0;
+  }
 `;
 
 const ContentPostImgWrapper = styled.div`
   position: relative;
-  display: flex;
-  width: fit-content;
+  width: 70%;
+  min-width: 300px;
+  margin: 0 auto;
+  text-align: center;
 `;
 
 const ContentPostImg = styled.img`
-  max-width: 95%;
+  vertical-align: top;
+  max-width: 70%;
+  min-width: 300px;
   height: 228px;
   object-fit: contain;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
-  transition: all 0.2s;
-  display: ${(props) => (props.isActive ? "flex" : "none")};
+  display: ${(props) => (props.isActive ? "inline" : "none")};
 `;
 
 const ButtonDotWrapper = styled.div`
@@ -78,6 +83,33 @@ const ButtonDot = styled.button`
   :hover {
     background-color: ${({ theme }) => theme.snBlue};
   }
+`;
+
+const SlideBtn = styled.button`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding: 10px;
+  width: 50%;
+  :hover {
+    background-color: ${({ theme }) => theme.snBlue}22;
+    transition: all 0.5s ease;
+  }
+  border-radius: 10px;
+`;
+
+const RightSlideBtn = styled(SlideBtn)`
+  right: 0;
+  text-align: right;
+`;
+
+const LeftSlideBtn = styled(SlideBtn)`
+  left: 0;
+  text-align: left;
+`;
+
+const SvgSlide = styled(Icons.Slide)`
+  transform: rotate(180deg);
 `;
 
 const IconWrapper = styled.div`
@@ -105,7 +137,7 @@ const SvgHeart = styled(Icons.Heart)`
   path {
     ${({ $isHearted, theme }) => $isHearted && "fill:" + theme.snRed + ";"}
     stroke: ${({ $isHearted, theme }) =>
-    $isHearted ? theme.snRed : theme.snGreyIcon};
+      $isHearted ? theme.snRed : theme.snGreyIcon};
   }
 `;
 
@@ -122,7 +154,6 @@ const PostDate = styled.time`
   line-height: 12px;
 `;
 
-
 export default function PostCard({
   authorId,
   username,
@@ -135,7 +166,7 @@ export default function PostCard({
   hearted,
   heartCount,
   commentCount,
-  $isPostDetailPage = false
+  $isPostDetailPage = false,
 }) {
   const { getMyPostData, getPostData } = useContext(PostDataContext);
   const navigate = useNavigate();
@@ -144,14 +175,12 @@ export default function PostCard({
   const isThisPostMine = authorId === myId;
 
   // 게시글 삭제 API
-  const [isDeletingPost, deletePostResponse, deletePosterror, deletePost] = useAPI(
-    req.post.remove
-  );
+  const [isDeletingPost, deletePostResponse, deletePosterror, deletePost] =
+    useAPI(req.post.remove);
 
   // 게시글 신고 API
-  const [isReportingPost, reportPostResponse, reportPosterror, reportPost] = useAPI(
-    req.post.report
-  );
+  const [isReportingPost, reportPostResponse, reportPosterror, reportPost] =
+    useAPI(req.post.report);
 
   // 슬라이드 버튼
   const [BtnDotCounter, setBtnDotCounter] = useState(0);
@@ -193,7 +222,14 @@ export default function PostCard({
       alert("게시물 삭제중 에러가 발생했습니다.");
       console.error(deletePosterror);
     }
-  }, [deletePostResponse, deletePosterror, getMyPostData, getPostData, navigate, $isPostDetailPage]);
+  }, [
+    deletePostResponse,
+    deletePosterror,
+    getMyPostData,
+    getPostData,
+    navigate,
+    $isPostDetailPage,
+  ]);
 
   const like = async () => {
     const {
@@ -237,7 +273,7 @@ export default function PostCard({
       return;
     }
     deletePost({ postId });
-  }
+  };
 
   // 삭제 메시지 모달창
   const [
@@ -252,7 +288,7 @@ export default function PostCard({
       return;
     }
     reportPost({ postId });
-  }
+  };
 
   // 신고 메시지 모달창
   const [
@@ -263,8 +299,7 @@ export default function PostCard({
   ] = useModal(handleReportModalButton);
 
   // 수정 & 삭제 드롭다운 모달
-  const [isDroppedUp, dropUp, dropDown] =
-    useDropdownModal();
+  const [isDroppedUp, dropUp, dropDown] = useDropdownModal();
 
   function handleDropDownButton() {
     deleteMsgModalopen();
@@ -288,6 +323,7 @@ export default function PostCard({
 
   return (
     <PostCardWrapper>
+      <h2 className="sr-only">게시물</h2>
       <SmallProfile
         size={PROFILE_SIZE.SMALL}
         src={profileImage}
@@ -302,14 +338,17 @@ export default function PostCard({
             />
           }
           right={
-            <button type="button" onClick={isThisPostMine ? dropUp : reportDropUp}>
+            <button
+              type="button"
+              onClick={isThisPostMine ? dropUp : reportDropUp}
+            >
               <Icons.SMoreVertical />
             </button>
           }
         />
       </SmallProfile>
 
-      {isThisPostMine ?
+      {isThisPostMine ? (
         <DropdownModal isDroppedUp={isDroppedUp} dropDown={dropDown}>
           <DropdownModal.Button onClick={handleDropDownButton}>
             수정하기
@@ -318,12 +357,16 @@ export default function PostCard({
             삭제하기
           </DropdownModal.Button>
         </DropdownModal>
-        : <DropdownModal isDroppedUp={isReportDroppedUp} dropDown={reportDropDown}>
+      ) : (
+        <DropdownModal
+          isDroppedUp={isReportDroppedUp}
+          dropDown={reportDropDown}
+        >
           <DropdownModal.Button onClick={handleReportDropDownButton}>
             신고하기
           </DropdownModal.Button>
         </DropdownModal>
-      }
+      )}
       <AlertModal isModalOpened={isReportMsgModalOpened}>
         <AlertModal.Content>게시글을 신고하시겠어요?</AlertModal.Content>
         <AlertModal.Cancle handleModalButton={reportMsgModalclose}>
@@ -333,8 +376,6 @@ export default function PostCard({
           신고
         </AlertModal.ConfirmButton>
       </AlertModal>
-
-      {/* TODO 게시글 수정시 수정 페이지로 이동 */}
 
       <AlertModal isModalOpened={isDeleteMsgModalOpened}>
         <AlertModal.Content>게시글을 삭제하시겠어요?</AlertModal.Content>
@@ -347,25 +388,25 @@ export default function PostCard({
       </AlertModal>
 
       <ContentWrapper>
-        <ContentText>
-          <Link to={`/post/${postId}`}>{content}</Link>
-        </ContentText>
+        {content && (
+          <ContentText>
+            <Link to={`/post/${postId}`}>{content}</Link>
+          </ContentText>
+        )}
         <ContentPostImgWrapper>
-          <Link to={`/post/${postId}`}>
-            {image &&
-              React.Children.toArray(
-                image
-                  .split(",")
-                  .map((postImg, index) => (
-                    <ContentPostImg
-                      src={postImg}
-                      isActive={index === BtnDotCounter}
-                      onError={handleImgError}
-                      onClick={(event) => event.preventDefault()}
-                    />
-                  ))
-              )}
-          </Link>
+          {image &&
+            React.Children.toArray(
+              image.split(",").map((postImg, index) => (
+                <ContentPostImg
+                  src={postImg}
+                  isActive={index === BtnDotCounter}
+                  onError={handleImgError}
+                  onClick={(event) => {
+                    event.preventDefault();
+                  }}
+                />
+              ))
+            )}
 
           {multipleImgs && (
             <ButtonDotWrapper>
@@ -374,13 +415,42 @@ export default function PostCard({
                   .split(",")
                   .map((postImg, index) => (
                     <ButtonDot
-                      src={postImg}
                       isActive={index === BtnDotCounter}
                       onClick={() => setBtnDotCounter(index)}
                     />
                   ))
               )}
             </ButtonDotWrapper>
+          )}
+          {multipleImgs && (
+            <>
+              <LeftSlideBtn
+                type="button"
+                onClick={() => {
+                  setBtnDotCounter((prev) => {
+                    if (prev > 0) {
+                      return prev - 1;
+                    }
+                    return prev;
+                  });
+                }}
+              >
+                <SvgSlide />
+              </LeftSlideBtn>
+              <RightSlideBtn
+                type="button"
+                onClick={() => {
+                  setBtnDotCounter((prev) => {
+                    if (prev < image.split(",").length - 1) {
+                      return prev + 1;
+                    }
+                    return prev;
+                  });
+                }}
+              >
+                <Icons.Slide />
+              </RightSlideBtn>
+            </>
           )}
         </ContentPostImgWrapper>
 
@@ -418,5 +488,5 @@ PostCard.propTypes = {
   hearted: PropTypes.bool,
   heartCount: PropTypes.number,
   commentCount: PropTypes.number,
-  $isPostDetailPage: PropTypes.bool
+  $isPostDetailPage: PropTypes.bool,
 };
