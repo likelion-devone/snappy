@@ -20,6 +20,9 @@ import { BUTTON_SIZE } from "constant/size";
 
 const JoinForm = styled.form`
   text-align: center;
+  ${Button} {
+    margin-top: 30px;
+  }
 `
 
 export default function JoinPageOne() {
@@ -66,7 +69,15 @@ export default function JoinPageOne() {
           <ValidationInputWrapper.Input ref={passwordRef} id="password" type="password" labelText="비밀번호" placeholder="비밀번호를 설정해 주세요." />
           <ValidationInputWrapper.ErrorMessage />
         </ValidationInputWrapper>
-        <Button size={BUTTON_SIZE.X_LARGE} state={isEmailValidationLoading ? BUTTON_STATE.X_LARGE.DISABLED : BUTTON_STATE.X_LARGE.ABLED} type="submit">다음</Button>
+        <Button
+          size={BUTTON_SIZE.X_LARGE}
+          state={isEmailValidationLoading
+            ? BUTTON_STATE.X_LARGE.DISABLED
+            : BUTTON_STATE.X_LARGE.ABLED}
+          type="submit"
+        >
+          다음
+        </Button>
       </JoinForm>
     </LoginLayout>
   )

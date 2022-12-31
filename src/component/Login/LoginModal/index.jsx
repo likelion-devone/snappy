@@ -9,7 +9,9 @@ import LogoGoogle from "asset/social/google.png";
 import LogoFacebook from "asset/social/facebook.png";
 
 import { FONT_SIZE } from "constant/style"
-import { ROUTE_LOGIN } from "constant/route";
+import ROUTE, { ROUTE_LOGIN } from "constant/route";
+
+import routeResolver from "util/routeResolver";
 
 const LoginModalWrapper = styled.main`
   width: 100%;
@@ -64,7 +66,7 @@ export default function LoginModal({ $isModalOpened }) {
       <LoginButton src={LogoGoogle} providerName="구글" color="#767676" />
       <LoginButton src={LogoFacebook} providerName="페이스북" color="#33AFD8" />
       <StyledLink to={ROUTE_LOGIN.AUTHORIZE} relative={true}>이메일로 로그인</StyledLink>
-      <StyledLink to={ROUTE_LOGIN.JOIN} relative={true}>회원가입</StyledLink>
+      <StyledLink to={routeResolver(ROUTE.LOGIN, ROUTE_LOGIN.JOIN, "1")} relative={true}>회원가입</StyledLink>
     </LoginModalWrapper>
   )
 }
