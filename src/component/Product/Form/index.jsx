@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import ValidationInputWrapper from "component/common/Input/ValidationInput";
 
 import { FONT_SIZE } from "constant/style";
-import { ProductContext } from "component/Product/ProductProvider";
+import { ProductContext } from "component/common/ProductProvider/index";
 import Icons from "asset/icon/icons";
 import AddedImgList from "component/common/AddedImgList/index";
 import useAPI from "hook/useAPI";
@@ -139,9 +139,7 @@ function ProductForm({ formId }) {
         }
       });
 
-      const imgList = [
-        ...prevImgData.filter((url) => !isBlobUrl(url)),
-      ];
+      const imgList = [...prevImgData.filter((url) => !isBlobUrl(url))];
 
       for (const file of imgFileList) {
         if (file.size > SIZE_LIMIT) {
@@ -190,9 +188,7 @@ function ProductForm({ formId }) {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const previouslyExistedImgUrls = imgData.filter(
-      (url) => !isBlobUrl(url)
-    );
+    const previouslyExistedImgUrls = imgData.filter((url) => !isBlobUrl(url));
 
     if (
       !inpImagesRef.current.files.length &&
@@ -210,8 +206,8 @@ function ProductForm({ formId }) {
 
     const newImages = results.length
       ? results.map(
-        (result) => process.env.REACT_APP_BASE_API + result.filename
-      )
+          (result) => process.env.REACT_APP_BASE_API + result.filename
+        )
       : [];
 
     dispatchProductData({

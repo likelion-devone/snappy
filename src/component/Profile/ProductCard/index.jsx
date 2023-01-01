@@ -2,7 +2,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { FONT_SIZE } from "constant/style";
 import { useContext } from "react";
-import { ProductContext } from "component/Product/ProductProvider/index";
+import { ProductContext } from "component/common/ProductProvider/index";
 
 const ProductItem = styled.li`
   filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.3));

@@ -1,7 +1,7 @@
 import { useEffect, useContext, useRef, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { ProductContext } from "component/Product/ProductProvider";
+import { ProductContext } from "component/common/ProductProvider/index";
 import ProductForm from "component/Product/Form/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
@@ -31,7 +31,10 @@ export default function EditProductPage() {
 
   const UploadButton = useMemo(
     () => (
-      <TopNavElement.Button form="productForm" $isAbled={!isFormFilled || isProductEditing}>
+      <TopNavElement.Button
+        form="productForm"
+        $isAbled={!isFormFilled || isProductEditing}
+      >
         저장
       </TopNavElement.Button>
     ),
@@ -84,7 +87,7 @@ export default function EditProductPage() {
     ) {
       editProduct({ productId: productid, ...productData });
     } else if (isMounted.current) {
-      alert("수정사항이 없습니다.")
+      alert("수정사항이 없습니다.");
     } else {
       isMounted.current = true;
     }
@@ -115,9 +118,7 @@ export default function EditProductPage() {
 
   return isProductDataFetching ? (
     <>로딩중</>
-  ) :
-    <ProductForm
-      formId="productForm"
-      initialProductData={initialProductData}
-    />
+  ) : (
+    <ProductForm formId="productForm" initialProductData={initialProductData} />
+  );
 }
