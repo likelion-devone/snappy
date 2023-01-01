@@ -10,10 +10,11 @@ import {
   FollowingLink,
 } from "component/common/BigProfile/FollowLink";
 import Button from "component/common/Button/index";
-import ProductList from "component/Profile/ProductList/index";
 import { PostDataContext } from "component/common/PostDataProvider/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
 import { AlertModal, DropdownModal } from "component/common/Modal/index";
+import FollowButton from "../FollowButton/index";
+import ProductCard from "component/Profile/ProductCard/index";
 
 import useFetch from "hook/useFetch";
 import useTopNavSetter from "hook/useTopNavSetter";
@@ -31,7 +32,9 @@ import ROUTE, { ROUTE_PRODUCT, ROUTE_PROFILE } from "constant/route";
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
 import { FONT_SIZE } from "constant/style";
-import FollowButton from "../FollowButton/index";
+import useAuthInfo from "hook/useAuthInfo";
+import { ProductContext } from "component/common/ProductProvider/index";
+import useAPI from "hook/useAPI";
 
 const StyleBigProfile = styled.div`
   display: flex;
@@ -115,10 +118,39 @@ const CurrentPortfolio = styled.section`
     border: 3px solid ${(props) => props.theme.snBlue};
     text-align: center;
   }
+  @media only screen and (max-width: 500px) {
+    .title {
+      height: 50px;
+    }
+  }
 `;
 
 const Portfolio = styled.img`
   width: 300px;
+`;
+
+const ProductItemList = styled.ul`
+  height: 386px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 30px;
+
+  flex-grow: 1;
+  display: flex;
+  gap: 60px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+  ::-webkit-scrollbar:hover::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  @media only screen and (max-width: 500px) {
+    height: 214px;
+    padding: 20px;
+    gap: 20px;
+  }
 `;
 
 const IconBox = styled.div`
@@ -138,16 +170,16 @@ const NoPostIndicator = styled.p`
   line-height: 14px;
 
   color: ${({ theme }) => theme.snGreyIcon};
-`
+`;
 
 const IconList = styled(Icons.PostList)`
   margin-top: 12.25px;
   margin-right: 22.5px;
   path {
     fill: ${({ $isListActive, theme }) =>
-    $isListActive ? theme.snBlue : theme.snGreyOff};
+      $isListActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isListActive, theme }) =>
-    $isListActive ? theme.snBlue : theme.snGreyOff};
+      $isListActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
@@ -155,16 +187,16 @@ const IconAlbum = styled(Icons.PostAlbum)`
   margin-top: 12.25px;
   path {
     fill: ${({ $isAlbumActive, theme }) =>
-    $isAlbumActive ? theme.snBlue : theme.snGreyOff};
+      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isAlbumActive, theme }) =>
-    $isAlbumActive ? theme.snBlue : theme.snGreyOff};
+      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
 const StyledButtonForLink = styled(Button)`
   line-height: 34px;
   text-align: center;
-`
+`;
 
 function LinkButton({ to, children }) {
   return (
@@ -176,29 +208,59 @@ function LinkButton({ to, children }) {
     >
       {children}
     </StyledButtonForLink>
-  )
+  );
 }
 
 LinkButton.propTypes = {
   to: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
-}
+  children: PropTypes.node.isRequired,
+};
 
 function PageDetails({ accountname, $isMyProfile = false }) {
   const navigate = useNavigate();
-  const { userPostData, userPostDataError, isUserPostDataLoading, getUserPostData } = useContext(PostDataContext);
+  const { _id: myId } = useAuthInfo();
+  const { selectedProductData } = useContext(ProductContext);
+  const [isThisPostMine, setIsThisPostMine] = useState(false);
+
+  const {
+    userPostData,
+    userPostDataError,
+    isUserPostDataLoading,
+    getUserPostData,
+  } = useContext(PostDataContext);
   const { handleLogout } = useContext(AuthContext);
 
+  const handleDeleteProduct = async () => {
+    await removeProduct({ productId: selectedProductData.id });
+    dropDownProductModal();
+    getProductData({ accountname });
+  };
 
-  const [isProfileMoreModalOpened, openProfileMoreModal, closeProfileMoreModal] = useDropdownModal();
-  const [isLogoutAlertModalOpened, openLogoutAlertModal, closeLogoutAlertModal, confirmLogoutAlertModal] = useModal(handleLogout);
+  const [
+    isProfileMoreModalOpened,
+    openProfileMoreModal,
+    closeProfileMoreModal,
+  ] = useDropdownModal();
+  const [
+    isLogoutAlertModalOpened,
+    openLogoutAlertModal,
+    closeLogoutAlertModal,
+    confirmLogoutAlertModal,
+  ] = useModal(handleLogout);
+
+  const [isProductModalDroppedUp, dropUpProductModal, dropDownProductModal] =
+    useDropdownModal();
+  const [
+    isDeleteProductAlertModalOpened,
+    openDeleteProductAlertModal,
+    closeDeleteProductAlertModal,
+    confirmDeleteProductAlertModal,
+  ] = useModal(handleDeleteProduct);
 
   useTopNavSetter({
     title: "프로필 페이지",
     left: <TopNavElement.GoBackButton />,
-    right: (
-      <TopNavElement.MoreButton onClick={openProfileMoreModal} />
-    )
+    right: <TopNavElement.MoreButton onClick={openProfileMoreModal} />,
   });
 
   const [viewOption, setViewOption] = useState(true);
@@ -209,14 +271,44 @@ function PageDetails({ accountname, $isMyProfile = false }) {
     { accountname }
   );
 
-  const [isProductLoading, productData, productDataError] = useFetch(
-    req.product.load,
-    { accountname }
-  );
+  const [isProductLoading, productData, productDataError, getProductData] =
+    useAPI(req.product.load);
+
+  const [
+    isProductRemoving,
+    _productRemoveResponse,
+    productRemoveError,
+    removeProduct,
+  ] = useAPI(req.product.remove);
+
+  useEffect(() => {
+    getProductData({ accountname });
+  }, [accountname, getProductData]);
+
+  useEffect(() => {
+    if (selectedProductData && selectedProductData.author._id === myId) {
+      setIsThisPostMine(true);
+    } else {
+      setIsThisPostMine(false);
+    }
+  }, [myId, selectedProductData]);
+
+  useEffect(() => {
+    if (isProductRemoving) {
+      return;
+    }
+    if (productRemoveError) {
+      alert("상품 삭제에 실패했스내피...");
+    }
+    // if (productRemoveResponse) {
+    //   alert("상품을 삭제했스내피."); 완벽히 처리하지 못 할 것 같아 일단 주석처리. 동작에 지장은 없음.
+    // }
+    return;
+  }, [isProductRemoving, productRemoveError, getProductData, accountname]);
 
   useEffect(() => {
     getUserPostData({ accountname });
-  }, [getUserPostData, accountname])
+  }, [getUserPostData, accountname]);
 
   useEffect(() => {
     if (profileDataError || productDataError || userPostDataError) {
@@ -224,7 +316,7 @@ function PageDetails({ accountname, $isMyProfile = false }) {
     }
   }, [profileDataError, productDataError, userPostDataError, navigate]);
 
-  if (isProfileDataLoading || isProductLoading || isUserPostDataLoading || !userPostData) {
+  if (isProfileDataLoading || isUserPostDataLoading || !userPostData) {
     return <>로딩중</>;
   }
 
@@ -237,6 +329,19 @@ function PageDetails({ accountname, $isMyProfile = false }) {
     setViewOption(false);
     setIsListActive(false);
   };
+
+  function handleDeleteButton() {
+    openDeleteProductAlertModal();
+  }
+  function handleEditButton() {
+    dropDownProductModal();
+    navigate(
+      routeResolver(ROUTE.PRODUCT, selectedProductData.id, ROUTE_PRODUCT.EDIT)
+    );
+  }
+  function handleVisitButton() {
+    dropDownProductModal();
+  }
 
   const { profile } = profileData;
 
@@ -272,14 +377,10 @@ function PageDetails({ accountname, $isMyProfile = false }) {
         <Wrapper>
           {$isMyProfile ? (
             <>
-              <LinkButton
-                to={routeResolver(ROUTE.PROFILE, ROUTE_PROFILE.EDIT)}
-              >
+              <LinkButton to={routeResolver(ROUTE.PROFILE, ROUTE_PROFILE.EDIT)}>
                 프로필 수정
               </LinkButton>
-              <LinkButton
-                to={routeResolver(ROUTE.PRODUCT, ROUTE_PRODUCT.ADD)}
-              >
+              <LinkButton to={routeResolver(ROUTE.PRODUCT, ROUTE_PRODUCT.ADD)}>
                 상품 등록
               </LinkButton>
             </>
@@ -288,7 +389,11 @@ function PageDetails({ accountname, $isMyProfile = false }) {
               <ChatLink to={ROUTE.CHAT}>
                 <Icons.MessageCircle title="채팅" className="messageCircle" />
               </ChatLink>
-              <FollowButton initialIsFollowing={profile.isfollowing} accountname={accountname} $isSizeLarge34={true} />
+              <FollowButton
+                initialIsFollowing={profile.isfollowing}
+                accountname={accountname}
+                $isSizeLarge34={true}
+              />
               <ShareLink as="button" onClick={() => alert("공유 기능 개발중")}>
                 <Icons.Share title="공유" className="shareCircle" />
               </ShareLink>
@@ -301,9 +406,19 @@ function PageDetails({ accountname, $isMyProfile = false }) {
         <h2 className="title">
           <Portfolio src={PortfolioTitleImg} />
         </h2>
-        <ProductList
-          productData={isProductLoading ? [] : productData.product}
-        />
+        <ProductItemList>
+          {isProductLoading
+            ? "로딩중"
+            : productData.data === 0
+            ? "아직 등록된 상품이 없어요."
+            : productData.product.map((singleProductData) => (
+                <ProductCard
+                  key={singleProductData.id}
+                  dropUpProductModal={dropUpProductModal}
+                  singleProductData={singleProductData}
+                />
+              ))}
+        </ProductItemList>
       </CurrentPortfolio>
 
       <section>
@@ -324,20 +439,78 @@ function PageDetails({ accountname, $isMyProfile = false }) {
           postData={isUserPostDataLoading ? [] : userPostData}
           visible={!viewOption}
         />
-        {userPostData.length === 0 &&
+        {userPostData.length === 0 && (
           <NoPostIndicator>아직 포스트가 없습니다.</NoPostIndicator>
-        }
+        )}
       </section>
 
-      <DropdownModal dropDown={closeProfileMoreModal} isDroppedUp={isProfileMoreModalOpened}>
+      <DropdownModal
+        dropDown={closeProfileMoreModal}
+        isDroppedUp={isProfileMoreModalOpened}
+      >
         <DropdownModal.Button onClick={openLogoutAlertModal}>
           로그아웃
         </DropdownModal.Button>
       </DropdownModal>
       <AlertModal isModalOpened={isLogoutAlertModalOpened}>
         <AlertModal.Content>로그아웃 하시겠스내피? 📷</AlertModal.Content>
-        <AlertModal.Cancle handleModalButton={closeLogoutAlertModal}>취소</AlertModal.Cancle>
-        <AlertModal.ConfirmButton handleModalButton={confirmLogoutAlertModal}>로그아웃</AlertModal.ConfirmButton>
+        <AlertModal.Cancle handleModalButton={closeLogoutAlertModal}>
+          취소
+        </AlertModal.Cancle>
+        <AlertModal.ConfirmButton handleModalButton={confirmLogoutAlertModal}>
+          로그아웃
+        </AlertModal.ConfirmButton>
+      </AlertModal>
+
+      {isThisPostMine ? (
+        <DropdownModal
+          isDroppedUp={isProductModalDroppedUp}
+          dropDown={dropDownProductModal}
+        >
+          <DropdownModal.Button onClick={handleDeleteButton}>
+            상품 삭제하기
+          </DropdownModal.Button>
+          <DropdownModal.Button onClick={handleEditButton}>
+            상품 수정하기
+          </DropdownModal.Button>
+          <DropdownModal.Button
+            as="a"
+            type=""
+            href={selectedProductData ? selectedProductData.link : ""}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleVisitButton}
+          >
+            웹사이트에서 상품 보기
+          </DropdownModal.Button>
+        </DropdownModal>
+      ) : (
+        <DropdownModal
+          isDroppedUp={isProductModalDroppedUp}
+          dropDown={dropDownProductModal}
+        >
+          <DropdownModal.Button
+            as="a"
+            type=""
+            href={selectedProductData ? selectedProductData.link : ""}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleVisitButton}
+          >
+            웹사이트에서 상품 보기
+          </DropdownModal.Button>
+        </DropdownModal>
+      )}
+      <AlertModal isModalOpened={isDeleteProductAlertModalOpened}>
+        <AlertModal.Content>상품을 삭제하시겠습니까?</AlertModal.Content>
+        <AlertModal.Cancle handleModalButton={closeDeleteProductAlertModal}>
+          취소
+        </AlertModal.Cancle>
+        <AlertModal.ConfirmButton
+          handleModalButton={confirmDeleteProductAlertModal}
+        >
+          삭제
+        </AlertModal.ConfirmButton>
       </AlertModal>
     </>
   );

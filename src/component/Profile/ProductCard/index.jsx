@@ -17,12 +17,23 @@ const ProductItem = styled.li`
 
   .product-name {
     font-size: ${FONT_SIZE.X_LARGE};
-    font-weight: 500;
+    font-weight: 600;
   }
   .product-price {
     font-size: ${FONT_SIZE.LARGE};
     font-weight: 500;
     letter-spacing: 0.5px;
+  }
+  @media only screen and (max-width: 500px) {
+    gap: 12px;
+
+    .product-name {
+      font-size: ${FONT_SIZE.LARGE};
+    }
+    .product-price {
+      font-size: ${FONT_SIZE.BASE};
+      letter-spacing: 0.5px;
+    }
   }
 
   transition: all 0.2s;
@@ -34,6 +45,10 @@ const ProductItem = styled.li`
 const SingleImg = styled.img`
   width: 200px;
   height: 250px;
+  @media only screen and (max-width: 500px) {
+    width: 100px;
+    height: 110px;
+  }
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 

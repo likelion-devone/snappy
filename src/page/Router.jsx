@@ -33,13 +33,14 @@ import PostEditPage from "./Post/Edit/index";
 import PostDataProvider from "component/common/PostDataProvider/index";
 import PostDetailDataProvider from "component/common/PostDataProvider/PostDetailDataProvider/index";
 import IsUploadPossibleProvider from "component/Post/IsUploadPossibleProvider/index";
+import ProductProvider from "component/common/ProductProvider/index";
 
 import ROUTE, {
   ROUTE_LOGIN,
   ROUTE_POST,
   ROUTE_PRODUCT,
   ROUTE_PROFILE,
-  ROUTE_CHAT
+  ROUTE_CHAT,
 } from "constant/route";
 
 export default function AppRouter() {
@@ -71,20 +72,21 @@ export default function AppRouter() {
                 index
                 element={
                   <PostDataProvider>
-                    <ProfilePage />
+                    <ProductProvider>
+                      <ProfilePage />
+                    </ProductProvider>
                   </PostDataProvider>
                 }
               />
-              <Route
-                path={ROUTE_PROFILE.EDIT}
-                element={<ProfileEditPage />}
-              />
+              <Route path={ROUTE_PROFILE.EDIT} element={<ProfileEditPage />} />
               <Route path=":accountname">
                 <Route
                   index
                   element={
                     <PostDataProvider>
-                      <YourProfilePage />
+                      <ProductProvider>
+                        <YourProfilePage />
+                      </ProductProvider>
                     </PostDataProvider>
                   }
                 />
