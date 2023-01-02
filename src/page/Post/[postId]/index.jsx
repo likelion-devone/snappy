@@ -18,6 +18,7 @@ import routeResolver from "util/routeResolver";
 
 import ROUTE from "constant/route";
 import { PROFILE_SIZE } from "constant/size";
+import { LoaderNappy } from "component/common/Animation/index";
 
 const CommentCardWrapper = styled.ol`
   border-top: 1px solid ${({ theme }) => theme.snGreyOff};
@@ -82,7 +83,7 @@ export default function PostDetail() {
 
   // 로딩중이면 데이터가 들어오지 않습니다.
   if (isPostDetailLoading || !postDetail || isCommentLoading || !commentData) {
-    return <>로딩중</>;
+    return <LoaderNappy />;
   }
 
   return (

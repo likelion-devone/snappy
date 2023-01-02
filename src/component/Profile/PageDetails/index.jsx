@@ -35,6 +35,7 @@ import { FONT_SIZE } from "constant/style";
 
 import Icons from "asset/icon/icons";
 import PortfolioTitleImg from "asset/title-portfolio.png";
+import { LoaderNappy, Spinner } from "component/common/Animation/index";
 
 const StyleBigProfile = styled.div`
   display: flex;
@@ -55,12 +56,12 @@ const StyleBigProfile = styled.div`
     font-weight: 400;
     font-size: ${FONT_SIZE.MEDIUM};
     line-height: 14px;
-    color: ${(props) => props.theme.snGreyIcon};
+    color: ${({ theme }) => theme.snGreyIcon};
     margin-bottom: 16px;
   }
 
   .intro {
-    color: ${(props) => props.theme.snGreyIcon};
+    color: ${({ theme }) => theme.snGreyIcon};
     margin-bottom: 24px;
     font-weight: 400;
     font-size: ${FONT_SIZE.BASE};
@@ -71,7 +72,7 @@ const StyleBigProfile = styled.div`
 const ChatLink = styled(Link)`
   width: 34px;
   height: 34px;
-  border: 1px solid ${(props) => props.theme.snGreyOff};
+  border: 1px solid ${({ theme }) => theme.snGreyOff};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -86,7 +87,7 @@ const ChatLink = styled(Link)`
 const ShareLink = styled(Link)`
   width: 34px;
   height: 34px;
-  border: 1px solid ${(props) => props.theme.snGreyOff};
+  border: 1px solid ${({ theme }) => theme.snGreyOff};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -108,14 +109,14 @@ const Wrapper = styled.div`
 const CurrentPortfolio = styled.section`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.snBlue};
+  background-color: ${({ theme }) => theme.snBlue};
   .title {
     height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${(props) => props.theme.snWhite};
-    border: 3px solid ${(props) => props.theme.snBlue};
+    background-color: ${({ theme }) => theme.snWhite};
+    border: 3px solid ${({ theme }) => theme.snBlue};
     text-align: center;
   }
   @media only screen and (max-width: 500px) {
@@ -128,6 +129,41 @@ const CurrentPortfolio = styled.section`
 const Portfolio = styled.img`
   width: 300px;
 `;
+
+const NoDataIndicator = styled.p`
+  height: 386px;
+  width: 100%;
+
+  text-align: center;
+  line-height: 386px;
+
+  font-weight: 400;
+  font-size: ${FONT_SIZE.LARGE};
+
+  color: ${({ theme }) => theme.snGreyIcon};
+
+  @media only screen and (max-width: 500px) {
+    height: 214px;
+    line-height: 214px;
+  }
+`
+
+const SpinnerWrapper = styled.div`
+  height: 386px;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media only screen and (max-width: 500px) {
+    height: 214px;
+  }
+`
+
+const StyledSpinner = styled(Spinner)`
+  background-color: transparent;
+`
 
 const ProductItemList = styled.ul`
   height: 386px;
@@ -177,9 +213,9 @@ const IconList = styled(Icons.PostList)`
   margin-right: 22.5px;
   path {
     fill: ${({ $isListActive, theme }) =>
-      $isListActive ? theme.snBlue : theme.snGreyOff};
+    $isListActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isListActive, theme }) =>
-      $isListActive ? theme.snBlue : theme.snGreyOff};
+    $isListActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
@@ -187,9 +223,9 @@ const IconAlbum = styled(Icons.PostAlbum)`
   margin-top: 12.25px;
   path {
     fill: ${({ $isAlbumActive, theme }) =>
-      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
+    $isAlbumActive ? theme.snBlue : theme.snGreyOff};
     stroke: ${({ $isAlbumActive, theme }) =>
-      $isAlbumActive ? theme.snBlue : theme.snGreyOff};
+    $isAlbumActive ? theme.snBlue : theme.snGreyOff};
   }
 `;
 
@@ -317,7 +353,7 @@ function PageDetails({ accountname, $isMyProfile = false }) {
   }, [profileDataError, productDataError, userPostDataError, navigate]);
 
   if (isProfileDataLoading || isUserPostDataLoading || !userPostData) {
-    return <>로딩중</>;
+    return <LoaderNappy />;
   }
 
   const ShowListView = () => {
@@ -406,19 +442,24 @@ function PageDetails({ accountname, $isMyProfile = false }) {
         <h2 className="title">
           <Portfolio src={PortfolioTitleImg} />
         </h2>
-        <ProductItemList>
-          {isProductLoading
-            ? "로딩중"
-            : productData.data === 0
-            ? "아직 등록된 상품이 없어요."
-            : productData.product.map((singleProductData) => (
+        {isProductLoading ?
+          <SpinnerWrapper><StyledSpinner /></SpinnerWrapper>
+          :
+          productData.product.length === 0
+            ?
+            <NoDataIndicator>아직 등록된 상품이 없어요.</NoDataIndicator>
+            :
+            <ProductItemList>
+              {productData.product.map((singleProductData) => (
                 <ProductCard
                   key={singleProductData.id}
                   dropUpProductModal={dropUpProductModal}
                   singleProductData={singleProductData}
                 />
               ))}
-        </ProductItemList>
+            </ProductItemList>
+
+        }
       </CurrentPortfolio>
 
       <section>

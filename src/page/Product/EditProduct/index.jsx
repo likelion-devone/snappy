@@ -13,6 +13,7 @@ import useAuthInfo from "hook/useAuthInfo";
 import { req } from "lib/api/index";
 
 import ROUTE from "constant/route";
+import { LoaderNappy } from "component/common/Animation/index";
 
 export default function EditProductPage() {
   const { productid } = useParams();
@@ -120,7 +121,7 @@ export default function EditProductPage() {
   }, [editProductResult, editProductError, navigate, initialProductData]);
 
   return isProductDataFetching ? (
-    <>로딩중</>
+    <LoaderNappy />
   ) : (
     <ProductForm formId="productForm" initialProductData={initialProductData} />
   );

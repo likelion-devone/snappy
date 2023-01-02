@@ -21,6 +21,7 @@ import routeResolver from "util/routeResolver";
 
 import { PROFILE_SIZE } from "constant/size";
 import ROUTE from "constant/route";
+import { LoaderNappy } from "component/common/Animation/index";
 
 const PostUploadWrapper = styled.div`
   position: relative;
@@ -208,7 +209,7 @@ export default function PostEditPage() {
   }, [navigate, editPostResponse, editPostError, postId]);
 
   return isPostDataFetching ? (
-    "로딩중"
+    <LoaderNappy />
   ) : (
     <PostUploadWrapper>
       <ImgDataProvider>

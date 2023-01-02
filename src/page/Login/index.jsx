@@ -2,8 +2,10 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 
 import LoginModal from "component/Login/LoginModal";
+import { SplashNappy } from "component/common/Animation/index";
 
-import srcLogoBw from "asset/logo-bw-212262.png";
+import Title from "asset/title-main-291051.png";
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -20,16 +22,11 @@ const LogoWrapper = styled.h1`
   flex: 1;
 
   display: flex;
-  align-items: center;
-`
-
-const LogoBw = styled.img`
-  display: block;
-  
-  width: 212px;
-  height: 262px;
-
-  transform: translate(-20px);
+  flex-direction: column;
+  justify-content: center;
+  .title-logo {
+    margin-top: 30px;
+  }
 `
 
 export default function LoginPage() {
@@ -42,7 +39,8 @@ export default function LoginPage() {
   return (
     <Wrapper>
       <LogoWrapper>
-        <LogoBw src={srcLogoBw} alt="Snappy 흑백 로고입니다." />
+        <SplashNappy />
+        <img src={Title} alt="Snappy 타이틀 로고입니다." className="title-logo" width={291} height={51} />
       </LogoWrapper>
       <LoginModal $isModalOpened={isModalOpened} />
     </Wrapper>

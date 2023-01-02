@@ -8,6 +8,7 @@ import routeResolver from "util/routeResolver";
 
 import ROUTE from "constant/route";
 import { PROFILE_SIZE } from "constant/size";
+import { LoaderNappy } from "component/common/Animation/index";
 
 const StyledFollowerList = styled.ul`
   display: flex;
@@ -19,7 +20,7 @@ const StyledFollowerList = styled.ul`
 
 export default function FollowerList({ data, $isLoading }) {
   return $isLoading || !data ? (
-    "로딩중"
+    <LoaderNappy />
   ) : (
     <StyledFollowerList>
       {data.map((follower) => {
