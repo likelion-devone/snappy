@@ -2,24 +2,25 @@ import styled from "styled-components";
 import { useState, useRef, useEffect, useContext, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import TextArea from "component/Post/TextArea/index";
 import SmallProfile from "component/common/SmallProfile/index";
 import AddedImgList from "component/common/AddedImgList/index";
-import { IsUploadPossibleContext } from "component/Post/IsUploadPossibleProvider/index";
 import ImgDataProvider from "component/Post/ImgDataProvider/index";
-import TextArea from "component/Post/TextArea/index";
 import LabelImgUpload from "component/Post/LabelImgUpload/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
+import { IsUploadPossibleContext } from "component/Post/IsUploadPossibleProvider/index";
+
+import useAPI from "hook/useAPI";
+import useFetch from "hook/useFetch";
+import useAuthInfo from "hook/useAuthInfo";
+import useTopNavSetter from "hook/useTopNavSetter";
+
+import { req } from "lib/api/index";
+import isBlobUrl from "util/isBlobUrl";
+import routeResolver from "util/routeResolver";
 
 import { PROFILE_SIZE } from "constant/size";
 import ROUTE from "constant/route";
-
-import { req } from "lib/api/index";
-import routeResolver from "util/routeResolver";
-import useAuthInfo from "hook/useAuthInfo";
-import useTopNavSetter from "hook/useTopNavSetter";
-import useAPI from "hook/useAPI";
-import useFetch from "hook/useFetch";
-import isBlobUrl from "util/isBlobUrl";
 
 const PostUploadWrapper = styled.div`
   position: relative;
@@ -71,7 +72,7 @@ export default function PostEditPage() {
     }
   }, [initialPostDataError, navigate, postId]);
 
-  // 상단 넵바
+  // 상단 Nav
   const UploadButton = useMemo(
     () => (
       <TopNavElement.Button form="post-upload" $isAbled={isPossibleToUpload}>
@@ -102,8 +103,6 @@ export default function PostEditPage() {
   const [isPostEditing, editPostResponse, editPostError, editPost] = useAPI(
     req.post.edit
   );
-
-  // 게시물 업로드 후 HOME 으로 경로 이동
 
   const { image: profileImage, accountname } = useAuthInfo();
 
