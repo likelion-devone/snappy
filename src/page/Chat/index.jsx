@@ -6,6 +6,7 @@ import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 import useTopNavSetter from "hook/useTopNavSetter";
 
+import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
 import ProfileImg from "asset/profile-img-42.png";
 
@@ -27,7 +28,7 @@ const Time = styled.p`
   align-self: flex-end;
   line-height: 13px;
   font-weight: 400;
-  color: ${(props) => props.theme.snGreyOff};
+  color: ${(theme) => theme.snGreyOff};
   font-size: ${FONT_SIZE.SMALL};
 `;
 
@@ -35,8 +36,8 @@ export default function ChatPage() {
   useTopNavSetter({
     title: "채팅 목록 페이지",
     left: <TopNavElement.GoBackButton />,
-    right: <TopNavElement.MoreButton />
-  })
+    right: <TopNavElement.MoreButton />,
+  });
 
   return (
     <ChatList>
