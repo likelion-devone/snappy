@@ -1,10 +1,13 @@
-import SmallProfile from "component/common/SmallProfile/index";
-import { PROFILE_SIZE } from "constant/size";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import ProfileImg from "asset/profile-img-42.png";
-import useTopNavSetter from "hook/useTopNavSetter";
+import { Link } from "react-router-dom";
+
+import SmallProfile from "component/common/SmallProfile/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
+
+import useTopNavSetter from "hook/useTopNavSetter";
+
+import { PROFILE_SIZE } from "constant/size";
+import ProfileImg from "asset/profile-img-42.png";
 
 const ChatList = styled.ul`
   width: min(800px, 100%);
@@ -21,18 +24,18 @@ const ChatList = styled.ul`
   }
 `;
 const Time = styled.p`
-  color: ${(props) => props.theme.snGreyOff};
-  font-size: x-small;
+  align-self: flex-end;
   line-height: 13px;
   font-weight: 400;
-  align-self: flex-end;
+  color: ${(props) => props.theme.snGreyOff};
+  font-size: ${FONT_SIZE.SMALL};
 `;
 
 export default function ChatPage() {
   useTopNavSetter({
     title: "채팅 목록 페이지",
     left: <TopNavElement.GoBackButton />,
-    right: <TopNavElement.MoreButton /> // TODO: 채팅 목록 페이지에서 MoreButton 기능 필요
+    right: <TopNavElement.MoreButton />
   })
 
   return (
