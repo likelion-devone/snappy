@@ -10,16 +10,7 @@ import useTopNavSetter from "hook/useTopNavSetter";
 
 import { req } from "lib/api";
 
-import routeResolver from "util/routeResolver";
-
-import ROUTE from "constant/route";
-import { PROFILE_SIZE } from "constant/size";
 import { LoaderNappy } from "component/common/Animation/index";
-
-const CommentCardWrapper = styled.ol`
-  border-top: 1px solid ${({ theme }) => theme.snGreyOff};
-  margin-bottom: 80px;
-`;
 
 export default function PostDetail() {
   useTopNavSetter({
@@ -79,7 +70,7 @@ export default function PostDetail() {
         heartCount={postDetailInitialData.post.heartCount}
         commentCount={
           postDetailInitialData.post.commentCount !==
-          postDetail?.post.commentCount
+            postDetail?.post.commentCount
             ? postDetail?.post.commentCount
             : postDetailInitialData.post.commentCount
         }

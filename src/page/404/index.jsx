@@ -5,7 +5,7 @@ import Button from "component/common/Button";
 
 import { BUTTON_STATE } from "constant/button_state";
 import { BUTTON_SIZE } from "constant/size";
-import { FONT_SIZE } from "constant/style";
+import { FONT_SIZE, MAX_WIDTH } from "constant/style";
 
 import SnappyError from "asset/logo-404-343264.png";
 
@@ -15,7 +15,7 @@ const MainLogoWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+
 
   img {
     width: 50vw;
@@ -29,6 +29,25 @@ const MainLogoWrapper = styled.div`
     font-weight: 700;
     font-size: ${FONT_SIZE.LARGE};
     color: ${({ theme }) => theme.snGreyMain};
+
+    @media (min-width: ${MAX_WIDTH}) {
+      font-size: ${FONT_SIZE.XX_LARGE};
+      padding-top: 0px;
+    }
+  }
+
+  .main-logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+
+    @media (min-width: ${MAX_WIDTH}) {
+      background-color: ${({ theme }) => theme.snWhite};
+      border-radius: 50%;
+      padding: 30px;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
   }
 `;
 
@@ -62,6 +81,10 @@ const Wrapper = styled.div`
     grid-row: 3 / 4;
     transform: translateY(10vw);
   }
+
+  @media (min-width: ${MAX_WIDTH}) {
+    visibility: hidden;
+  }
 `;
 
 export default function NotFoundErrorPage() {
@@ -78,21 +101,23 @@ export default function NotFoundErrorPage() {
         <img src={SnappyError} alt="404 로고 이미지입니다" className="logo4" />
       </Wrapper>
       <MainLogoWrapper>
-        <img
-          src={SnappyError}
-          alt="404 로고 이미지입니다"
-          className="mainlogo"
-        />
-        <p className="PageNotFound">Page Not Found</p>
-        <Button
-          className="PrevPageBtn"
-          type="button"
-          size={BUTTON_SIZE.LARGE_44}
-          state={BUTTON_STATE.LARGE_44.ABLED}
-          onClick={goback}
-        >
-          이전 페이지
-        </Button>
+        <div className="main-logo-container">
+          <img
+            src={SnappyError}
+            alt="404 로고 이미지입니다"
+            className="mainlogo"
+          />
+          <p className="PageNotFound">Page Not Found</p>
+          <Button
+            className="PrevPageBtn"
+            type="button"
+            size={BUTTON_SIZE.LARGE_44}
+            state={BUTTON_STATE.LARGE_44.ABLED}
+            onClick={goback}
+          >
+            이전 페이지
+          </Button>
+        </div>
       </MainLogoWrapper>
     </>
   );
