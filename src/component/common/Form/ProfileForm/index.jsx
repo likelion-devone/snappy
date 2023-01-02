@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState, useLayoutEffect } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -8,17 +14,20 @@ import { LabeledInput, ValidationInputWrapper } from "component/common/Input";
 import useAPI from "hook/useAPI";
 import useValidationInput from "hook/useValidationInput";
 
-import { validateUsername as validateUsernameOnLocal, validateAccountname as validateAccountnameOnLocal } from "util/validation"
 import { req } from "lib/api";
+import {
+  validateUsername as validateUsernameOnLocal,
+  validateAccountname as validateAccountnameOnLocal,
+} from "util/validation";
 import isBlobUrl from "util/isBlobUrl";
 
 const Form = styled.form`
   margin-bottom: 30px;
-`
+`;
 
 const StyledBigProfile = styled(BigProfile)`
   margin-bottom: 30px;
-`
+`;
 
 /**
  * @typedef {Object} ProfileFormParam
@@ -28,11 +37,16 @@ const StyledBigProfile = styled(BigProfile)`
  */
 
 /**
- * 
+ *
  * @param {ProfileFormParam} param
- * @returns 
+ * @returns
  */
-export default function ProfileForm({ formId, initialProfileData, dispatchProfileData, ...props }) {
+export default function ProfileForm({
+  formId,
+  initialProfileData,
+  dispatchProfileData,
+  ...props
+}) {
   const labelImageForUploadRef = useRef(null);
   const introRef = useRef(null);
   /**
@@ -40,10 +54,23 @@ export default function ProfileForm({ formId, initialProfileData, dispatchProfil
    */
   const submittedProfileDataRef = useRef(null);
 
-  const [profileSrc, setProfileSrc] = useState(initialProfileData?.image || process.env.REACT_APP_DEFAULT_PROFILE);
+  const [profileSrc, setProfileSrc] = useState(
+    initialProfileData?.image || process.env.REACT_APP_DEFAULT_PROFILE
+  );
 
-  const [_isAccountnameValidationLoading, accountnameValidationResult, _accountnameValidationError, validateAccountnameOnServer] = useAPI(req.noAuth.user.checkAccountname);
-  const [_isImageUploading, _uploadImageResult, _uploadImageError, uploadImage] = useAPI(req.noAuth.image.uploadfile);
+  const [
+    _isAccountnameValidationLoading,
+    accountnameValidationResult,
+    _accountnameValidationError,
+    validateAccountnameOnServer,
+  ] = useAPI(req.noAuth.user.checkAccountname);
+
+  const [
+    _isImageUploading,
+    _uploadImageResult,
+    _uploadImageError,
+    uploadImage,
+  ] = useAPI(req.noAuth.image.uploadfile);
 
   const validateAccountname = async (value) => {
     const accountnameCheckedOnLocal = validateAccountnameOnLocal(value);
@@ -57,20 +84,24 @@ export default function ProfileForm({ formId, initialProfileData, dispatchProfil
       return result;
     }
 
-    return result.message !== "이미 가입된 계정ID 입니다." && value !== initialProfileData.accountname ? result : { message: "사용 가능한 계정ID 입니다." };
-  }
+    return result.message !== "이미 가입된 계정ID 입니다." &&
+      value !== initialProfileData.accountname
+      ? result
+      : { message: "사용 가능한 계정ID 입니다." };
+  };
 
   const [
     usernameRef,
     handleUsernameValidation,
     usernameValidationErrorMessage,
-    isUsernameValidationPassed
+    isUsernameValidationPassed,
   ] = useValidationInput(validateUsernameOnLocal);
+
   const [
     accountnameRef,
     handleAccountnameValidation,
     accountnameValidationErrorMessage,
-    _
+    _,
   ] = useValidationInput(validateAccountname);
 
   const fileReader = new FileReader();
@@ -98,8 +129,8 @@ export default function ProfileForm({ formId, initialProfileData, dispatchProfil
       username: event.target.username.value,
       accountname: event.target.accountname.value,
       intro: event.target.intro.value,
-    }
-  }
+    };
+  };
 
   const handleUploadImage = useCallback(async () => {
     const formData = new FormData();
@@ -116,27 +147,31 @@ export default function ProfileForm({ formId, initialProfileData, dispatchProfil
       submittedProfileDataRef.current.image = profileSrc;
     }
 
-    const {
-      accountname,
-      image,
-      intro,
-      username
-    } = submittedProfileDataRef.current;
+    const { accountname, image, intro, username } =
+      submittedProfileDataRef.current;
 
     dispatchProfileData({ type: "username", payload: username });
     dispatchProfileData({ type: "accountname", payload: accountname });
     dispatchProfileData({ type: "intro", payload: intro });
     dispatchProfileData({ type: "image", payload: image });
-  }, [profileSrc, handleUploadImage, dispatchProfileData])
-
+  }, [profileSrc, handleUploadImage, dispatchProfileData]);
 
   useEffect(() => {
-    if (isUsernameValidationPassed
-      && (accountnameValidationResult
-        && accountnameValidationErrorMessage === "사용 가능한 계정ID 입니다.")) {
+    if (
+      isUsernameValidationPassed &&
+      accountnameValidationResult &&
+      accountnameValidationErrorMessage === "사용 가능한 계정ID 입니다."
+    ) {
       handleFormSubmit();
     }
-  }, [isUsernameValidationPassed, accountnameValidationResult, accountnameValidationErrorMessage, profileSrc, handleUploadImage, handleFormSubmit]);
+  }, [
+    isUsernameValidationPassed,
+    accountnameValidationResult,
+    accountnameValidationErrorMessage,
+    profileSrc,
+    handleUploadImage,
+    handleFormSubmit,
+  ]);
 
   /**
    * initialProfileData가 있을 경우 setting하는 effect
@@ -144,36 +179,64 @@ export default function ProfileForm({ formId, initialProfileData, dispatchProfil
    */
   useLayoutEffect(() => {
     if (initialProfileData) {
-      const { accountname, intro, username } = initialProfileData
+      const { accountname, intro, username } = initialProfileData;
       introRef.current.value = intro;
       usernameRef.current.value = username;
       accountnameRef.current.value = accountname;
     }
-  }, [initialProfileData, introRef, usernameRef, accountnameRef])
+  }, [initialProfileData, introRef, usernameRef, accountnameRef]);
 
   return (
     <Form id={formId} onSubmit={validateValues} {...props}>
       <StyledBigProfile
         src={profileSrc}
         bottomRight={
-          <BigProfile.UploadLabel ref={labelImageForUploadRef} onChange={handleLoadImageToUpload} />
+          <BigProfile.UploadLabel
+            ref={labelImageForUploadRef}
+            onChange={handleLoadImageToUpload}
+          />
         }
       />
       <ValidationInputWrapper errorMessage={usernameValidationErrorMessage}>
-        <ValidationInputWrapper.Input ref={usernameRef} id="username" name="username" type="text" labelText="사용자 이름" placeholder="2~10자 이내여야 합니다." />
+        <ValidationInputWrapper.Input
+          ref={usernameRef}
+          id="username"
+          name="username"
+          type="text"
+          labelText="사용자 이름"
+          placeholder="2~10자 이내여야 합니다."
+        />
         <ValidationInputWrapper.ErrorMessage />
       </ValidationInputWrapper>
       <ValidationInputWrapper errorMessage={accountnameValidationErrorMessage}>
-        <ValidationInputWrapper.Input ref={accountnameRef} id="accountname" name="accountname" type="text" labelText="계정 ID" placeholder="영문, 숫자, 특수문자(.),(_)만 사용 가능합니다." />
-        <ValidationInputWrapper.ErrorMessage $isValid={accountnameValidationErrorMessage === "사용 가능한 계정ID 입니다."} />
+        <ValidationInputWrapper.Input
+          ref={accountnameRef}
+          id="accountname"
+          name="accountname"
+          type="text"
+          labelText="계정 ID"
+          placeholder="영문, 숫자, 특수문자(.),(_)만 사용 가능합니다."
+        />
+        <ValidationInputWrapper.ErrorMessage
+          $isValid={
+            accountnameValidationErrorMessage === "사용 가능한 계정ID 입니다."
+          }
+        />
       </ValidationInputWrapper>
-      <LabeledInput ref={introRef} id="intro" name="intro" type="text" labelText="소개" placeholder="자신을 소개해주세요." />
+      <LabeledInput
+        ref={introRef}
+        id="intro"
+        name="intro"
+        type="text"
+        labelText="소개"
+        placeholder="자신을 소개해주세요."
+      />
     </Form>
-  )
+  );
 }
 
 ProfileForm.propTypes = {
   formId: PropTypes.string.isRequired,
   initialProfileData: PropTypes.object,
   dispatchProfileData: PropTypes.func.isRequired,
-}
+};

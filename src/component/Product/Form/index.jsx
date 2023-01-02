@@ -1,18 +1,20 @@
 import styled from "styled-components";
-import { useEffect, useContext, useState, useRef } from "react";
-import useValidationInput from "hook/useValidationInput";
 import PropTypes from "prop-types";
+import { useEffect, useContext, useState, useRef } from "react";
 
+import { ProductContext } from "component/common/ProductProvider/index";
+import AddedImgList from "component/common/AddedImgList/index";
 import ValidationInputWrapper from "component/common/Input/ValidationInput";
 
-import { FONT_SIZE } from "constant/style";
-import { ProductContext } from "component/common/ProductProvider/index";
-import Icons from "asset/icon/icons";
-import AddedImgList from "component/common/AddedImgList/index";
 import useAPI from "hook/useAPI";
+import useValidationInput from "hook/useValidationInput";
+
 import { req } from "lib/api/index";
-import { validateIsFilled, validateOver1, validateUrl } from "util/validation";
 import isBlobUrl from "util/isBlobUrl";
+import { validateIsFilled, validateOver1, validateUrl } from "util/validation";
+
+import { FONT_SIZE } from "constant/style";
+import Icons from "asset/icon/icons";
 
 const ProductFormWrapper = styled.fieldset`
   min-width: 322px;
@@ -57,14 +59,14 @@ const HiddenUploadFileInput = styled.input`
 const AddedImgContainer = styled.div`
   width: 100%;
   height: 204px;
-  background-color: #f2f2f2;
   border-radius: 10px;
   border: 0.5px solid ${({ theme }) => theme.snGreyOff};
+  background-color: ${({ theme }) => theme.snGreyExtraLight};
 `;
 
 const StyledAddedImgList = styled(AddedImgList)`
   margin: 0;
-  background-color: #f2f2f2;
+  background-color: ${({ theme }) => theme.snGreyExtraLight};
   border-radius: 10px;
   max-width: 100%;
   height: 203px;
@@ -73,7 +75,7 @@ const StyledAddedImgList = styled(AddedImgList)`
   gap: 10px;
 
   li {
-    background-color: white;
+    background-color: ${({ theme }) => theme.snWhite};
     width: fit-content;
     height: 100%;
     margin: 0;

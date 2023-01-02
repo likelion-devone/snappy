@@ -1,16 +1,15 @@
 import { createContext, useEffect, useState, useCallback } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { req } from "lib/api";
 import useAPI from "hook/useAPI";
+import { req } from "lib/api";
 import { getValidToken } from "lib/auth";
 import {
   removeTokenOnLocalStorage,
   setTokenOnLocalStorage,
 } from "lib/storage/localStorage";
-
-import ROUTE from "constant/route";
 import LandingPage from "page/Landing";
+import ROUTE from "constant/route";
 
 /**
  * @typedef {Object} UserInfo
@@ -85,7 +84,7 @@ export default function AuthProvider() {
 
       setAuthInfo({
         intro: "",
-        ...result.user
+        ...result.user,
       }); // intro는 아예 없는 경우도 있습니다. 이럴 때를 대비해 빈 스트링을 넣습니다.
 
       if (
@@ -146,15 +145,23 @@ export default function AuthProvider() {
   }, [navigate]);
 
   return (
-    <AuthContext.Provider value={{
-      authInfo, handleLogin, handleLogout, loginError, isLoggingIn
-    }}>
+    <AuthContext.Provider
+      value={{
+        authInfo,
+        handleLogin,
+        handleLogout,
+        loginError,
+        isLoggingIn,
+      }}
+    >
       {authInfo ||
-        (haveTriedAutoLogin &&
-          (location.pathname.includes(ROUTE.LOGIN) ||
-            location.pathname === ROUTE.LANDING))
-        ? <Outlet />
-        : <LandingPage />}
+      (haveTriedAutoLogin &&
+        (location.pathname.includes(ROUTE.LOGIN) ||
+          location.pathname === ROUTE.LANDING)) ? (
+        <Outlet />
+      ) : (
+        <LandingPage />
+      )}
     </AuthContext.Provider>
   );
 }

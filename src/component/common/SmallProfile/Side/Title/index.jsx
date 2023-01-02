@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { FONT_SIZE } from "constant/style";
 import { Link } from "react-router-dom";
+import { FONT_SIZE } from "constant/style";
 
 const Wrapper = styled.div`
   display: flex;

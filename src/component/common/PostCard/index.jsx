@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import SmallProfile from "../SmallProfile";
 import { AlertModal, DropdownModal } from "component/common/Modal";
 import { PostDataContext } from "component/common/PostDataProvider/index";
 import Carousel from "component/common/Carousel/index";
+import SmallProfile from "../SmallProfile";
 
 import useDropdownModal from "hook/useDropdownModal";
 import useAuthInfo from "hook/useAuthInfo";
@@ -17,11 +17,10 @@ import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
 import getTimeGapInKr from "util/getTimeGapInKr";
 
-import Icons from "asset/icon/icons";
-
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
 import ROUTE, { ROUTE_POST } from "constant/route";
+import Icons from "asset/icon/icons";
 
 const PostCardWrapper = styled.section`
   display: flex;
@@ -69,7 +68,7 @@ const SvgHeart = styled(Icons.Heart)`
   path {
     ${({ $isHearted, theme }) => $isHearted && "fill:" + theme.snRed + ";"}
     stroke: ${({ $isHearted, theme }) =>
-    $isHearted ? theme.snRed : theme.snGreyIcon};
+      $isHearted ? theme.snRed : theme.snGreyIcon};
   }
 `;
 
@@ -112,22 +111,22 @@ export default function PostCard({
     useAPI(req.post.remove);
   const deletePostIfNotDeleting = () => {
     if (isDeletingPost) {
-      alert("게시글을 삭제중입니다. 잠시 기다려주세요.")
+      alert("게시글을 삭제중입니다. 잠시 기다려주세요.");
       return;
     }
     deletePost({ postId });
-  }
+  };
 
   // 게시글 신고 API
   const [isReportingPost, reportPostResponse, reportPosterror, reportPost] =
     useAPI(req.post.report);
   const reportPostIfNotReporting = () => {
     if (isReportingPost) {
-      alert("게시글을 신고중입니다. 잠시 기다려주세요.")
+      alert("게시글을 신고중입니다. 잠시 기다려주세요.");
       return;
     }
     reportPost({ postId });
-  }
+  };
 
   // 좋아요 버튼
   const [isHearted, setIsHearted] = useState(hearted);
@@ -338,7 +337,10 @@ export default function PostCard({
           </LinkIcon>
         </IconWrapper>
 
-        <PostDate dateTime={createdAt}>{getTimeGapInKr(createdAt)}{createdAt !== updatedAt && ` (${getTimeGapInKr(updatedAt)} 수정됨)`}</PostDate>
+        <PostDate dateTime={createdAt}>
+          {getTimeGapInKr(createdAt)}
+          {createdAt !== updatedAt && ` (${getTimeGapInKr(updatedAt)} 수정됨)`}
+        </PostDate>
       </ContentWrapper>
     </PostCardWrapper>
   );

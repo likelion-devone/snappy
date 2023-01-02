@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import GreyIcon from "asset/logo-profile-172213.png";
-import PostCard from "component/common/PostCard/index";
 import { Link } from "react-router-dom";
+
+import PostCard from "component/common/PostCard/index";
 import routeResolver from "util/routeResolver";
+
 import ROUTE from "constant/route";
+import GreyIcon from "asset/logo-profile-172213.png";
 
 const SingleImg = styled.img`
   height: 100%;
@@ -30,18 +32,22 @@ const AlbumGrid = styled.ol`
     grid-row: span 2;
   }
 
-  ${({ visible }) => !visible && `
+  ${({ visible }) =>
+    !visible &&
+    `
     position: absolute;
     left: -200vw;
   `};
 `;
 
 const ListViewWrapper = styled.ol`
-  ${({ visible }) => !visible && `
+  ${({ visible }) =>
+    !visible &&
+    `
     position: absolute;
     left: -200vw;
   `};
-`
+`;
 
 const handleImgError = (event) => {
   event.target.src = GreyIcon;
@@ -67,7 +73,7 @@ function AlbumView({ postData, visible }) {
             <li key={slide.id}>
               <Link to={routeResolver(ROUTE.POST, slide.id)}>
                 <SingleImg
-                  src={slide.image.split(',')[0]}
+                  src={slide.image.split(",")[0]}
                   alt={`${slide.author.username}님이 올리신 포스트의 썸네일 이미지입니다.`}
                   onError={handleImgError}
                 />
@@ -110,9 +116,9 @@ export { AlbumView, ListView };
 
 AlbumView.propTypes = {
   postData: PropTypes.arrayOf(PropTypes.object),
-  visible: PropTypes.bool.isRequired
+  visible: PropTypes.bool.isRequired,
 };
 ListView.propTypes = {
   postData: PropTypes.arrayOf(PropTypes.object),
-  visible: PropTypes.bool.isRequired
+  visible: PropTypes.bool.isRequired,
 };

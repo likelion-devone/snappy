@@ -1,5 +1,5 @@
-import { TopNavContext } from "component/common/Navbar/TopNavProvider";
 import { useCallback, useContext, useLayoutEffect, useState } from "react";
+import { TopNavContext } from "component/common/Navbar/TopNavProvider";
 
 /**
  * @typedef {Object.<{ title: string, left: React.ReactNode, right: React.ReactNode }>} TopNavSetterParam

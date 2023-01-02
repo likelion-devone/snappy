@@ -12,11 +12,11 @@ const Form = styled.form`
   align-items: center;
   gap: 8px;
   padding: 0 15px;
-  
+
   height: 61px;
-  
-  color: ${(props) => props.theme.snGreyOff};
-  background-color: ${(props) => props.theme.snWhite};
+
+  color: ${({ theme }) => theme.snGreyOff};
+  background-color: ${({ theme }) => theme.snWhite};
 
   box-shadow: rgba(17, 12, 46, 0.08) 0px -5px 100px 0px;
   z-index: 100;
@@ -29,30 +29,36 @@ const Form = styled.form`
     align-items: center;
 
     + button {
-      color: ${({ $isFilled, theme }) => $isFilled ? theme.snBlue : theme.snGreyMain};
+      color: ${({ $isFilled, theme }) =>
+        $isFilled ? theme.snBlue : theme.snGreyMain};
       ${({ $isFilled }) => !$isFilled && `pointer-events: none;`}
     }
   }
   .formInput {
     flex: 1;
-
     height: 30px;
-
     padding: 0 7px;
-
-    border: 1px solid ${(props) => props.theme.snGreyOff};
+    border: 1px solid ${({ theme }) => theme.snGreyOff};
     border-radius: 10px;
+
     :focus {
-      outline-color: #33afd8;
+      outline-color: ${({ theme }) => theme.snBlue};
     }
   }
 `;
 
-export default function CommentForm({ left, right, placeholder = "Type a message", ...props }) {
+export default function CommentForm({
+  left,
+  right,
+  placeholder = "Type a message",
+  ...props
+}) {
   const [isFilled, setIsFilled] = useState(false);
 
   const setIsFilledIfHasContent = (event) => {
-    const { target: { value } } = event;
+    const {
+      target: { value },
+    } = event;
     if (isFilled && !value) {
       setIsFilled(false);
     }

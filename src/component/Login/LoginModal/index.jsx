@@ -1,21 +1,20 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
+import routeResolver from "util/routeResolver";
 import LoginButton from "../LoginButton/index";
+
+import { FONT_SIZE } from "constant/style";
+import ROUTE, { ROUTE_LOGIN } from "constant/route";
 
 import LogoKakao from "asset/social/kakao.png";
 import LogoGoogle from "asset/social/google.png";
 import LogoFacebook from "asset/social/facebook.png";
 
-import { FONT_SIZE } from "constant/style"
-import ROUTE, { ROUTE_LOGIN } from "constant/route";
-
-import routeResolver from "util/routeResolver";
-
 const LoginModalWrapper = styled.main`
   width: 100%;
-  height: ${({ $isModalOpened }) => $isModalOpened ? "320px" : "0"};
+  height: ${({ $isModalOpened }) => ($isModalOpened ? "320px" : "0")};
 
   padding-top: 50px;
 
@@ -27,7 +26,7 @@ const LoginModalWrapper = styled.main`
 
   border-top-right-radius: 44px;
   border-top-left-radius: 44px;
-`
+`;
 
 const StyledLink = styled(Link)`
   display: inline-block;
@@ -54,10 +53,10 @@ const StyledLink = styled(Link)`
       width: 1px;
       height: 13px;
 
-      background-color: #C4C4C4;
+      background-color: ${({ theme }) => theme.snGreyLight};
     }
   }
-`
+`;
 
 export default function LoginModal({ $isModalOpened }) {
   return (
@@ -65,12 +64,19 @@ export default function LoginModal({ $isModalOpened }) {
       <LoginButton src={LogoKakao} providerName="카카오톡" color="#F2C94C" />
       <LoginButton src={LogoGoogle} providerName="구글" color="#767676" />
       <LoginButton src={LogoFacebook} providerName="페이스북" color="#33AFD8" />
-      <StyledLink to={ROUTE_LOGIN.AUTHORIZE} relative={true}>이메일로 로그인</StyledLink>
-      <StyledLink to={routeResolver(ROUTE.LOGIN, ROUTE_LOGIN.JOIN, "1")} relative={true}>회원가입</StyledLink>
+      <StyledLink to={ROUTE_LOGIN.AUTHORIZE} relative={true}>
+        이메일로 로그인
+      </StyledLink>
+      <StyledLink
+        to={routeResolver(ROUTE.LOGIN, ROUTE_LOGIN.JOIN, "1")}
+        relative={true}
+      >
+        회원가입
+      </StyledLink>
     </LoginModalWrapper>
-  )
+  );
 }
 
 LoginModal.propTypes = {
-  $isModalOpened: PropTypes.bool
-}
+  $isModalOpened: PropTypes.bool,
+};

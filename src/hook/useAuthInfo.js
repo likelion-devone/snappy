@@ -1,5 +1,5 @@
-import { AuthContext } from "lib/auth/AuthProvider";
 import { useContext } from "react";
+import { AuthContext } from "lib/auth/AuthProvider";
 
 /**
  * user info가 필요한 경우 사용하는 Custom Hook

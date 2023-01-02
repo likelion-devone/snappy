@@ -14,11 +14,11 @@ import useAPI from "hook/useAPI";
 import useAuthInfo from "hook/useAuthInfo";
 import useTopNavSetter from "hook/useTopNavSetter";
 
-import ROUTE from "constant/route";
-import { PROFILE_SIZE } from "constant/size";
-
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
+
+import ROUTE from "constant/route";
+import { PROFILE_SIZE } from "constant/size";
 
 const PostUploadWrapper = styled.div`
   position: relative;

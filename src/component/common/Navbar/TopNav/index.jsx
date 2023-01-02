@@ -1,13 +1,11 @@
 import { useContext } from "react";
 import styled from "styled-components";
 
-import { cssNavbar } from "../style/css";
 import { TopNavContext } from "../TopNavProvider";
-
-import { TOP_NAVBAR_HEIGHT } from "constant/style";
-
 import Title from "./Title";
 import TopNavButton, { GoBackButton, MoreButton, SearchButton } from "./Button";
+import { cssNavbar } from "../style/css";
+import { TOP_NAVBAR_HEIGHT } from "constant/style";
 
 const Wrapper = styled.header`
   ${cssNavbar}
@@ -19,31 +17,29 @@ const Wrapper = styled.header`
   padding: 13px 16px;
 
   height: ${TOP_NAVBAR_HEIGHT};
-
-`
+`;
 
 export default function TopNav() {
   const { title, left, right } = useContext(TopNavContext);
 
   if (!left || !right) {
-    return <></>
+    return <></>;
   }
 
   const hasHeadingElement = [
     right.type,
     right.type.target,
     left.type,
-    left.type.target
+    left.type.target,
   ].includes("h1");
 
   return (
     <Wrapper>
-      {!hasHeadingElement
-        && <h1 className="sr-only">{title}</h1>}
+      {!hasHeadingElement && <h1 className="sr-only">{title}</h1>}
       {left}
       {right}
     </Wrapper>
-  )
+  );
 }
 
 const TopNavElement = {};
