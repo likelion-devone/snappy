@@ -50,12 +50,20 @@ export default function CommentWrapper({ postId, onCommentChanges }) {
 
   useEffect(() => {
     if (createCommentResult) {
+      onCommentChanges();
       getComments({ postId });
     }
     if (createCommentError) {
       alert("댓글 게시중 오류가 발생했습니다.");
+      console.error(createCommentError);
     }
-  }, [createCommentResult, createCommentError, getComments, postId]);
+  }, [
+    createCommentResult,
+    createCommentError,
+    getComments,
+    postId,
+    onCommentChanges,
+  ]);
 
   const createCommentIfNotCreating = (event) => {
     event.preventDefault();
@@ -77,8 +85,6 @@ export default function CommentWrapper({ postId, onCommentChanges }) {
       postId,
       content: value,
     });
-
-    onCommentChanges();
   };
 
   const handleCommentChanges = useCallback(() => {
