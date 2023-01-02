@@ -8,15 +8,17 @@ import { ProductContext } from "component/common/ProductProvider/index";
 import useAPI from "hook/useAPI";
 import useFetch from "hook/useFetch";
 import useTopNavSetter from "hook/useTopNavSetter";
+import useAuthInfo from "hook/useAuthInfo";
 
 import { req } from "lib/api/index";
-import routeResolver from "util/routeResolver";
 
 import ROUTE from "constant/route";
 
 export default function EditProductPage() {
   const { productid } = useParams();
   const navigate = useNavigate();
+  const { _id: userId } = useAuthInfo();
+
   const isMounted = useRef(false);
 
   // 상품 상세 API
@@ -54,11 +56,15 @@ export default function EditProductPage() {
 
   useEffect(() => {
     if (initialProductDataError) {
-      alert("초기 데이터 오류가 발생했스내피!");
+      console.error(initialProductDataError);
       navigate(ROUTE.HOME);
       return;
     }
     if (initialProductData) {
+      if (initialProductData.product.author._id !== userId) {
+        navigate(ROUTE.PROFILE);
+      }
+
       dispatchProductData({
         type: "set",
         payload: {
@@ -70,6 +76,7 @@ export default function EditProductPage() {
       });
     }
   }, [
+    userId,
     initialProductData,
     initialProductDataError,
     navigate,
@@ -104,12 +111,7 @@ export default function EditProductPage() {
   useEffect(() => {
     if (editProductResult) {
       alert("상품 내용을 수정했스내피!");
-      navigate(
-        routeResolver(
-          ROUTE.PROFILE,
-          initialProductData.product.author.accountname
-        )
-      );
+      navigate(ROUTE.PROFILE);
       return;
     }
     if (editProductError) {

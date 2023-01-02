@@ -42,6 +42,8 @@ export default function PostEditPage() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const [imgData, setImgData] = useState([]);
+  const { _id: userId } = useAuthInfo();
+
   const inpImagesRef = useRef(null);
   const textareaRef = useRef(null);
 
@@ -57,12 +59,18 @@ export default function PostEditPage() {
 
   useEffect(() => {
     if (initialPostData) {
+      console.log(initialPostData);
+      if (initialPostData.post.author._id !== userId) {
+        navigate(ROUTE.HOME);
+        return;
+      }
+
       if (!initialPostData.post.image) {
         return;
       }
       setImgData(initialPostData.post.image.split(","));
     }
-  }, [initialPostData]);
+  }, [initialPostData, navigate, userId]);
 
   useEffect(() => {
     if (initialPostDataError) {
@@ -188,7 +196,7 @@ export default function PostEditPage() {
   useEffect(() => {
     // 게시물 업로드 전
     if (editPostError) {
-      console.log(editPostError);
+      console.error(editPostError);
       alert("게시물 업로드를 실패했습니다.");
       return;
     }

@@ -9,7 +9,6 @@ import useAPI from "hook/useAPI";
 import useTopNavSetter from "hook/useTopNavSetter";
 
 import { req } from "lib/api/index";
-import routeResolver from "util/routeResolver";
 
 import ROUTE from "constant/route";
 
@@ -52,12 +51,7 @@ export default function AddProductPage() {
   useEffect(() => {
     if (addProductResult) {
       alert("상품 등록이 완료되었스내피!");
-      navigate(
-        routeResolver(
-          ROUTE.PROFILE,
-          addProductResult.product.author.accountname
-        )
-      );
+      navigate(ROUTE.PROFILE);
       return;
     }
     if (addProductError) {

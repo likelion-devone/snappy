@@ -53,7 +53,6 @@ export default function AddedImgList({ imgData, setImgData, className }) {
   //  X 버튼 클릭 시 이미지 프리뷰 리스트에서 제거
   const handleDeleteImg = (blobToRemove) => () => {
     setImgData((prev) => prev.filter((image) => image !== blobToRemove));
-    // TODO: 시우님께 알립니다! 아래 부분 때문에 isPossibleUploadProvider를 잘 써주셔야 합니다.
     if (!isPossibleToUpload) {
       setIsPossibleToUpload(true);
     }
