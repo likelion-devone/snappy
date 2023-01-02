@@ -275,8 +275,8 @@ function PageDetails({ accountname, $isMyProfile = false }) {
     useAPI(req.product.load);
 
   const [
-    isProductRemoving,
-    _productRemoveResponse,
+    _isProductRemoving,
+    productRemoveResponse,
     productRemoveError,
     removeProduct,
   ] = useAPI(req.product.remove);
@@ -294,17 +294,17 @@ function PageDetails({ accountname, $isMyProfile = false }) {
   }, [myId, selectedProductData]);
 
   useEffect(() => {
-    if (isProductRemoving) {
-      return;
-    }
     if (productRemoveError) {
       alert("상품 삭제에 실패했스내피...");
     }
-    // if (productRemoveResponse) {
-    //   alert("상품을 삭제했스내피."); 완벽히 처리하지 못 할 것 같아 일단 주석처리. 동작에 지장은 없음.
-    // }
     return;
-  }, [isProductRemoving, productRemoveError, getProductData, accountname]);
+  }, [productRemoveError]);
+
+  useEffect(() => {
+    if (productRemoveResponse) {
+      alert("상품을 삭제했스내피.");
+    }
+  }, [productRemoveResponse]);
 
   useEffect(() => {
     getUserPostData({ accountname });
