@@ -1,8 +1,8 @@
 import { useEffect, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ProductContext } from "component/common/ProductProvider/index";
 import ProductForm from "component/Product/Form/index";
+import { ProductContext } from "component/common/ProductProvider/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
 
 import useAPI from "hook/useAPI";
@@ -15,6 +15,8 @@ import ROUTE from "constant/route";
 export default function AddProductPage() {
   const navigate = useNavigate();
   const { isFormFilled, productData } = useContext(ProductContext);
+  
+  // 상품 등록 API
   const [isProductAdding, addProductResult, addProductError, addProduct] =
     useAPI(req.product.add);
 
@@ -55,7 +57,7 @@ export default function AddProductPage() {
       return;
     }
     if (addProductError) {
-      alert("상품 등록에 실패했스내피. 오류가 접수되었습니다.");
+      alert("상품 등록에 실패했스내피!");
     }
   }, [addProductResult, addProductError, navigate]);
 

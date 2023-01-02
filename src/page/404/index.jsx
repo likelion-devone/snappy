@@ -16,7 +16,7 @@ const MainLogoWrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  
+
   img {
     width: 50vw;
     max-width: 500px;
@@ -28,9 +28,9 @@ const MainLogoWrapper = styled.div`
     padding-bottom: 20px;
     font-weight: 700;
     font-size: ${FONT_SIZE.LARGE};
-    color: ${(props) => props.theme.snGreyMain};
+    color: ${({ theme }) => theme.snGreyMain};
   }
-`
+`;
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -49,8 +49,7 @@ const Wrapper = styled.div`
 
   .logo2 {
     grid-column: 3 / 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    grid-row: 1 / 2;
     transform: translateY(10vw);
   }
 
