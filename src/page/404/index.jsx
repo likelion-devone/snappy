@@ -44,7 +44,6 @@ const Wrapper = styled.div`
 
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
   align-items: center;
   text-align: center;
 
