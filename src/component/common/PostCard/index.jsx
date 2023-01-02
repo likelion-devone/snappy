@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import SmallProfile from "../SmallProfile";
 import { AlertModal, DropdownModal } from "component/common/Modal";
 import { PostDataContext } from "component/common/PostDataProvider/index";
+import Carousel from "component/common/Carousel/index";
 
 import useDropdownModal from "hook/useDropdownModal";
 import useAuthInfo from "hook/useAuthInfo";
@@ -17,7 +18,6 @@ import routeResolver from "util/routeResolver";
 import getTimeGapInKr from "util/getTimeGapInKr";
 
 import Icons from "asset/icon/icons";
-import ErrorImg from "asset/logo-404-343264.png";
 
 import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
@@ -42,74 +42,6 @@ const ContentText = styled.p`
     display: block;
     padding: 16px 0;
   }
-`;
-
-const ContentPostImgWrapper = styled.div`
-  position: relative;
-  width: 70%;
-  min-width: 300px;
-  margin: 0 auto;
-  text-align: center;
-`;
-
-const ContentPostImg = styled.img`
-  vertical-align: top;
-  max-width: 70%;
-  min-width: 300px;
-  height: 228px;
-  object-fit: contain;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
-  display: ${(props) => (props.isActive ? "inline" : "none")};
-`;
-
-const ButtonDotWrapper = styled.div`
-  position: absolute;
-  bottom: 12px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-`;
-
-const ButtonDot = styled.button`
-  height: 11px;
-  width: 11px;
-  margin: 0 6px;
-  border-radius: 50%;
-  background-color: ${(props) =>
-    props.isActive ? props.theme.snBlue : props.theme.snGreyOff};
-
-  :hover {
-    background-color: ${({ theme }) => theme.snBlue};
-  }
-`;
-
-const SlideBtn = styled.button`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  padding: 10px;
-  width: 50%;
-  :hover {
-    background-color: ${({ theme }) => theme.snBlue}22;
-    transition: all 0.5s ease;
-  }
-  border-radius: 10px;
-`;
-
-const RightSlideBtn = styled(SlideBtn)`
-  right: 0;
-  text-align: right;
-`;
-
-const LeftSlideBtn = styled(SlideBtn)`
-  left: 0;
-  text-align: left;
-`;
-
-const SvgSlide = styled(Icons.Slide)`
-  transform: rotate(180deg);
 `;
 
 const IconWrapper = styled.div`
@@ -196,9 +128,6 @@ export default function PostCard({
     }
     reportPost({ postId });
   }
-
-  // 슬라이드 버튼
-  const [BtnDotCounter, setBtnDotCounter] = useState(0);
 
   // 좋아요 버튼
   const [isHearted, setIsHearted] = useState(hearted);
@@ -317,13 +246,6 @@ export default function PostCard({
     reportMsgModalopen();
   }
 
-  // 이미지 여러장
-  const multipleImgs = image && image.split(",").length > 1;
-
-  const handleImgError = (event) => {
-    event.target.src = ErrorImg;
-  };
-
   return (
     <PostCardWrapper>
       <h2 className="sr-only">게시물</h2>
@@ -397,66 +319,8 @@ export default function PostCard({
             <Link to={`/post/${postId}`}>{content}</Link>
           </ContentText>
         )}
-        <ContentPostImgWrapper>
-          {image &&
-            React.Children.toArray(
-              image.split(",").map((postImg, index) => (
-                <ContentPostImg
-                  src={postImg}
-                  isActive={index === BtnDotCounter}
-                  onError={handleImgError}
-                  onClick={(event) => {
-                    event.preventDefault();
-                  }}
-                />
-              ))
-            )}
 
-          {multipleImgs && (
-            <ButtonDotWrapper>
-              {React.Children.toArray(
-                image
-                  .split(",")
-                  .map((postImg, index) => (
-                    <ButtonDot
-                      isActive={index === BtnDotCounter}
-                      onClick={() => setBtnDotCounter(index)}
-                    />
-                  ))
-              )}
-            </ButtonDotWrapper>
-          )}
-          {multipleImgs && (
-            <>
-              <LeftSlideBtn
-                type="button"
-                onClick={() => {
-                  setBtnDotCounter((prev) => {
-                    if (prev > 0) {
-                      return prev - 1;
-                    }
-                    return prev;
-                  });
-                }}
-              >
-                <SvgSlide />
-              </LeftSlideBtn>
-              <RightSlideBtn
-                type="button"
-                onClick={() => {
-                  setBtnDotCounter((prev) => {
-                    if (prev < image.split(",").length - 1) {
-                      return prev + 1;
-                    }
-                    return prev;
-                  });
-                }}
-              >
-                <Icons.Slide />
-              </RightSlideBtn>
-            </>
-          )}
-        </ContentPostImgWrapper>
+        {image && <Carousel imageLinks={image.split(",")} />}
 
         <IconWrapper>
           <ButtonIcon onClick={handleHeartButton}>
