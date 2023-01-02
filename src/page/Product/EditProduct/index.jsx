@@ -1,31 +1,32 @@
 import { useEffect, useContext, useRef, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { ProductContext } from "component/common/ProductProvider/index";
 import ProductForm from "component/Product/Form/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
+import { ProductContext } from "component/common/ProductProvider/index";
 
-import useFetch from "hook/useFetch";
 import useAPI from "hook/useAPI";
+import useFetch from "hook/useFetch";
+import useTopNavSetter from "hook/useTopNavSetter";
 
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
 
 import ROUTE from "constant/route";
-import useTopNavSetter from "hook/useTopNavSetter";
 
 export default function EditProductPage() {
   const { productid } = useParams();
   const navigate = useNavigate();
-
   const isMounted = useRef(false);
 
+  // 상품 상세 API
   const [isProductDataFetching, initialProductData, initialProductDataError] =
     useFetch(req.product.detail, { productId: productid });
 
   const { isFormFilled, productData, dispatchProductData } =
     useContext(ProductContext);
 
+  // 상품 수정 API
   const [isProductEditing, editProductResult, editProductError, editProduct] =
     useAPI(req.product.edit);
 
@@ -53,7 +54,7 @@ export default function EditProductPage() {
 
   useEffect(() => {
     if (initialProductDataError) {
-      alert("물건 데이터 fetch 오류");
+      alert("초기 데이터 오류가 발생했스내피!");
       navigate(ROUTE.HOME);
       return;
     }
@@ -87,7 +88,7 @@ export default function EditProductPage() {
     ) {
       editProduct({ productId: productid, ...productData });
     } else if (isMounted.current) {
-      alert("수정사항이 없습니다.");
+      alert("수정사항이 없스내피!");
     } else {
       isMounted.current = true;
     }
@@ -112,7 +113,7 @@ export default function EditProductPage() {
       return;
     }
     if (editProductError) {
-      alert("수정하다가 에러뜸");
+      alert("수정중 에러가 발생했스내피!");
     }
   }, [editProductResult, editProductError, navigate, initialProductData]);
 
