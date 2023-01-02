@@ -9,14 +9,15 @@ import useFetch from "hook/useFetch";
 import useAPI from "hook/useAPI";
 
 import { req } from "lib/api/index";
-import routeResolver from "util/routeResolver";
 
 import ROUTE from "constant/route";
 import useTopNavSetter from "hook/useTopNavSetter";
+import useAuthInfo from "hook/useAuthInfo";
 
 export default function EditProductPage() {
   const { productid } = useParams();
   const navigate = useNavigate();
+  const { _id: userId } = useAuthInfo();
 
   const isMounted = useRef(false);
 
@@ -53,11 +54,16 @@ export default function EditProductPage() {
 
   useEffect(() => {
     if (initialProductDataError) {
+      console.error(initialProductDataError);
       alert("물건 데이터 fetch 오류");
       navigate(ROUTE.HOME);
       return;
     }
     if (initialProductData) {
+      if (initialProductData.product.author._id !== userId) {
+        navigate(ROUTE.PROFILE)
+      }
+
       dispatchProductData({
         type: "set",
         payload: {
@@ -69,6 +75,7 @@ export default function EditProductPage() {
       });
     }
   }, [
+    userId,
     initialProductData,
     initialProductDataError,
     navigate,
@@ -103,9 +110,7 @@ export default function EditProductPage() {
   useEffect(() => {
     if (editProductResult) {
       alert("상품 내용을 수정했스내피!");
-      navigate(
-        routeResolver(ROUTE.PROFILE)
-      );
+      navigate(ROUTE.PROFILE);
       return;
     }
     if (editProductError) {
