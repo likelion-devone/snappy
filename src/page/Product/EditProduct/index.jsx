@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProductForm from "component/Product/Form/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
 import { ProductContext } from "component/common/ProductProvider/index";
+import { IsUploadPossibleContext } from "component/Post/IsUploadPossibleProvider/index";
 
 import useAPI from "hook/useAPI";
 import useFetch from "hook/useFetch";
@@ -19,6 +20,14 @@ export default function EditProductPage() {
   const { productid } = useParams();
   const navigate = useNavigate();
   const { _id: userId } = useAuthInfo();
+  const { isPossibleToUpload: isImageDeleted, _setIsPossibleToUpload } =
+    useContext(IsUploadPossibleContext);
+
+  const isImageDeletedRef = useRef(false);
+
+  useEffect(() => {
+    isImageDeletedRef.current = isImageDeleted;
+  }, [isImageDeleted]);
 
   const isMounted = useRef(false);
 
@@ -37,7 +46,7 @@ export default function EditProductPage() {
     () => (
       <TopNavElement.Button
         form="productForm"
-        $isAbled={!isFormFilled || isProductEditing}
+        $isAbled={isFormFilled && !isProductEditing}
       >
         저장
       </TopNavElement.Button>
@@ -92,11 +101,13 @@ export default function EditProductPage() {
     if (
       !Object.keys(productData).every(
         (key) => productData[key] === initialProductData.product[key]
-      )
+      ) ||
+      isImageDeletedRef.current
     ) {
       editProduct({ productId: productid, ...productData });
     } else if (isMounted.current) {
       alert("수정사항이 없스내피!");
+      navigate(ROUTE.PROFILE);
     } else {
       isMounted.current = true;
     }
@@ -118,7 +129,7 @@ export default function EditProductPage() {
     if (editProductError) {
       alert("수정중 에러가 발생했스내피!");
     }
-  }, [editProductResult, editProductError, navigate, initialProductData]);
+  }, [editProductResult, editProductError, navigate]);
 
   return isProductDataFetching ? (
     <LoaderNappy />
