@@ -2,22 +2,23 @@ import styled from "styled-components";
 import { useState, useRef, useEffect, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
+import TextArea from "component/Post/TextArea/index";
 import SmallProfile from "component/common/SmallProfile/index";
 import AddedImgList from "component/common/AddedImgList/index";
-import { IsUploadPossibleContext } from "component/Post/IsUploadPossibleProvider/index";
-import ImgDataProvider from "component/Post/ImgDataProvider/index";
-import TextArea from "component/Post/TextArea/index";
 import LabelImgUpload from "component/Post/LabelImgUpload/index";
+import ImgDataProvider from "component/Post/ImgDataProvider/index";
 import { TopNavElement } from "component/common/Navbar/TopNav/index";
+import { IsUploadPossibleContext } from "component/Post/IsUploadPossibleProvider/index";
 
-import { PROFILE_SIZE } from "constant/size";
+import useAPI from "hook/useAPI";
+import useAuthInfo from "hook/useAuthInfo";
+import useTopNavSetter from "hook/useTopNavSetter";
+
 import ROUTE from "constant/route";
+import { PROFILE_SIZE } from "constant/size";
 
 import { req } from "lib/api/index";
 import routeResolver from "util/routeResolver";
-import useAuthInfo from "hook/useAuthInfo";
-import useTopNavSetter from "hook/useTopNavSetter";
-import useAPI from "hook/useAPI";
 
 const PostUploadWrapper = styled.div`
   position: relative;
@@ -153,7 +154,6 @@ export default function PostUploadPage() {
 
   return (
     <PostUploadWrapper>
-      {/* TODO 상단 Nav 업로드 버튼, isActive */}
       <ImgDataProvider>
         <FormSection id="post-upload" onSubmit={handleSubmitPost}>
           <SmallProfile
