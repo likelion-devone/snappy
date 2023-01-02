@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-import Logo from "asset/logo-main-212262.png";
 import Title from "asset/title-main-291051.png";
+import { SplashNappy } from "component/common/Animation/index";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -15,17 +15,16 @@ const Wrapper = styled.div`
 
   transition: all 1s ease-in-out;
 
-  img.logo {
-    transform: translate(-20px);
-    margin-bottom: 49px;
+  img.title-logo {
+    margin-top: 50px;
   }
 `
 
 export default function LandingPage() {
   return (
     <Wrapper>
-      <img className="logo" src={Logo} alt="" width={212} height={262} />
-      <img src={Title} alt="" width={291} height={51} />
+      <SplashNappy />
+      <img src={Title} alt="Snappy 타이틀 로고입니다." className="title-logo" width={291} height={51} />
     </Wrapper>
   )
 }

@@ -16,7 +16,7 @@ export default function FollowingListPage() {
       <>
         <TopNavElement.GoBackButton />
         <TopNavElement.Title>
-          Followers
+          Followings
         </TopNavElement.Title>
       </>
     ),

@@ -13,6 +13,7 @@ import useTopNavSetter from "hook/useTopNavSetter";
 import { req } from "lib/api/index";
 
 import ROUTE from "constant/route";
+import { LoaderNappy } from "component/common/Animation/index";
 
 const StyledProfileForm = styled(ProfileForm)`
   margin-top: 15px;
@@ -113,7 +114,7 @@ export default function ProfileEditPage() {
   }, [editProfileResult, editProfileError, navigate]);
 
   if (isInitialProfileDataLoading) {
-    return <>로딩중</>;
+    return <LoaderNappy />;
   }
 
   return <StyledProfileForm formId="profileForm" initialProfileData={initialProfileData.profile} dispatchProfileData={dispatchProfileData} />

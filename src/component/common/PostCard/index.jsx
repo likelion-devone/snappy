@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 
 import { AlertModal, DropdownModal } from "component/common/Modal";
 import { PostDataContext } from "component/common/PostDataProvider/index";
@@ -37,9 +37,10 @@ const ContentText = styled.p`
   font-size: ${FONT_SIZE.BASE};
   line-height: 18px;
   word-break: break-all;
+  white-space: pre-wrap;
+  padding: 16px 0;
   a {
     display: block;
-    padding: 16px 0;
   }
 `;
 
@@ -68,7 +69,7 @@ const SvgHeart = styled(Icons.Heart)`
   path {
     ${({ $isHearted, theme }) => $isHearted && "fill:" + theme.snRed + ";"}
     stroke: ${({ $isHearted, theme }) =>
-      $isHearted ? theme.snRed : theme.snGreyIcon};
+    $isHearted ? theme.snRed : theme.snGreyIcon};
   }
 `;
 
@@ -102,6 +103,7 @@ export default function PostCard({
 }) {
   const { getMyPostData, getPostData } = useContext(PostDataContext);
   const navigate = useNavigate();
+  const isPostDetailPage = useMatch(routeResolver(ROUTE.POST, ":postId"));
 
   const { _id: myId } = useAuthInfo();
   const isThisPostMine = authorId === myId;
@@ -314,9 +316,16 @@ export default function PostCard({
 
       <ContentWrapper>
         {content && (
-          <ContentText>
-            <Link to={`/post/${postId}`}>{content}</Link>
-          </ContentText>
+          isPostDetailPage ?
+            (
+              <ContentText>
+                {content}
+              </ContentText>
+            ) : (
+              <ContentText>
+                <Link to={`/post/${postId}`}>{content}</Link>
+              </ContentText>
+            )
         )}
 
         {image && <Carousel imageLinks={image.split(",")} />}

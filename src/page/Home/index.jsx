@@ -15,6 +15,7 @@ import { FONT_SIZE, GLOBAL_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT } from "constant/sty
 
 import LogoBw from "asset/logo-bw-212262.png";
 import { ReactComponent as SnappyTitleLogoBlack } from "asset/snappy_black.svg";
+import { LoaderNappy } from "component/common/Animation/index";
 
 const NoFollowingsWrapper = styled.section`
   display: flex;
@@ -73,7 +74,7 @@ export default function HomePage() {
 
   // 로딩중이면 데이터가 들어오지 않습니다.
   if (isPostDataLoading || !postData || isMyPostDataLoading || !myPostData) {
-    return <>로딩중</>;
+    return <LoaderNappy />;
   }
 
   const postDataSorted = [...postData, ...myPostData]

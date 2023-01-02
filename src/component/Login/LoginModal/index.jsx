@@ -24,8 +24,8 @@ const LoginModalWrapper = styled.main`
 
   transition: all 1s ease;
 
-  border-top-right-radius: 44px;
-  border-top-left-radius: 44px;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
 `;
 
 const StyledLink = styled(Link)`
