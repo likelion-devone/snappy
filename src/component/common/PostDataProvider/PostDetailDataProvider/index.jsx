@@ -4,15 +4,17 @@ import { PostDataContext } from "../index";
 
 export default function PostDetailDataProvider({ children }) {
   return (
-    <PostDataContext.Provider value={{
-      getPostData: () => { },
-      getMyPostData: () => { },
-    }}>
+    <PostDataContext.Provider
+      value={{
+        getPostData: () => {},
+        getMyPostData: () => {},
+      }}
+    >
       {children}
     </PostDataContext.Provider>
   );
 }
 
 PostDetailDataProvider.propTypes = {
-  children: PropTypes.node.isRequired
-}
+  children: PropTypes.node.isRequired,
+};

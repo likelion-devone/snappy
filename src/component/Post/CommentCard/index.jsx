@@ -22,7 +22,7 @@ const CommentContentWrapper = styled.li`
 
 const StyledSmallProfile = styled(SmallProfile)`
   margin-bottom: 4px;
-`
+`;
 
 const CreatedTime = styled.time`
   margin-left: 6px;
@@ -46,34 +46,46 @@ export default function CommentCard({
   createdAt,
   postId,
   commentId,
-  getComments
+  onCommentChanges,
 }) {
   const { _id: myId } = useAuthInfo();
   const isThisPostMine = authorId === myId;
 
   // 댓글 삭제 API
-  const [isDeletingComment, deleteCommentResponse, deleteCommentError, deleteComment] =
-    useAPI(req.comment.remove);
+  const [
+    isDeletingComment,
+    deleteCommentResponse,
+    deleteCommentError,
+    deleteComment,
+  ] = useAPI(req.comment.remove);
   const deleteCommentIfNotDeleting = () => {
     if (isDeletingComment) {
-      alert("댓글을 삭제중입니다. 잠시 기다려주세요.")
+      alert("댓글을 삭제중입니다. 잠시 기다려주세요.");
       return;
     }
     deleteComment({ postId, commentId });
-  }
+  };
 
   // 댓글 신고 API
-  const [isReportingComment, reportCommentResponse, reportCommentError, reportComment] =
-    useAPI(req.comment.report);
+  const [
+    isReportingComment,
+    reportCommentResponse,
+    reportCommentError,
+    reportComment,
+  ] = useAPI(req.comment.report);
   const reportCommentIfNotReporting = () => {
     if (isReportingComment) {
-      alert("댓글을 신고중입니다. 잠시 기다려주세요.")
+      alert("댓글을 신고중입니다. 잠시 기다려주세요.");
       return;
     }
     reportComment({ postId, commentId });
-  }
+  };
 
-  const [isCommentMoreDropdownOpened, commentMoreDropdownOpen, commentMoreDropdownClose] = useDropdownModal();
+  const [
+    isCommentMoreDropdownOpened,
+    commentMoreDropdownOpen,
+    commentMoreDropdownClose,
+  ] = useDropdownModal();
 
   const [
     isReportCommentAlertModalOpened,
@@ -95,17 +107,20 @@ export default function CommentCard({
     if (reportCommentError) {
       alert("댓글 신고중 오류가 발생했습니다.");
     }
-  }, [reportCommentResponse, reportCommentError])
+  }, [reportCommentResponse, reportCommentError]);
 
   useEffect(() => {
     if (deleteCommentResponse) {
       alert("댓글을 삭제했습니다.");
-      getComments({ postId });
+      onCommentChanges();
     }
+  }, [deleteCommentResponse, onCommentChanges]);
+
+  useEffect(() => {
     if (deleteCommentError) {
       alert("댓글 삭제중 오류가 발생했습니다.");
     }
-  }, [deleteCommentResponse, deleteCommentError, getComments, postId]);
+  }, [deleteCommentError]);
 
   return (
     <CommentContentWrapper>
@@ -120,7 +135,9 @@ export default function CommentCard({
               title={username}
               titleTo={`/profile/${accountname}`}
               attachment={
-                <CreatedTime dateTime={createdAt}>{getTimeGapInKr(createdAt)}</CreatedTime>
+                <CreatedTime dateTime={createdAt}>
+                  {getTimeGapInKr(createdAt)}
+                </CreatedTime>
               }
             />
           }
@@ -132,7 +149,10 @@ export default function CommentCard({
         />
       </StyledSmallProfile>
 
-      <DropdownModal isDroppedUp={isCommentMoreDropdownOpened} dropDown={commentMoreDropdownClose}>
+      <DropdownModal
+        isDroppedUp={isCommentMoreDropdownOpened}
+        dropDown={commentMoreDropdownClose}
+      >
         {!isThisPostMine ? (
           <DropdownModal.Button onClick={reportCommentAlertModalOpen}>
             신고하기
@@ -149,7 +169,9 @@ export default function CommentCard({
         <AlertModal.Cancle handleModalButton={reportCommentAlertModalClose}>
           취소
         </AlertModal.Cancle>
-        <AlertModal.ConfirmButton handleModalButton={reportCommentAlertModalConfirm}>
+        <AlertModal.ConfirmButton
+          handleModalButton={reportCommentAlertModalConfirm}
+        >
           신고
         </AlertModal.ConfirmButton>
       </AlertModal>
@@ -176,5 +198,5 @@ CommentCard.propTypes = {
   createdAt: PropTypes.string.isRequired,
   commentId: PropTypes.string.isRequired,
   postId: PropTypes.string.isRequired,
-  getComments: PropTypes.func.isRequired
+  onCommentChanges: PropTypes.func.isRequired,
 };
