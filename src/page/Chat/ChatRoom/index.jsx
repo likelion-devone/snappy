@@ -44,9 +44,9 @@ const UserChat = styled.article`
     padding: 1rem;
     border-style: solid;
     border-width: 0.1rem 0.1rem 0.1rem 0.1rem;
-    outline: ${(theme) => theme.snGreyIcon} solid 2px;
-    border-color: ${(theme) => theme.snWhite};
-    background: ${(theme) => theme.snWhite};
+    outline: ${({ theme }) => theme.snGreyIcon} solid 2px;
+    border-color: ${({ theme }) => theme.snWhite};
+    background: ${({ theme }) => theme.snWhite};
     box-shadow: 0 1rem 1.2rem rgba(0, 0, 0, 0.2);
     font-size: ${FONT_SIZE.BASE};
   }
@@ -54,8 +54,8 @@ const UserChat = styled.article`
     display: block;
     padding: 1.5rem;
     line-height: 1.5;
-    border: 1.5px solid ${(theme) => theme.snGreyMain};
-    background-color: ${(theme) => theme.snGreyOff};
+    border: 1.5px solid ${({ theme }) => theme.snGreyMain};
+    background-color: ${({ theme }) => theme.snGreyOff};
   }
   .snappyMark {
     width: 20%;
@@ -66,7 +66,7 @@ const UserChat = styled.article`
     align-self: flex-end;
     margin-left: 30px;
     padding-top: 1rem;
-    color: ${(theme) => theme.snGreyIcon};
+    color: ${({ theme }) => theme.snGreyIcon};
   }
 `;
 
@@ -85,9 +85,9 @@ const SnappyImgChatWrapper = styled.article`
     margin-right: 20px;
     border-style: solid;
     border-width: 0.1rem 0.1rem 0.1rem 0.1rem;
-    border-color: ${(theme) => theme.snWhite};
-    outline: ${(theme) => theme.snBlue} solid 2px;
-    background: ${(theme) => theme.snWhite};
+    border-color: ${({ theme }) => theme.snWhite};
+    outline: ${({ theme }) => theme.snBlue} solid 2px;
+    background: ${({ theme }) => theme.snWhite};
     box-shadow: 0 1rem 1.2rem rgba(0, 0, 0, 0.2);
   }
   .chatSampleImg {
@@ -96,8 +96,8 @@ const SnappyImgChatWrapper = styled.article`
     display: block;
   }
   .chat {
-    border: 2px solid ${(theme) => theme.snBlue};
-    background-color: ${(theme) => theme.snGreyOff};
+    border: 2px solid ${({ theme }) => theme.snBlue};
+    background-color: ${({ theme }) => theme.snGreyOff};
   }
   .snappyMark {
     width: 20%;
@@ -108,7 +108,7 @@ const SnappyImgChatWrapper = styled.article`
     align-self: flex-end;
     margin-left: 30px;
     padding-top: 1rem;
-    color: ${(theme) => theme.snBlue};
+    color: ${({ theme }) => theme.snBlue};
     font-size: ${FONT_SIZE.BASE};
   }
 `;
@@ -128,9 +128,9 @@ const SnappyChatWrapper = styled.article`
     padding: 1rem;
     border-style: solid;
     border-width: 0.1rem 0.1rem 0.1rem 0.1rem;
-    border-color: ${(theme) => theme.snWhite};
-    outline: ${(theme) => theme.snBlue} solid 2px;
-    background: ${(theme) => theme.snWhite};
+    border-color: ${({ theme }) => theme.snWhite};
+    outline: ${({ theme }) => theme.snBlue} solid 2px;
+    background: ${({ theme }) => theme.snWhite};
     box-shadow: 0 1rem 1.2rem rgba(0, 0, 0, 0.2);
     font-size: ${FONT_SIZE.BASE};
   }
@@ -138,8 +138,8 @@ const SnappyChatWrapper = styled.article`
   .chat {
     padding: 1.5rem;
     line-height: 1.5;
-    border: 2px solid ${(theme) => theme.snBlue};
-    background-color: ${(theme) => theme.snBlue};
+    border: 2px solid ${({ theme }) => theme.snBlue};
+    background-color: ${({ theme }) => theme.snBlue};
   }
   .snappyMark {
     width: 20%;
@@ -150,7 +150,7 @@ const SnappyChatWrapper = styled.article`
     align-self: flex-end;
     padding-top: 1rem;
     margin-left: 30px;
-    color: ${(theme) => theme.snBlue};
+    color: ${({ theme }) => theme.snBlue};
     font-size: ${FONT_SIZE.BASE};
   }
 `;
@@ -159,7 +159,7 @@ const ImageUploadBtn = styled.button`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: ${(theme) => theme.snGreyOff};
+  background-color: ${({ theme }) => theme.snGreyOff};
 `;
 
 export default function ChatRoomPage() {
@@ -176,8 +176,8 @@ export default function ChatRoomPage() {
         </TopNavElement.Title>
       </>
     ),
-    right: <TopNavElement.MoreButton onClick={dropUpExit} />
-  })
+    right: <TopNavElement.MoreButton onClick={dropUpExit} />,
+  });
 
   const handleExitButton = () => {
     dropDownExit();
@@ -185,7 +185,10 @@ export default function ChatRoomPage() {
   };
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => lastChatRef.current.scrollIntoView({ block: "end" }), 100);
+    const timeoutId = setTimeout(
+      () => lastChatRef.current.scrollIntoView({ block: "end" }),
+      100
+    );
 
     return () => clearTimeout(timeoutId);
   }, []);
@@ -225,11 +228,7 @@ export default function ChatRoomPage() {
               혹시 어나더스튜디오에서 촬영하신 것 같으신데, 예시로 사진 몇 컷 볼
               수 있을까요?
             </p>
-            <img
-              src={SnappyMarkGrey}
-              alt=""
-              className="snappyMark"
-            />
+            <img src={SnappyMarkGrey} alt="" className="snappyMark" />
             <p className="time">1:13</p>
           </div>
         </UserChat>
@@ -259,11 +258,7 @@ export default function ChatRoomPage() {
                 className="chatSampleImg"
               />
             </p>
-            <img
-              src={SnappyMarkBlue}
-              alt=""
-              className="snappyMark"
-            />
+            <img src={SnappyMarkBlue} alt="" className="snappyMark" />
             <p className="time">1:20</p>
           </div>
         </SnappyImgChatWrapper>
@@ -273,18 +268,19 @@ export default function ChatRoomPage() {
               편하게 보시고 더 궁금하신 점 있으시면, 문의 남겨놓아주세요.
               좋은하루 되세요!
             </p>
-            <img
-              src={SnappyMarkBlue}
-              alt=""
-              className="snappyMark"
-            />
-            <p ref={lastChatRef} className="time">1:25</p>
+            <img src={SnappyMarkBlue} alt="" className="snappyMark" />
+            <p ref={lastChatRef} className="time">
+              1:25
+            </p>
           </div>
         </SnappyChatWrapper>
         <CommentForm
           left={
             <ImageUploadBtn type="button">
-              <Icons.Image className="ImageUploader" title="채팅 이미지 업로드 버튼입니다." />
+              <Icons.Image
+                className="ImageUploader"
+                title="채팅 이미지 업로드 버튼입니다."
+              />
             </ImageUploadBtn>
           }
           right={<button type="button">전송</button>}

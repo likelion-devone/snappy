@@ -28,7 +28,7 @@ const Time = styled.p`
   align-self: flex-end;
   line-height: 13px;
   font-weight: 400;
-  color: ${(theme) => theme.snGreyOff};
+  color: ${({ theme }) => theme.snGreyOff};
   font-size: ${FONT_SIZE.SMALL};
 `;
 
