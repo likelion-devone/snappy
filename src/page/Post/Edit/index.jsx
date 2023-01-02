@@ -127,30 +127,27 @@ export default function PostEditPage() {
       return;
     }
 
-    if (imgCount)
-      setImgData((prevImgData) => {
-        prevImgData.forEach((data) => {
-          if (data.startsWith("blob:")) {
-            URL.revokeObjectURL(data);
-          }
-        });
+    setImgData((prevImgData) => {
+      prevImgData.forEach((data) => {
+        if (data.startsWith("blob:")) {
+          URL.revokeObjectURL(data);
+        }
+      });
 
-        const imgList = [
-          ...prevImgData.filter((url) => !isBlobUrl(url))
-        ];
+      const imgList = [...prevImgData.filter((url) => !isBlobUrl(url))];
 
-        for (const file of imgFileList) {
-          if (file.size > SIZE_LIMIT) {
-            alert("10MB 이상의 이미지는 업로드 할 수 없습니다.");
-            return imgList;
-          }
-
-          imgList.push(URL.createObjectURL(file));
+      for (const file of imgFileList) {
+        if (file.size > SIZE_LIMIT) {
+          alert("10MB 이상의 이미지는 업로드 할 수 없습니다.");
+          return imgList;
         }
 
-        setIsPossibleToUpload(imgList.length !== 0);
-        return imgList;
-      });
+        imgList.push(URL.createObjectURL(file));
+      }
+
+      setIsPossibleToUpload(imgList.length !== 0);
+      return imgList;
+    });
   };
 
   // 상단 Nav 업로드 버튼 onClick 이벤트
@@ -160,9 +157,7 @@ export default function PostEditPage() {
       return;
     }
 
-    const previouslyExistedImgUrls = imgData.filter(
-      (url) => !isBlobUrl(url)
-    );
+    const previouslyExistedImgUrls = imgData.filter((url) => !isBlobUrl(url));
 
     if (inpImagesRef.current.files.length !== 0) {
       const formData = new FormData();
@@ -174,8 +169,8 @@ export default function PostEditPage() {
 
       const newImages = results.length
         ? results.map(
-          (result) => process.env.REACT_APP_BASE_API + result.filename
-        )
+            (result) => process.env.REACT_APP_BASE_API + result.filename
+          )
         : [];
 
       return editPost({
