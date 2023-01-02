@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useEffect, useRef } from "react";
 
 import SmallProfile from "component/common/SmallProfile";
 import { CommentForm } from "component/common/Form";
@@ -166,6 +167,7 @@ const ImageUploadBtn = styled.button`
 
 export default function ChatRoomPage() {
   const navigate = useNavigate();
+  const lastChatRef = useRef(null);
   const [isExitDroppedUp, dropUpExit, dropDownExit] = useDropdownModal();
 
   useTopNavSetter({
@@ -184,6 +186,12 @@ export default function ChatRoomPage() {
     dropDownExit();
     navigate(ROUTE.CHAT);
   };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => lastChatRef.current.scrollIntoView({ block: "end" }), 100);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
     <>
@@ -222,7 +230,7 @@ export default function ChatRoomPage() {
             </p>
             <img
               src={SnappyMarkGrey}
-              alt="프로필 이미지입니다"
+              alt=""
               className="snappyMark"
             />
             <p className="time">1:13</p>
@@ -256,13 +264,13 @@ export default function ChatRoomPage() {
             </p>
             <img
               src={SnappyMarkBlue}
-              alt="프로필 이미지입니다"
+              alt=""
               className="snappyMark"
             />
             <p className="time">1:20</p>
           </div>
         </SnappyImgChatWrapper>
-        <SnappyChatWrapper>
+        <SnappyChatWrapper id="last-chat">
           <div className="polaroid">
             <p className="chat">
               편하게 보시고 더 궁금하신 점 있으시면, 문의 남겨놓아주세요.
@@ -270,10 +278,10 @@ export default function ChatRoomPage() {
             </p>
             <img
               src={SnappyMarkBlue}
-              alt="프로필 이미지입니다"
+              alt=""
               className="snappyMark"
             />
-            <p className="time">1:25</p>
+            <p ref={lastChatRef} className="time">1:25</p>
           </div>
         </SnappyChatWrapper>
         <CommentForm
