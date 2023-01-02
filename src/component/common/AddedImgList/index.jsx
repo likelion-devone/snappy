@@ -1,10 +1,11 @@
+import React, { useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import Icons from "asset/icon/icons";
-import ErrorImg from "asset/logo-404-343264.png";
-import React, { useContext } from "react";
 import { IsUploadPossibleContext } from "component/Post/IsUploadPossibleProvider/index";
+
+import Icons from "asset/icon/icons";
+import SnappyError from "asset/logo-404-343264.png";
 
 // 이미지 프리뷰
 const UploadedImgList = styled.ul`
@@ -29,7 +30,6 @@ const UploadImg = styled.img`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   transition: all 0.2s;
-
   vertical-align: top;
 `;
 
@@ -47,7 +47,7 @@ export default function AddedImgList({ imgData, setImgData, className }) {
   );
 
   const handleImgError = (event) => {
-    event.target.src = ErrorImg;
+    event.target.src = SnappyError;
   };
 
   //  X 버튼 클릭 시 이미지 프리뷰 리스트에서 제거
