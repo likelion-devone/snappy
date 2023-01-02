@@ -97,8 +97,6 @@ export default function Carousel({ imageLinks }) {
   const showPrevImage = useCallback(() => setActivatedImageIndex((prev) => prev !== 0 ? prev - 1 : prev), []);
   const showNextImage = useCallback(() => setActivatedImageIndex((prev) => prev !== imageLinks.length - 1 ? prev + 1 : prev), [imageLinks]);
 
-  console.log(imageLinks);
-
   if (!isMultiple) {
     return (
       <Wrapper>

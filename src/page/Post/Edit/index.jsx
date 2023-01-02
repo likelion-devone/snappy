@@ -59,7 +59,6 @@ export default function PostEditPage() {
 
   useEffect(() => {
     if (initialPostData) {
-      console.log(initialPostData);
       if (initialPostData.post.author._id !== userId) {
         navigate(ROUTE.HOME);
         return;

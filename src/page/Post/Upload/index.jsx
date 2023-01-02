@@ -140,7 +140,7 @@ export default function PostUploadPage() {
   useEffect(() => {
     // 게시물 업로드 전
     if (uploadPostError) {
-      console.log(uploadPostError);
+      console.error(uploadPostError);
       alert("게시물 업로드를 실패했습니다.");
       return;
     }
