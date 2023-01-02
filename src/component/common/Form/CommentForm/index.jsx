@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -51,8 +51,10 @@ export default function CommentForm({
   left,
   right,
   placeholder = "Type a message",
+  onSubmit,
   ...props
 }) {
+  const inpRef = useRef(null);
   const [isFilled, setIsFilled] = useState(false);
 
   const setIsFilledIfHasContent = (event) => {
@@ -67,11 +69,21 @@ export default function CommentForm({
     }
   };
 
+  const handleSubmit = useCallback(
+    async (event) => {
+      await onSubmit(event);
+      inpRef.current.value = "";
+      setIsFilled(false);
+    },
+    [onSubmit]
+  );
+
   return (
-    <Form $isFilled={isFilled} {...props}>
+    <Form $isFilled={isFilled} onSubmit={handleSubmit} {...props}>
       <label className="label-comment">
         {left}
         <input
+          ref={inpRef}
           type="text"
           className="formInput"
           name="inpComment"
@@ -88,4 +100,5 @@ CommentForm.propTypes = {
   left: PropTypes.node.isRequired,
   right: PropTypes.node.isRequired,
   placeholder: PropTypes.string,
+  onSubmit: PropTypes.func,
 };
