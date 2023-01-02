@@ -104,10 +104,7 @@ export default function EditProductPage() {
     if (editProductResult) {
       alert("상품 내용을 수정했스내피!");
       navigate(
-        routeResolver(
-          ROUTE.PROFILE,
-          initialProductData.product.author.accountname
-        )
+        routeResolver(ROUTE.PROFILE)
       );
       return;
     }
