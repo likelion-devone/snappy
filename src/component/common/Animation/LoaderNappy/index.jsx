@@ -51,27 +51,25 @@ const SpinnerInLens = styled.div`
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-  }
-
-  @keyframes rotation {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+    animation: ${keyframeRotation} 1s linear infinite;
   }
 `;
+
+const keyframeRotation = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`
 
 //loading 단어 에니메이션
 const keyframeLoading = keyframes`
   0% {
-    /* transform: scale(1); */
     scale: 1;
   }
   100% {
-    /* transform: scale(0.5); */
     scale: 0.5;
   }
 `;
@@ -97,28 +95,26 @@ const LoadingSpan = styled.span`
 `;
 
 const LOADING_STR = "LOADING...";
-export default function NotFoundErrorPage() {
+export default function LoaderNappy() {
   return (
-    <>
-      <Wrapper>
-        <LogoWrapper>
-          <LoaderImg>
-            <SpinnerInLens>
-              <span className="loader"></span>
-            </SpinnerInLens>
-          </LoaderImg>
-          <LoaderWord>
-            <Loader>
-              {React.Children.toArray(
-                LOADING_STR.split("").map((char, index) => (
-                  <LoadingSpan index={index}>{char}</LoadingSpan>
-                ))
-              )}
-            </Loader>
-          </LoaderWord>
-          <LogoBw src={srcLogoBw} alt="Snappy 흑백 로고입니다." />
-        </LogoWrapper>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <LogoWrapper>
+        <LoaderImg>
+          <SpinnerInLens>
+            <span className="loader"></span>
+          </SpinnerInLens>
+        </LoaderImg>
+        <LoaderWord>
+          <Loader>
+            {React.Children.toArray(
+              LOADING_STR.split("").map((char, index) => (
+                <LoadingSpan index={index}>{char}</LoadingSpan>
+              ))
+            )}
+          </Loader>
+        </LoaderWord>
+        <LogoBw src={srcLogoBw} alt="Snappy 흑백 로고입니다." />
+      </LogoWrapper>
+    </Wrapper>
   );
 }
