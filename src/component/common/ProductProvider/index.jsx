@@ -21,6 +21,8 @@ export default function ProductProvider({ children }) {
   const [isFormFilled, setIsFormFilled] = useState(false);
   // TODO: IsUploadPossibleProvider랑 합치기
 
+  const [selectedProductData, setSelectedProductData] = useState(null);
+
   return (
     <ProductContext.Provider
       value={{
@@ -28,6 +30,8 @@ export default function ProductProvider({ children }) {
         dispatchProductData,
         isFormFilled,
         setIsFormFilled,
+        selectedProductData,
+        setSelectedProductData,
       }}
     >
       {children}
