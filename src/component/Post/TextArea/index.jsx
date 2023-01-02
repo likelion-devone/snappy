@@ -25,7 +25,7 @@ const TextArea = forwardRef(function TextAreaForwarded(props, ref) {
   const { isPossibleToUpload, setIsPossibleToUpload } = useContext(
     IsUploadPossibleContext
   );
-  const [text, setText] = useState("");
+  const [text, setText] = useState(defaultValue ?? "");
 
   const handleTextAreaChange = (event) => {
     let currentText = event.target.value;
