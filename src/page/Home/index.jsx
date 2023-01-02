@@ -1,20 +1,20 @@
 import styled from "styled-components";
 import { useState, useContext, useEffect } from "react";
 
-import { TopNavElement } from "component/common/Navbar/TopNav/index";
 import PostCard from "component/common/PostCard/index";
 import SearchBar from "component/Home/SearchBar/index";
 import Button from "component/common/Button/index";
+import { TopNavElement } from "component/common/Navbar/TopNav/index";
 import { PostDataContext } from "component/common/PostDataProvider/index";
 
 import useTopNavSetter from "hook/useTopNavSetter";
 
-import { FONT_SIZE, GLOBAL_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT } from "constant/style";
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
+import { FONT_SIZE, GLOBAL_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT } from "constant/style";
 
-import { ReactComponent as SnappyTitleLogoBlack } from "asset/snappy_black.svg";
 import LogoBw from "asset/logo-bw-212262.png";
+import { ReactComponent as SnappyTitleLogoBlack } from "asset/snappy_black.svg";
 
 const NoFollowingsWrapper = styled.section`
   display: flex;
@@ -34,8 +34,8 @@ const NoFollowingsWrapper = styled.section`
     margin: 23px 0;
 
     font-weight: 400;
-    font-size: ${FONT_SIZE.BASE};
     line-height: 14px;
+    font-size: ${FONT_SIZE.BASE};
 
     color: ${({ theme }) => theme.snGreyIcon};
   }
@@ -83,7 +83,6 @@ export default function HomePage() {
         Date.parse(post1.createdAt)
     );
 
-  console.log("🚀 ~ file: index.jsx:80 ~ HomePage ~ postDataSorted", postDataSorted)
   return (
     <>
       <SearchBar handleClose={toggleSearch} $isSearchOpened={isSearchOpened} />
