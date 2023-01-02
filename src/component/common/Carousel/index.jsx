@@ -10,11 +10,18 @@ const Wrapper = styled.div`
   width: 300px;
   margin: 0 auto;
   overflow: hidden;
+
+  .dot-wrapper {
+    opacity: 0;
+    transition: all 0.2s ease;
+  }
+
+  :hover .dot-wrapper {
+    opacity: 1;
+  }
 `;
 
 const ImagesWrapper = styled.ul`
-  margin-left: ;
-
   height: 230px;
   width: ${({ imageCount }) => imageCount * 300 + "px"};
   transition: all 0.2s ease;
@@ -123,7 +130,7 @@ export default function Carousel({ imageLinks }) {
         )}
       </ImagesWrapper>
 
-      <DotWrapper>
+      <DotWrapper className="dot-wrapper">
         {React.Children.toArray(
           imageLinks.map((postImg, index) => (
             <Dot
