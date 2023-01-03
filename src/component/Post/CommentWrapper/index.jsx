@@ -121,11 +121,14 @@ export default function CommentWrapper({ postId, onCommentChanges }) {
           .map((comment) => (
             <CommentCard
               key={comment.id}
-              {...{
-                ...comment,
-                commentId: comment.id,
-                postId,
-              }}
+              authorId={comment.author._id}
+              username={comment.author.username}
+              image={comment.author.image}
+              accountname={comment.author.accountname}
+              content={comment.content}
+              createdAt={comment.createdAt}
+              commentId={comment.id}
+              postId={postId}
               onCommentChanges={handleCommentChanges}
             />
           ))}

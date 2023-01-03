@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -40,8 +40,11 @@ const Comment = styled.p`
   word-break: break-all;
 `;
 
-export default function CommentCard({
-  author: { _id: authorId, image, accountname, username },
+function CommentCard({
+  authorId,
+  username,
+  image,
+  accountname,
   content,
   createdAt,
   postId,
@@ -193,10 +196,15 @@ export default function CommentCard({
 }
 
 CommentCard.propTypes = {
-  author: PropTypes.object.isRequired,
+  authorId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  accountname: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
   commentId: PropTypes.string.isRequired,
   postId: PropTypes.string.isRequired,
   onCommentChanges: PropTypes.func.isRequired,
 };
+
+export default memo(CommentCard);
