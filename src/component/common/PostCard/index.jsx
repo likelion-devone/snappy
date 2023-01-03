@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 
 import { AlertModal, DropdownModal } from "component/common/Modal";
@@ -21,6 +21,7 @@ import { FONT_SIZE } from "constant/style";
 import { PROFILE_SIZE } from "constant/size";
 import ROUTE, { ROUTE_POST } from "constant/route";
 import Icons from "asset/icon/icons";
+import HeartButton from "./HeartButton/index";
 
 const PostCardWrapper = styled.section`
   display: flex;
@@ -52,25 +53,9 @@ const IconWrapper = styled.div`
   background-color: ${({ theme }) => theme.snGrayIcon};
 `;
 
-const ButtonIcon = styled.button`
-  display: flex;
-  align-items: center;
-`;
-
 const LinkIcon = styled(Link)`
   display: flex;
   align-items: center;
-`;
-
-const SvgHeart = styled(Icons.Heart)`
-  margin-right: 6px;
-  width: 17px;
-  height: 15px;
-  path {
-    ${({ $isHearted, theme }) => $isHearted && "fill:" + theme.snRed + ";"}
-    stroke: ${({ $isHearted, theme }) =>
-    $isHearted ? theme.snRed : theme.snGreyIcon};
-  }
 `;
 
 const SvgComment = styled(Icons.MessageCircle)`
@@ -130,18 +115,6 @@ export default function PostCard({
     reportPost({ postId });
   };
 
-  // 좋아요 버튼
-  const [isHearted, setIsHearted] = useState(hearted);
-  const [heartCountState, setHeartCountState] = useState(heartCount);
-
-  // 좋아요
-  const [isLikeBeingActivated, _activateLikeResponse, _error, activateLike] =
-    useAPI(req.like.activate);
-
-  // 좋아요 취소
-  const [isUnLikeBeingActivated, _cancelLikeResponse, __error, cancelLike] =
-    useAPI(req.like.cancle);
-
   useEffect(() => {
     if (reportPostResponse) {
       alert("게시물을 신고했습니다.");
@@ -175,43 +148,6 @@ export default function PostCard({
     navigate,
     $isPostDetailPage,
   ]);
-
-  const like = async () => {
-    const {
-      post: { hearted: newHearted, heartCount: newHeartCount },
-    } = await activateLike({ postId });
-
-    setIsHearted(newHearted);
-    setHeartCountState(newHeartCount);
-  };
-
-  const unlike = async () => {
-    const {
-      post: { hearted: newHearted, heartCount: newHeartCount },
-    } = await cancelLike({ postId });
-
-    setIsHearted(newHearted);
-    setHeartCountState(newHeartCount);
-  };
-
-  // 좋아요 버튼 active 여부에 따른 예외 처리
-  const handleHeartClick = () => {
-    // 로딩 중일 때 실행
-    if (isLikeBeingActivated || isUnLikeBeingActivated) {
-      return;
-    }
-    // 로딩 중이 아닐 때 실행
-    if (isHearted) {
-      unlike();
-      return;
-    }
-    like();
-  };
-
-  const handleHeartButton = (event) => {
-    event.preventDefault();
-    setIsHearted((prev) => !prev);
-  };
 
   // 삭제 메시지 모달창
   const [
@@ -331,14 +267,11 @@ export default function PostCard({
         {image && <Carousel imageLinks={image.split(",")} />}
 
         <IconWrapper>
-          <ButtonIcon onClick={handleHeartButton}>
-            <SvgHeart
-              title="하트 아이콘 입니다"
-              $isHearted={isHearted}
-              onClick={handleHeartClick}
-            />
-            {heartCountState}
-          </ButtonIcon>
+          <HeartButton
+            postId={postId}
+            initialHearted={hearted}
+            initialHeartCount={heartCount}
+          />
 
           <LinkIcon to={`/post/${postId}`}>
             <SvgComment title="댓글 아이콘 입니다" />
