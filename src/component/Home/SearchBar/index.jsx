@@ -49,7 +49,7 @@ const ResultListWrapper = styled.ul`
   z-index: 20;
 
   opacity: ${({ visible }) => (visible ? 1 : 0)};
-  top: ${({ visible }) => (visible ? TOP_NAVBAR_HEIGHT : "-100px")};
+  top: ${({ visible }) => (visible ? TOP_NAVBAR_HEIGHT : `max(-80%, calc(-100vh + ${TOP_NAVBAR_HEIGHT} + ${GLOBAL_NAVBAR_HEIGHT} + 10px))`)};
   transition: all 0.3s ease;
 `;
 
