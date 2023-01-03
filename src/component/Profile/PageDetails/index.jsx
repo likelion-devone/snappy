@@ -426,7 +426,7 @@ function PageDetails({ accountname, $isMyProfile = false }) {
                 <Icons.MessageCircle title="채팅" className="messageCircle" />
               </ChatLink>
               <FollowButton
-                initialIsFollowing={profile.isfollowing}
+                initialIsFollowing={profile.isfollow}
                 accountname={accountname}
                 $isSizeLarge34={true}
               />
