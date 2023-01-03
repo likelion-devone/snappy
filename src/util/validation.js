@@ -64,6 +64,10 @@ const validateUsername = (str) => {
     return "2~10자 이내여야 합니다.";
   }
 
+  if (str.includes(" ")) {
+    return "공백을 포함할 수 없습니다.";
+  }
+
   return "";
 };
 
