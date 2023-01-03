@@ -155,7 +155,7 @@ export default function PostUploadPage() {
   return (
     <PostUploadWrapper>
       <ImgDataProvider>
-        <FormSection id="post-upload" onSubmit={handleSubmitPost}>
+        <FormSection id="post-upload" onSubmit={handleSubmitPost} autoComplete="off">
           <SmallProfile
             size={PROFILE_SIZE.SMALL}
             src={profileImage}

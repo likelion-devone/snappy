@@ -30,7 +30,7 @@ const Form = styled.form`
 
     + button {
       color: ${({ $isFilled, theme }) =>
-        $isFilled ? theme.snBlue : theme.snGreyMain};
+    $isFilled ? theme.snBlue : theme.snGreyMain};
       ${({ $isFilled }) => !$isFilled && `pointer-events: none;`}
     }
   }
@@ -79,7 +79,7 @@ export default function CommentForm({
   );
 
   return (
-    <Form $isFilled={isFilled} onSubmit={handleSubmit} {...props}>
+    <Form $isFilled={isFilled} onSubmit={handleSubmit} autoComplete="off" {...props}>
       <label className="label-comment">
         {left}
         <input
@@ -87,6 +87,7 @@ export default function CommentForm({
           type="text"
           className="formInput"
           name="inpComment"
+          spellCheck={false}
           placeholder={placeholder}
           onKeyUp={setIsFilledIfHasContent}
         />

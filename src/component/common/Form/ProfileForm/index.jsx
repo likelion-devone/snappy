@@ -187,7 +187,7 @@ export default function ProfileForm({
   }, [initialProfileData, introRef, usernameRef, accountnameRef]);
 
   return (
-    <Form id={formId} onSubmit={validateValues} {...props}>
+    <Form id={formId} onSubmit={validateValues} autoComplete="off" {...props}>
       <StyledBigProfile
         src={profileSrc}
         bottomRight={

@@ -18,7 +18,7 @@ const UploadProfileImageLabel = forwardRef(function ForwardedUploadProfileImageI
   return (
     <StyledLabel>
       <Icons.Image title="프로필 업로드 버튼입니다." />
-      <input ref={ref} type="file" className="sr-only" accept="image/*" name="profileImg" {...props} />
+      <input ref={ref} type="file" className="sr-only" accept="image/*" name="profileImg" autoComplete="off" spellCheck={false} {...props} />
     </StyledLabel>
   )
 })

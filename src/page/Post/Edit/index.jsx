@@ -170,8 +170,8 @@ export default function PostEditPage() {
 
       const newImages = results.length
         ? results.map(
-            (result) => process.env.REACT_APP_BASE_API + result.filename
-          )
+          (result) => process.env.REACT_APP_BASE_API + result.filename
+        )
         : [];
 
       return editPost({
@@ -208,7 +208,7 @@ export default function PostEditPage() {
   ) : (
     <PostUploadWrapper>
       <ImgDataProvider>
-        <FormSection id="post-upload" onSubmit={handleSubmitPost}>
+        <FormSection id="post-upload" onSubmit={handleSubmitPost} autoComplete="off">
           <SmallProfile
             size={PROFILE_SIZE.SMALL}
             src={profileImage}

@@ -63,7 +63,7 @@ export default function AuthorizePage() {
 
   return (
     <LoginLayout title="로그인">
-      <LoginForm onSubmit={handleSubmit}>
+      <LoginForm onSubmit={handleSubmit} autoComplete="off">
         <LabeledInput ref={inpEmailRef} id="email" type="email" labelText="이메일" />
         <LabeledInput ref={inpPasswordRef} id="password" type="password" labelText="비밀번호" />
         {loginErrorClientSide && <ErrorMessage>{loginErrorClientSide}</ErrorMessage>}

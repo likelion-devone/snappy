@@ -208,8 +208,8 @@ function ProductForm({ formId }) {
 
     const newImages = results.length
       ? results.map(
-          (result) => process.env.REACT_APP_BASE_API + result.filename
-        )
+        (result) => process.env.REACT_APP_BASE_API + result.filename
+      )
       : [];
 
     dispatchProductData({
@@ -224,7 +224,7 @@ function ProductForm({ formId }) {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} id={formId}>
+    <form onSubmit={handleFormSubmit} id={formId} autoComplete="off">
       <ProductFormWrapper>
         <legend className="sr-only">상품 정보</legend>
 

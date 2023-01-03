@@ -13,7 +13,7 @@ const LabeledInput = forwardRef(function LabeledInputForwarded(props, ref) {
   return (
     <InputContainer>
       <Label htmlFor={id}>{labelText}</Label>
-      <Input id={id} type={type} ref={ref} {...restProps} />
+      <Input id={id} type={type} ref={ref} spellCheck={false} {...restProps} />
     </InputContainer>
   );
 });

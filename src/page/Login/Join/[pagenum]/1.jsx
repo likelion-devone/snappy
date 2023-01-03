@@ -61,7 +61,7 @@ export default function JoinPageOne() {
 
   return (
     <LoginLayout title="이메일로 회원가입">
-      <JoinForm onSubmit={handleSubmit}>
+      <JoinForm onSubmit={handleSubmit} autoComplete="off">
         <ValidationInputWrapper errorMessage={emailValidationErrorMessage}>
           <ValidationInputWrapper.Input ref={emailRef} id="email" type="email" labelText="이메일" placeholder="이메일 주소를 입력해 주세요." />
           <ValidationInputWrapper.ErrorMessage $isValid={emailValidationErrorMessage === "사용 가능한 이메일 입니다."} />

@@ -176,6 +176,8 @@ export default function SearchBar({ handleClose, $isSearchOpened }) {
           ref={inpSearchRef}
           type="text"
           placeholder="계정 검색"
+          autoComplete="off"
+          spellCheck={false}
           onChange={handleSearchInput}
         />
       </SearchBarWrapper>
