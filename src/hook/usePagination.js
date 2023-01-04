@@ -27,7 +27,6 @@ export default function usePagination() {
         // controller.abort();
 
         setFeeds((prevFeeds) => {
-          console.log([...prevFeeds, ...feedArray]);
           return [...prevFeeds, ...feedArray];
         });
 

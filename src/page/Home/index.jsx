@@ -8,6 +8,7 @@ import { TopNavElement } from "component/common/Navbar/TopNav/index";
 import { PostDataContext } from "component/common/PostDataProvider/index";
 
 import useTopNavSetter from "hook/useTopNavSetter";
+import usePagination from "hook/usePagination";
 
 import {
   FONT_SIZE,
@@ -20,7 +21,8 @@ import { BUTTON_STATE } from "constant/button_state";
 import LogoBw from "asset/logo-bw-212262.png";
 import { ReactComponent as SnappyTitleLogoBlack } from "asset/snappy_black.svg";
 import { LoaderNappy } from "component/common/Animation/index";
-import usePagination from "hook/usePagination";
+import useAPI from "hook/useAPI";
+import { req } from "lib/api/index";
 
 const NoFollowingsWrapper = styled.section`
   display: flex;
@@ -60,8 +62,13 @@ export default function HomePage() {
   });
 
   // 페이지네이션
+  const [_isFeedLoading, _feedData, _feedError, loadFeed] = useAPI(
+    req.post.feedPagination
+  );
+
   const skipRef = useRef(0);
-  const { feeds, hasMore, loading, error, loadMoreFeeds } = usePagination();
+  const { feeds, hasMore, loading, error, loadMoreFeeds } =
+    usePagination(loadFeed);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,7 +77,6 @@ export default function HomePage() {
         return;
       }
       if (window.innerHeight + scrollTop >= offsetHeight - 1 && hasMore) {
-        console.log(window.innerHeight, scrollTop, offsetHeight);
         skipRef.current = skipRef.current + 20;
         loadMoreFeeds(skipRef.current);
       }
@@ -78,7 +84,6 @@ export default function HomePage() {
 
     window.addEventListener("scroll", handleScroll);
     return () => {
-      console.log("uh?");
       window.removeEventListener("scroll", handleScroll);
     };
   }, [hasMore, loading, loadMoreFeeds]);
