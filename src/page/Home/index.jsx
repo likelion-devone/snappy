@@ -67,7 +67,7 @@ export default function HomePage() {
   );
 
   const skipRef = useRef(0);
-  const { feeds, hasMore, loading, error, loadMoreFeeds } =
+  const { feeds, hasMore, loading, _error, loadMoreFeeds } =
     usePagination(loadFeed);
 
   useEffect(() => {
@@ -144,8 +144,7 @@ export default function HomePage() {
           </Button>
         </NoFollowingsWrapper>
       )}
-      {loading && <div>{"loading..."}</div>}
-      {error && <div>{"Error"}</div>}
+      {loading && <LoaderNappy />}
     </>
   );
 }
