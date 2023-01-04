@@ -15,7 +15,8 @@ const LayoutStyle = styled.main`
 
   @media (min-width: ${MAX_WIDTH}) {
     padding: ${TOP_NAVBAR_HEIGHT} 15px 10px;
-    margin-left: 200px;
+    
+    ${({ $isFullScreen }) => !$isFullScreen && "margin-left: 200px;"};
   }
 `;
 

@@ -23,6 +23,8 @@ const GlobalNavStyle = styled.nav`
     border-right: 1px solid ${({ theme }) => theme.snGreyOff};
 
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 `
 

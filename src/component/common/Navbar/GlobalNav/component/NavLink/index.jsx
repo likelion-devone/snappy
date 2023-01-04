@@ -11,6 +11,8 @@ const StyledLink = styled(Link)`
   @media (min-width: ${MAX_WIDTH}) {
     display: flex;
     align-items: center;
+
+    margin: 20px 20px;
   }
 `
 
