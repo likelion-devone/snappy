@@ -3,14 +3,20 @@ import styled from "styled-components";
 
 import { GlobalNav, TopNav, TopNavProvider } from "component/common/Navbar";
 
-import { GLOBAL_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT } from "constant/style";
 import routeResolver from "util/routeResolver";
+
+import { GLOBAL_NAVBAR_HEIGHT, MAX_WIDTH, TOP_NAVBAR_HEIGHT } from "constant/style";
 import ROUTE, { ROUTE_CHAT, ROUTE_POST, ROUTE_PRODUCT, ROUTE_PROFILE } from "constant/route";
 import { cssLayout } from "./style";
 
 const LayoutStyle = styled.main`
   padding: ${TOP_NAVBAR_HEIGHT} 15px ${({ $isFullScreen }) => $isFullScreen ? "10px" : `calc(${GLOBAL_NAVBAR_HEIGHT} + 10px)`};
   ${cssLayout}
+
+  @media (min-width: ${MAX_WIDTH}) {
+    padding: ${TOP_NAVBAR_HEIGHT} 15px 10px;
+    margin-left: 200px;
+  }
 `;
 
 function Layout() {

@@ -2,11 +2,16 @@ import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import { FONT_SIZE } from "constant/style";
+import { FONT_SIZE, MAX_WIDTH } from "constant/style";
 import { NAV_LINK_MAP } from "./constant";
 
 const StyledLink = styled(Link)`
   text-align: center;
+
+  @media (min-width: ${MAX_WIDTH}) {
+    display: flex;
+    align-items: center;
+  }
 `
 
 const Title = styled.strong`
@@ -18,6 +23,12 @@ const Title = styled.strong`
   line-height: 14px;
 
   color: ${({ theme, $isActive }) => $isActive ? theme.snBlue : theme.snGreyIcon};
+
+  @media (min-width: ${MAX_WIDTH}) {
+    font-weight: 500;
+    font-size: ${FONT_SIZE.X_LARGE};
+    margin-left: 10px;
+  }
 `
 
 function NavLink({ linkKey }) {
