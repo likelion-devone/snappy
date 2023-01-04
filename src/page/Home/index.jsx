@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 
 import PostCard from "component/common/PostCard/index";
 import SearchBar from "component/Home/SearchBar/index";
@@ -9,13 +9,18 @@ import { PostDataContext } from "component/common/PostDataProvider/index";
 
 import useTopNavSetter from "hook/useTopNavSetter";
 
+import {
+  FONT_SIZE,
+  GLOBAL_NAVBAR_HEIGHT,
+  TOP_NAVBAR_HEIGHT,
+} from "constant/style";
 import { BUTTON_SIZE } from "constant/size";
 import { BUTTON_STATE } from "constant/button_state";
-import { FONT_SIZE, GLOBAL_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT } from "constant/style";
 
 import LogoBw from "asset/logo-bw-212262.png";
 import { ReactComponent as SnappyTitleLogoBlack } from "asset/snappy_black.svg";
 import { LoaderNappy } from "component/common/Animation/index";
+import usePagination from "hook/usePagination";
 
 const NoFollowingsWrapper = styled.section`
   display: flex;
@@ -40,86 +45,102 @@ const NoFollowingsWrapper = styled.section`
 
     color: ${({ theme }) => theme.snGreyIcon};
   }
-`
+`;
 
 export default function HomePage() {
   const [isSearchOpened, setIsSearchOpened] = useState(false);
 
   const toggleSearch = () => {
     setIsSearchOpened((prev) => !prev);
-  }
+  };
 
   useTopNavSetter({
-    left: (
-      <SnappyTitleLogoBlack width={100} />
-    ),
-    right: (
-      <TopNavElement.SearchButton onClick={toggleSearch} />
-    )
+    left: <SnappyTitleLogoBlack width={100} />,
+    right: <TopNavElement.SearchButton onClick={toggleSearch} />,
   });
 
-  const {
-    getMyPostData,
-    getPostData,
-    isMyPostDataLoading,
-    isPostDataLoading,
-    postData,
-    myPostData
-  } = useContext(PostDataContext);
+  // 페이지네이션
+  const skipRef = useRef(0);
+  const { feeds, hasMore, loading, error, loadMoreFeeds } = usePagination();
 
   useEffect(() => {
-    getMyPostData();
-    getPostData();
-  }, [getMyPostData, getPostData]);
+    const handleScroll = () => {
+      const { scrollTop, offsetHeight } = document.documentElement;
+      if (loading) {
+        return;
+      }
+      if (window.innerHeight + scrollTop >= offsetHeight - 1 && hasMore) {
+        console.log(window.innerHeight, scrollTop, offsetHeight);
+        skipRef.current = skipRef.current + 20;
+        loadMoreFeeds(skipRef.current);
+      }
+    };
 
-  // 로딩중이면 데이터가 들어오지 않습니다.
-  if (isPostDataLoading || !postData || isMyPostDataLoading || !myPostData) {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      console.log("uh?");
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [hasMore, loading, loadMoreFeeds]);
+
+  useEffect(() => {
+    loadMoreFeeds(skipRef.current);
+  }, [loadMoreFeeds]);
+
+  const { isPostDataLoading, postData, getPostData } =
+    useContext(PostDataContext);
+
+  useEffect(() => {
+    getPostData();
+  }, [getPostData]);
+
+  if (isPostDataLoading || !postData) {
     return <LoaderNappy />;
   }
-
-  const postDataSorted = [...postData, ...myPostData]
-    .sort(
-      (post1, post2) =>
-        Date.parse(post2.createdAt) -
-        Date.parse(post1.createdAt)
-    );
 
   return (
     <>
       <SearchBar handleClose={toggleSearch} $isSearchOpened={isSearchOpened} />
-      {
-        postDataSorted.length !== 0 ?
-          postDataSorted.map((postCard) => (
+      {postData.length !== 0 ? (
+        feeds.map((feed) => {
+          return (
             <PostCard
-              key={postCard.id}
-              authorId={postCard.author._id}
-              username={postCard.author.username}
-              accountname={postCard.author.accountname}
-              profileImage={postCard.author.image}
-              postId={postCard.id}
-              content={postCard.content}
-              image={postCard.image}
-              createdAt={postCard.createdAt}
-              hearted={postCard.hearted}
-              heartCount={postCard.heartCount}
-              commentCount={postCard.commentCount}
-              updatedAt={postCard.updatedAt}
+              key={feed.id}
+              authorId={feed.author._id}
+              username={feed.author.username}
+              accountname={feed.author.accountname}
+              profileImage={feed.author.image}
+              postId={feed.id}
+              content={feed.content}
+              image={feed.image}
+              createdAt={feed.createdAt}
+              hearted={feed.hearted}
+              heartCount={feed.heartCount}
+              commentCount={feed.commentCount}
+              updatedAt={feed.updatedAt}
             />
-          ))
-          :
-          <NoFollowingsWrapper>
-            <h2 className="sr-only">유저 팔로우 없음 안내</h2>
-            <img className="logo" src={LogoBw} alt="내피가 팔을 흔들고 있는 모습입니다." />
-            <p className="guide">유저를 검색해 팔로우 해보세요!</p>
-            <Button
-              size={BUTTON_SIZE.LARGE_44}
-              state={BUTTON_STATE.LARGE_44.ABLED}
-              onClick={toggleSearch}
-            >
-              검색하기
-            </Button>
-          </NoFollowingsWrapper>
-      }
+          );
+        })
+      ) : (
+        <NoFollowingsWrapper>
+          <h2 className="sr-only">유저 팔로우 없음 안내</h2>
+          <img
+            className="logo"
+            src={LogoBw}
+            alt="내피가 팔을 흔들고 있는 모습입니다."
+          />
+          <p className="guide">유저를 검색해 팔로우 해보세요!</p>
+          <Button
+            size={BUTTON_SIZE.LARGE_44}
+            state={BUTTON_STATE.LARGE_44.ABLED}
+            onClick={toggleSearch}
+          >
+            검색하기
+          </Button>
+        </NoFollowingsWrapper>
+      )}
+      {loading && <div>{"loading..."}</div>}
+      {error && <div>{"Error"}</div>}
     </>
-  )
+  );
 }
