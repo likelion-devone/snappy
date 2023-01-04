@@ -17,7 +17,7 @@ const DummyTextArea = styled.div`
   font-weight: 400;
   font-size: ${FONT_SIZE.BASE};
   padding: 5px;
-  white-space: pre;
+  white-space: pre-wrap;
 `;
 
 const TextArea = forwardRef(function TextAreaForwarded(props, ref) {
