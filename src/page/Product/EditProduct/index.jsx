@@ -67,12 +67,12 @@ export default function EditProductPage() {
   useEffect(() => {
     if (initialProductDataError) {
       console.error(initialProductDataError);
-      navigate(ROUTE.HOME);
+      navigate(ROUTE.HOME, { replace: true });
       return;
     }
     if (initialProductData) {
       if (initialProductData.product.author._id !== userId) {
-        navigate(ROUTE.PROFILE);
+        navigate(ROUTE.PROFILE, { replace: true });
       }
 
       dispatchProductData({

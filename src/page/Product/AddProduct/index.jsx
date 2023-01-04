@@ -15,7 +15,7 @@ import ROUTE from "constant/route";
 export default function AddProductPage() {
   const navigate = useNavigate();
   const { isFormFilled, productData } = useContext(ProductContext);
-  
+
   // 상품 등록 API
   const [isProductAdding, addProductResult, addProductError, addProduct] =
     useAPI(req.product.add);
@@ -53,7 +53,7 @@ export default function AddProductPage() {
   useEffect(() => {
     if (addProductResult) {
       alert("상품 등록이 완료되었스내피!");
-      navigate(ROUTE.PROFILE);
+      navigate(ROUTE.PROFILE, { replace: true });
       return;
     }
     if (addProductError) {

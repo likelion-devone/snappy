@@ -198,7 +198,7 @@ export default function PostEditPage() {
     // 게시물 업로드 완료 후
     if (editPostResponse) {
       alert("게시물을 업로드 했습니다.");
-      navigate(routeResolver(ROUTE.POST, postId));
+      navigate(routeResolver(ROUTE.POST, postId), { replace: true });
       return;
     }
   }, [navigate, editPostResponse, editPostError, postId]);

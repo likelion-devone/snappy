@@ -147,7 +147,7 @@ export default function PostUploadPage() {
     // 게시물 업로드 완료 후
     if (uploadPostResponse) {
       alert("게시물을 업로드 했습니다.");
-      navigate(routeResolver(ROUTE.HOME));
+      navigate(routeResolver(ROUTE.POST, uploadPostResponse.post.id), { replace: true });
       return;
     }
   }, [navigate, uploadPostResponse, uploadPostError]);
