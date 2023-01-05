@@ -84,7 +84,7 @@ export default function ProfileForm({
       return result;
     }
 
-    return result.message !== "이미 가입된 계정ID 입니다." &&
+    return result.message === "이미 가입된 계정ID 입니다." &&
       value !== initialProfileData.accountname
       ? result
       : { message: "사용 가능한 계정ID 입니다." };

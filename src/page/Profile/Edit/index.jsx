@@ -107,7 +107,6 @@ export default function ProfileEditPage() {
 
   useEffect(() => {
     if (editProfileResult) {
-      console.log(editProfileResult);
       alert("프로필을 수정했습니다.");
 
       setAuthInfo(editProfileResult.user)
