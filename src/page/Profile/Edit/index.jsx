@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useMemo } from "react";
+import { createContext, useReducer, useEffect, useMemo, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -14,6 +14,7 @@ import { req } from "lib/api/index";
 
 import ROUTE from "constant/route";
 import { LoaderNappy } from "component/common/Animation/index";
+import { AuthContext } from "lib/auth/AuthProvider/index";
 
 const StyledProfileForm = styled(ProfileForm)`
   margin-top: 15px;
@@ -63,6 +64,7 @@ export default function ProfileEditPage() {
   const navigate = useNavigate();
 
   const { accountname } = useAuthInfo();
+  const { setAuthInfo } = useContext(AuthContext);
   const [isInitialProfileDataLoading, initialProfileData, initialProfileDataError] = useFetch(req.profile.personalProfile, { accountname });
   const [isProfileEditing, editProfileResult, editProfileError, editProfile] = useAPI(req.profile.editProfile)
 
@@ -105,13 +107,16 @@ export default function ProfileEditPage() {
 
   useEffect(() => {
     if (editProfileResult) {
+      console.log(editProfileResult);
       alert("프로필을 수정했습니다.");
+
+      setAuthInfo(editProfileResult.user)
       navigate(ROUTE.PROFILE);
     }
     if (editProfileError) {
       alert("프로필 수정중 에러가 발생했습니다.");
     }
-  }, [editProfileResult, editProfileError, navigate]);
+  }, [editProfileResult, editProfileError, navigate, setAuthInfo]);
 
   if (isInitialProfileDataLoading) {
     return <LoaderNappy />;
