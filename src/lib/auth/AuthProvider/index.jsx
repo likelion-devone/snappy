@@ -41,7 +41,7 @@ import ROUTE from "constant/route";
  */
 
 /**
- * @type {React.Context<{authInfo: UserInfo | null, handleLogin: LoginHandler, handleLogout: LogoutHandler, loginError: Error | null, isLoggingIn: boolean }>}
+ * @type {React.Context<{authInfo: UserInfo | null, handleLogin: LoginHandler, handleLogout: LogoutHandler, loginError: Error | null, isLoggingIn: boolean, setAuthInfo: React.Dispatch<object | null> }>}
  */
 export const AuthContext = createContext();
 
@@ -129,7 +129,10 @@ export default function AuthProvider() {
         await loginWithToken();
         navigate(ROUTE.HOME, { relative: false });
       } catch (error) {
-        // loginError로 에러 헨들링
+        removeTokenOnLocalStorage();
+        alert("로그인 중 에러가 발생했습니다.");
+        console.error(error);
+        navigate(ROUTE.LOGIN);
       }
     },
     [login, navigate, loginWithToken]
@@ -150,14 +153,15 @@ export default function AuthProvider() {
         authInfo,
         handleLogin,
         handleLogout,
+        setAuthInfo,
         loginError,
         isLoggingIn,
       }}
     >
       {authInfo ||
-      (haveTriedAutoLogin &&
-        (location.pathname.includes(ROUTE.LOGIN) ||
-          location.pathname === ROUTE.LANDING)) ? (
+        (haveTriedAutoLogin &&
+          (location.pathname.includes(ROUTE.LOGIN) ||
+            location.pathname === ROUTE.LANDING)) ? (
         <Outlet />
       ) : (
         <LandingPage />
