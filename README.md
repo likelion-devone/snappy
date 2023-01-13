@@ -169,7 +169,7 @@ useEffect(() => {
 
 ### 5.1.4. Compound Component & Custom Hook - `ValidationInput`
 
-![snappyppt](./.github/asset/validationInput.007.gif)
+<img src="./.github/asset/validationInput.007.gif" alt="ValidationInput" width="50%" />
 
 #### ▶︎ 각 패턴을 사용한 이유
 
@@ -252,7 +252,9 @@ Create React App에 기본적으로 탑재되는 Webpack loader인 `svgr`로 svg
 
 ## 7. Hello Nappy 
 
-<img src="./.github/asset/greetingNappy.gif" alt="인사하는 네피입니다." width="20%" />
-<img src="./.github/asset/loaderNappy.gif" alt="로딩 중 네피입니다." width="20%" />
+<p>
+  <img src="./.github/asset/greetingNappy.gif" alt="인사하는 네피입니다." width="46.3%" />
+  <img src="./.github/asset/loaderNappy.gif" alt="로딩 중 네피입니다." width="49%" />
+</p>
 
 Snappy의 얼굴 Nappy를 소개합니다!
