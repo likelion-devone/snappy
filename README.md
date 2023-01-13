@@ -252,7 +252,7 @@ Create React App에 기본적으로 탑재되는 Webpack loader인 `svgr`로 svg
 
 ## 7. Hello Nappy 
 
-<img src="./.github/asset/greetingNappy.gif" alt="인사하는 네피입니다." width="46.3%" />
-<img src="./.github/asset/loaderNappy.gif" alt="로딩 중 네피입니다." width="49%" />
+<img src="./.github/asset/greetingNappy.gif" alt="인사하는 네피입니다." width="30%" />
+<img src="./.github/asset/loaderNappy.gif" alt="로딩 중 네피입니다." width="30%" />
 
 Snappy의 얼굴 Nappy를 소개합니다!
