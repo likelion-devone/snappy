@@ -10,7 +10,7 @@ const StyledTextArea = styled.textarea`
   line-height: 18px;
   font-weight: 400;
   font-family: inherit;
-  font-size: ${FONT_SIZE.BASE};
+  font-size: ${FONT_SIZE.LARGE};
   color: ${({ theme }) => theme.snBlack};
   border-style: none;
   resize: none;
