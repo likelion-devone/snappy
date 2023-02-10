@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 const DummyTextArea = styled.div`
   line-height: 18px;
   font-weight: 400;
-  font-size: ${FONT_SIZE.BASE};
+  font-size: ${FONT_SIZE.LARGE};
   padding: 5px;
   white-space: pre-wrap;
 `;
