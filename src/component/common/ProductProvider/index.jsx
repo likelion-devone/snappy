@@ -19,8 +19,6 @@ export default function ProductProvider({ children }) {
   const [productData, dispatchProductData] = useReducer(productReducer, null);
 
   const [isFormFilled, setIsFormFilled] = useState(false);
-  // TODO: IsUploadPossibleProvider랑 합치기
-
   const [selectedProductData, setSelectedProductData] = useState(null);
 
   return (

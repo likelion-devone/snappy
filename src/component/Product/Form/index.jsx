@@ -94,8 +94,6 @@ const StyledAddedImgList = styled(AddedImgList)`
 const SIZE_LIMIT = 10 * 1024 * 1024;
 
 function ProductForm({ formId }) {
-  //TODO: 링크임을 확인하는 정규식 테스트 추가, 버튼은 1차 처리이므로 데이터를 아예 받지 못하게 2차 처리 필요할듯
-
   const { isFormFilled, setIsFormFilled, productData, dispatchProductData } =
     useContext(ProductContext);
 
@@ -208,8 +206,8 @@ function ProductForm({ formId }) {
 
     const newImages = results.length
       ? results.map(
-        (result) => process.env.REACT_APP_BASE_API + result.filename
-      )
+          (result) => process.env.REACT_APP_BASE_API + result.filename
+        )
       : [];
 
     dispatchProductData({

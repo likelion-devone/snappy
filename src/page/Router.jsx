@@ -141,7 +141,6 @@ export default function AppRouter() {
                 }
               />
               <Route path=":productid">
-                {/* TODO: 제품 상세 페이지 개발 */}
                 <Route index element={<Navigate to={ROUTE_PRODUCT.EDIT} />} />
                 <Route
                   path={ROUTE_PRODUCT.EDIT}
