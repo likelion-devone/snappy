@@ -2,9 +2,11 @@
 
 ![Snappy 인트로 이미지](./.github/asset/powerpoint.002.jpeg)
 
-## 🚀 배포 URL
+**[🔗 최종 발표 보러가기](https://www.youtube.com/watch?v=PkcPliZGZ_0)**
 
-- URL : https://devone-snappy.vercel.app/
+## 🚀 배포
+
+- 서비스 링크 : https://devone-snappy.vercel.app/
 - 서비스 이용을 위한 예시 테스트 계정
   - ID : snappy@devone.com
   - Password : 123456
